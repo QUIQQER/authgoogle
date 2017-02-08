@@ -50,24 +50,24 @@
 
         <!-- Control: Login -->
         <locale name="controls.login.status.not_authorized">
-            <de><![CDATA[Mit ihrem Facebook-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
+            <de><![CDATA[Mit ihrem Google-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
         </locale>
         <locale name="controls.login.register.btn.text">
             <de><![CDATA[Jetzt registrieren]]></de>
         </locale>
 
         <!-- Class: Facebook -->
-        <locale name="classes.facebook.logout.btn.text">
-            <de><![CDATA[Facebook Logout]]></de>
+        <locale name="classes.google.logout.btn.text">
+            <de><![CDATA[Google Logout]]></de>
         </locale>
-        <locale name="classes.facebook.login.btn.text">
-            <de><![CDATA[Facebook Login]]></de>
+        <locale name="classes.google.login.btn.text">
+            <de><![CDATA[Google Login]]></de>
         </locale>
-        <locale name="classes.facebook.login.btn.authorize.text">
+        <locale name="classes.google.login.btn.authorize.text">
             <de><![CDATA[QUIQQER autorisieren]]></de>
         </locale>
-        <locale name="classes.facebook.warn.no.appId">
-            <de><![CDATA[Die Facebook Authentifikation kann nicht verwendet werden, da noch keine oder eine fehlerhafte App-ID in den Einstellungen festgelegt ist. Bitte legen Sie eine korrekte App-ID in den Einstellung ("Facbook Authentifikation") fest.]]></de>
+        <locale name="classes.google.warn.no.clientId">
+            <de><![CDATA[Die Google Authentifikation kann nicht verwendet werden, da noch keine oder eine fehlerhafte Client-ID in den Einstellungen festgelegt ist. Bitte legen Sie eine korrekte Client-ID in den Einstellung ("Google Authentifikation") fest.]]></de>
         </locale>
     </groups>
 
@@ -111,16 +111,16 @@
             <de><![CDATA[Diese Abfrage darf nur vom übergebenen Benutzer selbst durchgeführt werden.]]></de>
         </locale>
         <locale name="message.ajax.connectAccount.error">
-            <de><![CDATA[Bei der Verknüpfung des Facebook-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <de><![CDATA[Bei der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
         </locale>
         <locale name="message.ajax.connectAccount.success">
-            <de><![CDATA[Das Facebook-Konto "[fbAccount]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Facebook-Login kann nun für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
+            <de><![CDATA[Das Google-Konto "[fbAccount]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
         </locale>
         <locale name="message.ajax.disconnectAccount.error">
-            <de><![CDATA[Beim Aufheben der Verknüpfung des Facebook-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <de><![CDATA[Beim Aufheben der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
         </locale>
         <locale name="message.ajax.disconnectAccount.success" html="true">
-            <de><![CDATA[Die Verknüpfung des Facebook-Kontos mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) wurde erfolgreich gelöscht. Der Facebook-Login kann nun <b>nicht</b> mehr für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
+            <de><![CDATA[Die Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) wurde erfolgreich gelöscht. Der Google-Login kann nun <b>nicht</b> mehr für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
         </locale>
         <locale name="message.ajax.createAccount.error">
             <de><![CDATA[Bei Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
@@ -129,7 +129,7 @@
             <de><![CDATA[Das QUIQQER-Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
         </locale>
         <locale name="message.ajax.loginErrorCheck.force.logout.attention">
-            <de><![CDATA[Sie haben sich zu oft mit dem falschen Facebook-Konto angemeldet. Bitte starten Sie den Login-Vorgang erneut.]]></de>
+            <de><![CDATA[Sie haben sich zu oft mit dem falschen Google-Konto angemeldet. Bitte starten Sie den Login-Vorgang erneut.]]></de>
         </locale>
 
         <!-- Class: Auth -->
@@ -137,29 +137,29 @@
             <de><![CDATA[Die zur Authentifizierung übermittelten Daten sind nicht korrekt.]]></de>
         </locale>
         <locale name="exception.auth.no.account.connected">
-            <de><![CDATA[Mit diesem Facebook-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
+            <de><![CDATA[Mit diesem Google-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
         </locale>
         <locale name="exception.auth.wrong.account.for.user">
-            <de><![CDATA[Dieses Facebook-Konto ist nicht mit dem übergebenen QUIQQER-Benutzerkonto verknüpft.]]></de>
+            <de><![CDATA[Dieses Google-Konto ist nicht mit dem übergebenen QUIQQER-Benutzerkonto verknüpft.]]></de>
         </locale>
 
         <!-- Class: Facebook -->
-        <locale name="exception.facebook.api.error">
+        <locale name="exception.google.api.error">
             <de><![CDATA[Bei Verwendung der Facebook API ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
         </locale>
-        <locale name="exception.facebook.invalid.token">
+        <locale name="exception.google.invalid.token">
             <de><![CDATA[Ungültiges Facebook Zugriffs-Token.]]></de>
         </locale>
-        <locale name="exception.facebook.account.already.connected">
-            <de><![CDATA[Das QUIQQER-Benutzerkonto "[userName]" (#[userId]) ist bereits mit einem Facebook-Konto verknüpft.]]></de>
+        <locale name="exception.google.account.already.connected">
+            <de><![CDATA[Das QUIQQER-Benutzerkonto "[userName]" (#[userId]) ist bereits mit einem Google-Konto verknüpft.]]></de>
         </locale>
-        <locale name="exception.facebook.email.already.exists">
+        <locale name="exception.google.email.already.exists">
             <de><![CDATA[Es existiert bereits ein QUIQQER-Benutzerkonto mit der E-Mail-Adresse "[email]".]]></de>
         </locale>
-        <locale name="exception.facebook.email.access.mandatory">
+        <locale name="exception.google.email.access.mandatory">
             <de><![CDATA[Für die Erstellung eines QUIQQER-Benutzerkontos ist es erforderlich, dass QUIQQER der Zugriff auf die bei Facebook hinterlegte E-Mail-Adresse gestattet wird.]]></de>
         </locale>
-        <locale name="exception.facebook.email.incorrect">
+        <locale name="exception.google.email.incorrect">
             <de><![CDATA[Die übergebene E-Mail-Adresse entspricht nicht der bei Facebook hinterlegten E-Mail-Adresse.]]></de>
         </locale>
 
@@ -183,13 +183,13 @@
             <de><![CDATA[Bezeichnung]]></de>
         </locale>
         <locale name="controls.settings.table.btn.add">
-            <de><![CDATA[Facebook-Konto verknüpfen]]></de>
+            <de><![CDATA[Google-Konto verknüpfen]]></de>
         </locale>
         <locale name="controls.settings.table.btn.delete">
             <de><![CDATA[Konto-Verknüpfung löschen]]></de>
         </locale>
         <locale name="controls.settings.table.header.account">
-            <de><![CDATA[Facebook-Konto]]></de>
+            <de><![CDATA[Google-Konto]]></de>
         </locale>
 
         <locale name="controls.settings.showkey.title">
@@ -229,22 +229,22 @@
             <de><![CDATA[Sind Sie sicher, dass Sie die Einmal-Login-Codes neu generieren wollen? Alle alten Codes sind danach nicht mehr gültig und es können nur die neuen Codes verwendet werden.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.info.not_authorized" html="true">
-            <de><![CDATA[Sie sind z.Z. bei Facebook eingeloggt, haben QUIQQER aber noch nicht autorisiert, ihr Facebook-Konto für den Authentifizierungs-Prozess zu benutzen. Wenn Sie das Facebook-Konto, mit welchem sie aktuell eingeloggt sind, für den Authentifizierungs-Prozess verwenden möchten, klicken Sie bitte auf "QUIQQER autorisieren". Möchten Sie ein anderes Facebook-Konto für die Authentifizierung verwenden, besuchen Sie bitte <a href="https://www.facebook.com" target="_blank">https://www.facebook.com</a> und loggen sich dort zunächst aus.]]></de>
+            <de><![CDATA[Sie sind z.Z. bei Facebook eingeloggt, haben QUIQQER aber noch nicht autorisiert, ihr Google-Konto für den Authentifizierungs-Prozess zu benutzen. Wenn Sie das Google-Konto, mit welchem sie aktuell eingeloggt sind, für den Authentifizierungs-Prozess verwenden möchten, klicken Sie bitte auf "QUIQQER autorisieren". Möchten Sie ein anderes Google-Konto für die Authentifizierung verwenden, besuchen Sie bitte <a href="https://www.google.com" target="_blank">https://www.google.com</a> und loggen sich dort zunächst aus.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.info.connected" html="true">
-            <de><![CDATA[Sie sind mit dem Facebook-Konto <b>[name]</b> ([email]) eingeloggt. Wenn Sie dieses Facebook-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Facebook-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
+            <de><![CDATA[Sie sind mit dem Google-Konto <b>[name]</b> ([email]) eingeloggt. Wenn Sie dieses Google-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Google-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.email.unknown">
-            <de><![CDATA[Sie sind mit dem Facebook-Konto <b>[name]</b> eingeloggt, haben QUIQQER jedoch nicht autorisiert, Ihre mit dem Facebook-Konto verknüpfte E-Mail-Adresse abzurufen. Dies ist jedoch notwendig, um Ihr Facebook-Konto zur Authentifizierung mit QUIQQER benutzen zu können. Klicken Sie auf <b>QUIQQER autorisieren</b>, um QUIQQER den Zugriff auf Ihre E-Mail-Adresse bei Facebook zu geben.]]></de>
+            <de><![CDATA[Sie sind mit dem Google-Konto <b>[name]</b> eingeloggt, haben QUIQQER jedoch nicht autorisiert, Ihre mit dem Google-Konto verknüpfte E-Mail-Adresse abzurufen. Dies ist jedoch notwendig, um Ihr Google-Konto zur Authentifizierung mit QUIQQER benutzen zu können. Klicken Sie auf <b>QUIQQER autorisieren</b>, um QUIQQER den Zugriff auf Ihre E-Mail-Adresse bei Facebook zu geben.]]></de>
         </locale>
-        <locale name="controls.settings.addAccount.info.unknown">
-            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Facebook-Konto verknüpft. Bitte loggen Sie sich bei Facebook ein, um mit eine Konto-Verknüpfung zu erstellen.]]></de>
+        <locale name="controls.settings.addAccount.info.notSignedIn">
+            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Google-Konto verknüpft. Bitte loggen Sie sich bei Google ein, um eine Konto-Verknüpfung zu erstellen.]]></de>
         </locale>
         <locale name="controls.settings.wrong.user.info">
             <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
         </locale>
         <locale name="controls.settings.showAccountInfo.text">
-            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Facebook-Konto <b>[name]</b> ([email]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
+            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Google-Konto <b>[name]</b> ([email]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.btn.connect">
             <de><![CDATA[Jetzt verknüpfen]]></de>
@@ -253,7 +253,7 @@
             <de><![CDATA[Verknüpfung aufheben]]></de>
         </locale>
         <locale name="controls.settings.wrong.user.info">
-            <de><![CDATA[Die Verknüpfung mit einem Facebook-Konto kann nur der Benutzer selbst verwalten.]]></de>
+            <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
         </locale>
 
         <!-- Control: Register -->
@@ -264,7 +264,7 @@
             <de><![CDATA[Um ein QUIQQER-Benutzerkonto mit Facebook zu registrieren, benötigt QUIQQER Zugriff auf Ihr Facebook-Profil (nur Name) und die dort hinterlegte E-Mail-Adresse. Bitte klicken Sie auf <b>QUIQQER autorisieren</b>.]]></de>
         </locale>
         <locale name="controls.register.status.connected.account.exists">
-            <de><![CDATA[Das Facebook-Konto, mit welchem Sie gerade eingeloggt sind, ist bereits mit einem QUIQQER-Benutzerkonto verknüpft und kann daher nicht für eine Registrierung verwendet werden.]]></de>
+            <de><![CDATA[Das Google-Konto, mit welchem Sie gerade eingeloggt sind, ist bereits mit einem QUIQQER-Benutzerkonto verknüpft und kann daher nicht für eine Registrierung verwendet werden.]]></de>
         </locale>
         <locale name="controls.register.registration.profile.not.eligible">
             <de><![CDATA[Für die Registrierung eines QUIQQER-Benutzerkontos ist es notwendig, dass Sie QUIQQER Zugriff auf Ihre bei Facebook hinterlegte E-Mail-Adresse geben. Bitte klicken Sie dazu auf <b>QUIQQER autorisieren</b>.]]></de>
@@ -276,7 +276,7 @@
             <de><![CDATA[Benutzerkonto erstellen]]></de>
         </locale>
         <locale name="controls.register.registration.error">
-            <de><![CDATA[Bei der Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]<br/><br/>Es kann kein QUIQQER-Benutzerkonto mit dem Facebook-Konto erstellt werden, mit welchem sie z.Z. eingeloggt sind. Bitte verwenden Sie ein anderes Facebook-Konto oder eine andere Registrierungsmethode.]]></de>
+            <de><![CDATA[Bei der Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]<br/><br/>Es kann kein QUIQQER-Benutzerkonto mit dem Google-Konto erstellt werden, mit welchem sie z.Z. eingeloggt sind. Bitte verwenden Sie ein anderes Google-Konto oder eine andere Registrierungsmethode.]]></de>
         </locale>
         <locale name="controls.register.registration.success">
             <de><![CDATA[Das QUIQQER-Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
@@ -287,16 +287,16 @@
             <de><![CDATA[Bitte loggen Sie sich bei Facebook ein, um sich bei QUIQQER anzumelden.]]></de>
         </locale>
         <locale name="controls.login.register.status.connected" html="true">
-            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Facebook-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
+            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
         </locale>
         <locale name="controls.login.register.status.not_authorized" html="true">
-            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Facebook-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, müssen Sie QUIQQER zunächst autorisieren, auf Ihr Facebook-Profil und die dort hinterlegte E-Mail-Adresse zuzugreifen. Klicken Sie dazu bitte auf <b>QUIQQER autorisieren</b>.]]></de>
+            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, müssen Sie QUIQQER zunächst autorisieren, auf Ihr Facebook-Profil und die dort hinterlegte E-Mail-Adresse zuzugreifen. Klicken Sie dazu bitte auf <b>QUIQQER autorisieren</b>.]]></de>
         </locale>
-        <locale name="controls.login.wrong.facebook.user">
-            <de><![CDATA[Das Facebook-Konto, bei welchem Sie z.Z. eingeloggt sind, ist nicht mit dem QUIQQER-Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte loggen Sie sich bei Facebook aus und loggen sich erneut mit dem Facebook-Konto ein, welches zu diesem QUIQQER-Benutzerkonto gehört oder welches sie mit dem QUIQQER-Benutzerkonto verknüpfen möchten.]]></de>
+        <locale name="controls.login.wrong.google.user">
+            <de><![CDATA[Das Google-Konto, bei welchem Sie z.Z. eingeloggt sind, ist nicht mit dem QUIQQER-Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte loggen Sie sich bei Facebook aus und loggen sich erneut mit dem Google-Konto ein, welches zu diesem QUIQQER-Benutzerkonto gehört oder welches sie mit dem QUIQQER-Benutzerkonto verknüpfen möchten.]]></de>
         </locale>
         <locale name="controls.login.no.quiqqer.account">
-            <de><![CDATA[Zu dem Facebook-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein QUIQQER-Benutzerkonto. Bitte loggen Sie sich mit einem anderen Facebook-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
+            <de><![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein QUIQQER-Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
         </locale>
 
     </groups>

@@ -1,24 +1,24 @@
 <?php
 
-use QUI\Auth\Facebook\Facebook;
+use QUI\Auth\Google\Google;
 
 /**
- * Connect QUIQQER account with Facebook account
+ * Connect QUIQQER account with Google account
  *
  * @param int $userId - QUIQQER user id
- * @param array $fbAccountData - Facebook account data
+ * @param string $gToken - Google API id_token
  * @return array - connection account data
  *
  * @throws QUI\Permissions\Exception
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_connectAccount',
-    function ($userId, $fbToken) {
+    function ($userId, $gToken) {
         $userId = (int)$userId;
 
         try {
-            Facebook::connectQuiqqerAccount($userId, $fbToken);
-            $accountData = Facebook::getConnectedAccountByQuiqqerUserId($userId);
+            Google::connectQuiqqerAccount($userId, $gToken);
+            $accountData = Google::getConnectedAccountByQuiqqerUserId($userId);
         } catch (QUI\Auth\Facebook\Exception $Exception) {
             QUI::getMessagesHandler()->addError(
                 QUI::getLocale()->get(

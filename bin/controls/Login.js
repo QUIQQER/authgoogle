@@ -1,5 +1,5 @@
 /**
- * Facebook Authentication for QUIQQER
+ * Google Authentication for QUIQQER
  *
  * @module package/quiqqer/authgoogle/bin/controls/Login
  * @author www.pcsg.de (Patrick Müller)
@@ -8,7 +8,7 @@
  * @require qui/controls/windows/Confirm
  * @require qui/controls/buttons/Button
  * @require qui/controls/loader/Loader
- * @require package/quiqqer/authgoogle/bin/Facebook
+ * @require package/quiqqer/authgoogle/bin/Google
  * @requrie Ajax
  * @require Locale
  * @require css!package/quiqqer/authgoogle/bin/controls/Login.css
@@ -20,14 +20,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
     'qui/controls/buttons/Button',
     'qui/controls/loader/Loader',
 
-    'package/quiqqer/authgoogle/bin/Facebook',
+    'package/quiqqer/authgoogle/bin/Google',
 
     'Ajax',
     'Locale',
 
     'css!package/quiqqer/authgoogle/bin/controls/Login.css'
 
-], function (QUIControl, QUIConfirm, QUIButton, QUILoader, Facebook,
+], function (QUIControl, QUIConfirm, QUIButton, QUILoader, Google,
              QUIAjax, QUILocale) {
     "use strict";
 
@@ -97,14 +97,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.create().inject(this.$Input, 'after');
             this.$login();
 
-            Facebook.addEvents({
+            Google.addEvents({
                 onLogin: function () {
                     self.$BtnElm.set('html', '');
                     self.$login();
                 }
             });
 
-            Facebook.addEvents({
+            Google.addEvents({
                 onLogout: function () {
                     self.$BtnElm.set('html', '');
                     self.$login();
@@ -121,7 +121,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.Loader.show();
 
             Promise.all([
-                Facebook.getStatus(),
+                Google.getStatus(),
                 self.$getLoginUserId()
             ]).then(function (result) {
                 var status      = result[0];
@@ -129,8 +129,8 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                 switch (status) {
                     case 'connected':
-                        Facebook.getAuthData().then(function (AuthData) {
-                            Facebook.isAccountConnectedToQuiqqer(AuthData.userID).then(function (connected) {
+                        Google.getAuthData().then(function (AuthData) {
+                            Google.isAccountConnectedToQuiqqer(AuthData.userID).then(function (connected) {
 
                                 if (!connected) {
                                     if (loginUserId) {
@@ -141,7 +141,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                             QUILocale.get(lg, 'controls.login.no.quiqqer.account')
                                         );
 
-                                        Facebook.getLogoutButton().inject(self.$BtnElm);
+                                        Google.getLogoutButton().inject(self.$BtnElm);
                                     }
 
                                     self.Loader.hide();
@@ -149,7 +149,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                 }
 
                                 // if there is no previous user id in the user session
-                                // Facebook auth is used as a primary authenticator
+                                // Google auth is used as a primary authenticator
                                 if (!loginUserId) {
                                     self.$Input.value = AuthData.accessToken;
                                     self.$Form.fireEvent('submit', [self.$Form]);
@@ -158,7 +158,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                 }
 
                                 // check if login user is facebook user
-                                self.$isLoginUserFacebookUser(AuthData.accessToken).then(function (isLoginUser) {
+                                self.$isLoginUserGoogleUser(AuthData.accessToken).then(function (isLoginUser) {
                                     self.Loader.hide();
 
                                     if (!isLoginUser) {
@@ -177,7 +177,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                                 QUILocale.get(lg, 'controls.login.wrong.facebook.user')
                                             );
 
-                                            Facebook.getLogoutButton().inject(self.$BtnElm);
+                                            Google.getLogoutButton().inject(self.$BtnElm);
                                         });
                                         return;
                                     }
@@ -211,7 +211,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * Shows settings control
          *
          * @param {number} uid - QUIQQER User ID
-         * @param {string} status - Facebook Login status
+         * @param {string} status - Google Login status
          */
         $showSettings: function (uid, status) {
             var self = this;
@@ -261,19 +261,19 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * Show login button
          */
         $showLoginBtn: function () {
-            Facebook.getLoginButton().inject(this.$BtnElm);
+            Google.getLoginButton().inject(this.$BtnElm);
         },
 
         /**
-         * Checks if the current QUIQQER Login user is the Facebook user
+         * Checks if the current QUIQQER Login user is the Google user
          *
-         * @param {string} fbToken - Facebook API token
+         * @param {string} fbToken - Google API token
          * @return {Promise}
          */
-        $isLoginUserFacebookUser: function (fbToken) {
+        $isLoginUserGoogleUser: function (fbToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
-                    'package_quiqqer_authfacebook_ajax_isLoginUserFacebookUser',
+                    'package_quiqqer_authgoogle_ajax_isLoginUserGoogleUser',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         fbToken  : fbToken,
@@ -291,7 +291,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $getLoginUserId: function () {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
-                    'package_quiqqer_authfacebook_ajax_getLoginUserId',
+                    'package_quiqqer_authgoogle_ajax_getLoginUserId',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         onError  : reject
@@ -308,7 +308,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $loginErrorCheck: function () {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post(
-                    'package_quiqqer_authfacebook_ajax_loginErrorCheck',
+                    'package_quiqqer_authgoogle_ajax_loginErrorCheck',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         onError  : reject

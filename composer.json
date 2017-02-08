@@ -17,7 +17,7 @@
         "url": "http://www.pcsg.de"
     },
     "require": {
-        
+        "google/apiclient": "^2.1"
     }
     ,"autoload": {
   "psr-4": {

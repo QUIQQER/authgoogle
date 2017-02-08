@@ -276,7 +276,7 @@ define('package/quiqqer/authgoogle/bin/controls/Register', [
             return new Promise(function (resolve, reject) {
                 Facebook.getAuthData().then(function (AuthData) {
                     QUIAjax.post(
-                        'package_quiqqer_authfacebook_ajax_createAccount',
+                        'package_quiqqer_authgoogle_ajax_createAccount',
                         resolve, {
                             'package': 'quiqqer/authgoogle',
                             email    : email,

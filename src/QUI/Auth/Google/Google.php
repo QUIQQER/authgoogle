@@ -49,7 +49,7 @@ class Google
         if ($Users->emailExists($email)) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.facebook.email.already.exists',
+                'exception.google.email.already.exists',
                 array(
                     'email' => $email
                 )
@@ -63,14 +63,14 @@ class Google
         if (!isset($profileData['email'])) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.facebook.email.access.mandatory'
+                'exception.google.email.access.mandatory'
             ));
         }
 
         if ($profileData['email'] != $email) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.facebook.email.incorrect'
+                'exception.google.email.incorrect'
             ));
         }
 
@@ -106,7 +106,7 @@ class Google
         if (self::isQuiqqerAcccountConnected($uid)) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.facebook.account.already.connected',
+                'exception.google.account.already.connected',
                 array(
                     'userId'   => $uid,
                     'userName' => $User->getUsername()
@@ -162,7 +162,7 @@ class Google
         if (empty($profileData) || !isset($profileData['id'])) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.facebook.invalid.token'
+                'exception.google.invalid.token'
             ));
         }
     }
@@ -262,7 +262,7 @@ class Google
 
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.facebook.api.error'
+                'exception.google.api.error'
             ));
         }
 

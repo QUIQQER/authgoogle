@@ -106,7 +106,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
             // check if user is allowed to edit facebook account connection
             QUIAjax.get(
-                'package_quiqqer_authfacebook_ajax_isEditUserSessionUser',
+                'package_quiqqer_authgoogle_ajax_isEditUserSessionUser',
                 function (result) {
                     if (!result) {
                         self.$Elm.set(
@@ -218,85 +218,65 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
             this.$BtnsElm.set('html', '');
 
             return new Promise(function(resolve, reject) {
-                Google.getStatus().then(function (status) {
-                    switch (status) {
-                        case 'connected':
-                            Promise.all([
-                                Google.getProfileInfo(),
-                                Google.getAuthData()
-                            ]).then(function (result) {
-                                resolve(); // fires onLoaded
+                Google.isSignedIn().then(function (isSignedIn) {
+                    if (!isSignedIn) {
+                        self.setInfoText(
+                            QUILocale.get(lg, 'controls.settings.addAccount.info.notSignedIn')
+                        );
 
-                                var Profile  = result[0];
-                                var AuthData = result[1];
-
-                                // Check if user provided email
-                                if (typeof Profile.email === 'undefined') {
-                                    self.setInfoText(QUILocale.get(lg, 'controls.settings.addAccount.email.unknown', {
-                                        'name': Profile.first_name + ' ' + Profile.last_name
-                                    }));
-
-                                    Google.getAuthButton(true).inject(self.$BtnsElm);
-
-                                    self.fireEvent('authWithoutEmail', [self]);
-                                    return;
-                                }
-
-                                self.setInfoText(
-                                    QUILocale.get(
-                                        lg,
-                                        'controls.settings.addAccount.info.connected', {
-                                            'name'     : Profile.first_name + ' ' + Profile.last_name,
-                                            'email'    : Profile.email
-                                        }
-                                    )
-                                );
-
-                                // "Connect account" Button
-                                new QUIButton({
-                                    'class'  : 'quiqqer-auth-google-settings-btn',
-                                    textimage: 'fa fa-link',
-                                    text     : QUILocale.get(lg, 'controls.settings.addAccount.btn.connect'),
-                                    events   : {
-                                        onClick: function () {
-                                            self.Loader.show();
-
-                                            Google.connectQuiqqerAccount(
-                                                self.getAttribute('uid'),
-                                                AuthData.accessToken
-                                            ).then(function (Account) {
-                                                self.Loader.hide();
-
-                                                if (!Account) {
-                                                    return;
-                                                }
-
-                                                self.$showAccountInfo(Account);
-                                                self.fireEvent('accountConnected', [Account, self]);
-                                            });
-                                        }
-                                    }
-                                }).inject(self.$BtnsElm);
-                            });
-                            break;
-
-                        case 'not_authorized':
-                            self.setInfoText(
-                                QUILocale.get(lg, 'controls.settings.addAccount.info.not_authorized')
-                            );
-
-                            Google.getAuthButton().inject(self.$BtnsElm);
-                            resolve();
-                            break;
-
-                        default:
-                            self.setInfoText(
-                                QUILocale.get(lg, 'controls.settings.addAccount.info.unknown')
-                            );
-
-                            Google.getLoginButton().inject(self.$BtnsElm);
-                            resolve();
+                        Google.getLoginButton().inject(self.$BtnsElm);
+                        resolve();
+                        return;
                     }
+
+                    Promise.all([
+                        Google.getProfileInfo(),
+                        Google.getAuthData()
+                    ]).then(function (result) {
+                        resolve(); // fires onLoaded
+
+                        var Profile  = result[0];
+                        var AuthData = result[1];
+
+                        console.log(Profile);
+                        console.log(AuthData);
+
+                        self.setInfoText(
+                            QUILocale.get(
+                                lg,
+                                'controls.settings.addAccount.info.connected', {
+                                    'name'     : Profile.name,
+                                    'email'    : Profile.email
+                                }
+                            )
+                        );
+
+                        // "Connect account" Button
+                        new QUIButton({
+                            'class'  : 'quiqqer-auth-google-settings-btn',
+                            textimage: 'fa fa-link',
+                            text     : QUILocale.get(lg, 'controls.settings.addAccount.btn.connect'),
+                            events   : {
+                                onClick: function () {
+                                    self.Loader.show();
+
+                                    Google.connectQuiqqerAccount(
+                                        self.getAttribute('uid'),
+                                        AuthData.id_token
+                                    ).then(function (Account) {
+                                        self.Loader.hide();
+
+                                        if (!Account) {
+                                            return;
+                                        }
+
+                                        self.$showAccountInfo(Account);
+                                        self.fireEvent('accountConnected', [Account, self]);
+                                    });
+                                }
+                            }
+                        }).inject(self.$BtnsElm);
+                    });
 
                     self.Loader.hide();
                 });

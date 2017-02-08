@@ -1,6 +1,6 @@
 <?php
 
-use QUI\Auth\Facebook\Facebook;
+use QUI\Auth\Google\Google;
 
 /**
  * Check if a facebook account is connected to a QUIQQER user account
@@ -21,7 +21,7 @@ QUI::$Ajax->registerFunction(
             );
         }
 
-        return Facebook::getConnectedAccountByQuiqqerUserId($userId);
+        return Google::getConnectedAccountByQuiqqerUserId($userId);
     },
     array('userId')
 );
