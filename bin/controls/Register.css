@@ -1,0 +1,20 @@
+.quiqqer-auth-facebook-register {
+    float: left;
+    height: 100%;
+    width: 100%;
+}
+
+.quiqqer-auth-facebook-register-info {
+    float: left;
+    width: 100%;
+}
+
+.quiqqer-auth-facebook-register-btns {
+    float: left;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.quiqqer-auth-facebook-register-error {
+    color: red;
+}

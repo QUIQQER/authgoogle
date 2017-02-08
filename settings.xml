@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiqqer>
+    <settings>
+
+        <config>
+            <section name="apiSettings">
+                <conf name="clientId">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="clientKey">
+                    <type><![CDATA[string]]></type>
+                </conf>
+            </section>
+            <section name="authSettings">
+                <conf name="maxLoginErrors">
+                    <type><![CDATA[integer]]></type>
+                    <defaultvalue>3</defaultvalue>
+                </conf>
+            </section>
+        </config>
+
+        <window>
+            <title>
+                <locale group="quiqqer/authgoogle" var="settings.title" />
+            </title>
+            <params>
+                <icon>fa fa-google-plus</icon>
+            </params>
+
+            <categories>
+                <category name="settings">
+                    <text>
+                        <locale group="quiqqer/authgoogle" var="settings.category.settings.title" />
+                    </text>
+                    <icon>fa fa-cogs</icon>
+
+                    <settings title="apiSettings" name="apiSettings">
+                        <title>
+                            <locale group="quiqqer/authgoogle" var="settings.apiSettings.title" />
+                        </title>
+
+                        <input conf="apiSettings.clientId" type="text">
+                            <text>
+                                <locale group="quiqqer/authgoogle" var="settings.apiSettings.clientId.title" />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/authgoogle" var="settings.apiSettings.clientId.description" />
+                            </description>
+                        </input>
+
+                        <input conf="apiSettings.clientKey" type="text">
+                            <text>
+                                <locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.title" />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.description" />
+                            </description>
+                        </input>
+                    </settings>
+
+                    <settings title="authSettings" name="authSettings">
+                        <title>
+                            <locale group="quiqqer/authgoogle" var="settings.authSettings.title" />
+                        </title>
+
+                        <input conf="authSettings.maxLoginErrors" type="text">
+                            <text>
+                                <locale group="quiqqer/authgoogle" var="settings.authSettings.maxLoginErrors.title" />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/authgoogle" var="settings.authSettings.maxLoginErrors.description" />
+                            </description>
+                        </input>
+                    </settings>
+
+                </category>
+            </categories>
+        </window>
+
+    </settings>
+</quiqqer>

@@ -1,0 +1,16 @@
+<quiqqer>
+    <package>
+        <title>
+            <locale group="quiqqer/authgoogle" var="package.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/authgoogle" var="package.description"/>
+        </description>
+
+       <provider>
+           <auth src="\QUI\Auth\Google\Auth" />
+       </provider>
+
+    </package>
+</quiqqer>

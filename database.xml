@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+
+    <global>
+        <table name="quiqqer_auth_google">
+            <field type="BIGINT(20) NOT NULL PRIMARY KEY">userId</field>
+            <field type="BIGINT(20) NOT NULL">googleId</field>
+            <field type="MEDIUMTEXT NOT NULL">email</field>
+            <field type="VARCHAR(255) NOT NULL">name</field>
+        </table>
+    </global>
+
+</database>
