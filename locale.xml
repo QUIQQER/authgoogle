@@ -3,172 +3,172 @@
     <groups name="quiqqer/authgoogle" datatype="js,php">
         <locale name="authgoogle.title">
             <de><![CDATA[Google Login]]></de>
+            <en><![CDATA[Google Login]]></en>
         </locale>
         <locale name="authgoogle.description">
             <de><![CDATA[QUIQQER Authentifikation mittels Google-Konto]]></de>
+            <en><![CDATA[QUIQQER authentication via Google Account]]></en>
         </locale>
 
         <!-- Package -->
         <locale name="package.title">
             <de><![CDATA[Google Login für QUIQQER]]></de>
+            <en><![CDATA[Google Login for QUIQQER]]></en>
         </locale>
         <locale name="package.description">
             <de><![CDATA[QUIQQER Authentifikation mittels Google-Konto]]></de>
+            <en><![CDATA[QUIQQER authentication via Google Account]]></en>
         </locale>
 
         <!-- Settings -->
         <locale name="settings.title">
             <de><![CDATA[Google Authentifikation]]></de>
+            <en><![CDATA[Google Authentication]]></en>
         </locale>
         <locale name="settings.category.settings.title">
             <de><![CDATA[Einstellungen]]></de>
+            <en><![CDATA[Settings]]></en>
         </locale>
         <locale name="settings.apiSettings.title">
             <de><![CDATA[Google API]]></de>
+            <en><![CDATA[Google API]]></en>
         </locale>
         <locale name="settings.authSettings.title">
             <de><![CDATA[Authentifizierung]]></de>
+            <en><![CDATA[Authentication]]></en>
         </locale>
         <locale name="settings.apiSettings.clientId.title">
             <de><![CDATA[Client-ID]]></de>
+            <en><![CDATA[Client-ID]]></en>
         </locale>
         <locale name="settings.apiSettings.clientId.description" html="true">
             <de><![CDATA[OAuth-2.0 Client-ID des Google API Projekts, über welches die API-Kommunikation zur Authentifizierung stattfindet. Siehe <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></de>
+            <en><![CDATA[OAuth-2.0 Client-ID of the Google API project via which the API communication for authentication takes place. See <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></en>
         </locale>
         <locale name="settings.apiSettings.appSecret.title">
             <de><![CDATA[Clientschlüssel]]></de>
+            <en><![CDATA[Client key]]></en>
         </locale>
         <locale name="settings.apiSettings.appSecret.description" html="true">
             <de><![CDATA[OAuth-2.0 Clientschlüssel des Google API Projekts, über welches die API-Kommunikation zur Authentifizierung stattfindet. Siehe <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></de>
+            <en><![CDATA[OAuth-2.0 Client key of the Google API project via which the API communication for authentication takes place. See <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></en>
         </locale>
         <locale name="settings.authSettings.maxLoginErrors.title">
             <de><![CDATA[Maximale Login-Versuche]]></de>
+            <de><![CDATA[Maximum no. of login attempts]]></de>
         </locale>
         <locale name="settings.authSettings.maxLoginErrors.description">
             <de><![CDATA[Maximale Versuche, die ein Benutzer hat, sich beim Login-Prozess mit einem gültigen (d.h.: zu seinem QUIQQER-Benutzerkonto gehörigen) Google-Konto anzumelden, bevor ein automatischer Logout stattfindet und der Authentifizierungs-Prozess von vorne gestartet wird.]]></de>
+            <de><![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></de>
         </locale>
 
         <!-- Control: Login -->
         <locale name="controls.login.status.not_authorized">
             <de><![CDATA[Mit ihrem Google-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
+            <en><![CDATA[There is no QUIQQER Account linked to your Google Account.]]></en>
         </locale>
         <locale name="controls.login.register.btn.text">
             <de><![CDATA[Jetzt registrieren]]></de>
+            <en><![CDATA[Register now]]></en>
         </locale>
 
         <!-- Class: Google -->
         <locale name="classes.google.logout.btn.text">
             <de><![CDATA[Google Logout]]></de>
+            <en><![CDATA[Google Logout]]></en>
         </locale>
         <locale name="classes.google.login.btn.text">
             <de><![CDATA[Google Login]]></de>
+            <en><![CDATA[Google Login]]></en>
         </locale>
         <locale name="classes.google.login.btn.authorize.text">
             <de><![CDATA[QUIQQER autorisieren]]></de>
+            <en><![CDATA[Authorize QUIQQER]]></en>
         </locale>
         <locale name="classes.google.warn.no.clientId">
             <de><![CDATA[Die Google Authentifikation kann nicht verwendet werden, da noch keine oder eine fehlerhafte Client-ID in den Einstellungen festgelegt ist. Bitte legen Sie eine korrekte Client-ID in den Einstellung ("Google Authentifikation") fest.]]></de>
+            <en><![CDATA[Google cannot be used because there is no or a wrong Client-ID set in the settings. Please set a correct Client-ID in the settings ("Google authentication").]]></en>
         </locale>
     </groups>
 
     <groups name="quiqqer/authgoogle" datatype="php">
 
         <!-- Ajax -->
-        <locale name="exception.ajax.generateKey.title.already.exists">
-            <de><![CDATA[Es existiert bereits ein Authentifizierungs-Schlüssel mit dem Titel "[title]".]]></de>
-        </locale>
         <locale name="message.ajax.general.error">
             <de><![CDATA[Beim Verarbeiten der Anfrage ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
-        </locale>
-        <locale name="message.ajax.generateKey.error" html="true">
-            <de><![CDATA[Beim Erstellen des Authentifizierungs-Schlüssels ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-        </locale>
-        <locale name="message.ajax.generateKey.success">
-            <de><![CDATA[Der Authentifizierungs-Schlüssel "[title]" wurde erfolgreich erstellt.]]></de>
-        </locale>
-        <locale name="message.ajax.getKey.error" html="true">
-            <de><![CDATA[Beim Abruf des Authentifizierungs-Schlüssels ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-        </locale>
-        <locale name="exception.ajax.getKey.title.not.found">
-            <de><![CDATA[Der Authentifizierungs-Schlüssel "[title]" wurde für den Benutzer "[user]" (#[userId]) nicht gefunden.]]></de>
-        </locale>
-        <locale name="message.ajax.getAccounts.error" html="true">
-            <de><![CDATA[Beim Abruf der verknüpften Google-Konten ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-        </locale>
-        <locale name="message.ajax.deleteKeys.error" html="true">
-            <de><![CDATA[Beim Löschen der Authentifizierungs-Schlüssel ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-        </locale>
-        <locale name="message.ajax.deleteKeys.success">
-            <de><![CDATA[Die gewählten Authentifizierungs-Schlüssel wurden erfolgreich gelöscht.]]></de>
-        </locale>
-        <locale name="message.ajax.regenerateRecoveryKeys.error" html="true">
-            <de><![CDATA[Beim Neu-Generieren der Einmal-Login-Codes ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-        </locale>
-        <locale name="message.ajax.regenerateRecoveryKeys.success">
-            <de><![CDATA[Die Einmal-Login-Codes wurden neu generiert. Die bisherigen Codes sind ab jetzt nicht mehr gültig.]]></de>
+            <en><![CDATA[An unexpected error ocurred during your request. Please contact an administrator.]]></en>
         </locale>
         <locale name="exception.operation.only.allowed.by.own.user">
             <de><![CDATA[Diese Abfrage darf nur vom übergebenen Benutzer selbst durchgeführt werden.]]></de>
+            <en><![CDATA[This request can only be executed by the given user.]]></en>
         </locale>
         <locale name="message.ajax.connectAccount.error">
             <de><![CDATA[Bei der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <en><![CDATA[An error ocurred while linking your Google Account to your QUIQQER Account:<br/><br/>[error]]]></en>
         </locale>
         <locale name="message.ajax.connectAccount.success">
-            <de><![CDATA[Das Google-Konto "[account]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
+            <de><![CDATA[Das Google-Konto "[account]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit diesem QUIQQER-Benutzerkonto verwendet werden.]]></de>
+            <en><![CDATA[The Google Account "[account]" was succesfully linked to the QUIQQER Account "[qUserName]" (#[qUserId]). Authentication for this Account via Google Login can now be used.]]></en>
         </locale>
         <locale name="message.ajax.disconnectAccount.error">
             <de><![CDATA[Beim Aufheben der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <en><![CDATA[An error occurred while unlinking your Google Account from your QUIQQER Account:<br/><br/>[error]]]></en>
         </locale>
         <locale name="message.ajax.disconnectAccount.success" html="true">
             <de><![CDATA[Die Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) wurde erfolgreich gelöscht. Der Google-Login kann nun <b>nicht</b> mehr zur Authentifizierung für diesen QUIQQER-Benutzer verwendet werden.]]></de>
+            <en><![CDATA[The Google Account was succesfully unlinked from the QUIQQER Account "[qUserName]" (#[qUserId]). Google Login can]]></en>
         </locale>
         <locale name="message.ajax.createAccount.error">
             <de><![CDATA[Bei Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <en><![CDATA[An error occurred while creating the QUIQQER user Account:<br/><br/>[error]]]></en>
         </locale>
         <locale name="message.ajax.createAccount.success" html="true">
             <de><![CDATA[Das QUIQQER-Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
+            <en><![CDATA[The QUIQQER user Account <b>[email]</b> has been successfully created.]]></en>
         </locale>
         <locale name="message.ajax.loginAttemptsCheck.force.logout.attention">
             <de><![CDATA[Sie haben sich zu oft mit dem falschen Google-Konto angemeldet. Bitte starten Sie den Login-Vorgang erneut.]]></de>
+            <en><![CDATA[You've logged in too often with the wrong Google Account. Please restart the login process.]]></en>
         </locale>
 
         <!-- Class: Auth -->
         <locale name="exception.auth.wrong.data">
             <de><![CDATA[Die zur Authentifizierung übermittelten Daten sind nicht korrekt.]]></de>
+            <en><![CDATA[The data sent for authentication is not correct.]]></en>
         </locale>
         <locale name="exception.auth.no.account.connected">
             <de><![CDATA[Mit diesem Google-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
+            <en><![CDATA[No QUIQQER user Account is associated with this Google Account.]]></en>
         </locale>
         <locale name="exception.auth.wrong.account.for.user">
             <de><![CDATA[Dieses Google-Konto ist nicht mit dem übergebenen QUIQQER-Benutzerkonto verknüpft.]]></de>
+            <en><![CDATA[This Google Account is not linked to the QUIQQER user Account you submitted.]]></en>
         </locale>
 
         <!-- Class: Google -->
         <locale name="exception.google.api.error">
             <de><![CDATA[Bei Verwendung der Google API ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <en><![CDATA[An unexpected error occurred while using Google API. Please contact an administrator.]]></en>
         </locale>
         <locale name="exception.google.invalid.token">
             <de><![CDATA[Ungültiges Google Zugriffs-Token.]]></de>
+            <en><![CDATA[Invalid Google Access Token.]]></en>
         </locale>
         <locale name="exception.google.account.already.connected">
             <de><![CDATA[Das QUIQQER-Benutzerkonto "[userName]" (#[userId]) ist bereits mit einem Google-Konto verknüpft.]]></de>
+            <en><![CDATA[The QUIQQER user Account "[userName]" (#[userId]) is already linked to a Google Account.]]></en>
         </locale>
         <locale name="exception.google.email.already.exists">
             <de><![CDATA[Es existiert bereits ein QUIQQER-Benutzerkonto mit der E-Mail-Adresse "[email]".]]></de>
+            <en><![CDATA[There is already a QUIQQER user Account with the e-mail address "[email]".]]></en>
         </locale>
         <locale name="exception.google.email.access.mandatory">
             <de><![CDATA[Für die Erstellung eines QUIQQER-Benutzerkontos ist es erforderlich, dass QUIQQER der Zugriff auf die bei Google hinterlegte E-Mail-Adresse gestattet wird.]]></de>
+            <en><![CDATA[For the creation of a QUIQQER user Account, QUIQQER is required to access the e-mail address stored at Google.]]></en>
         </locale>
         <locale name="exception.google.email.incorrect">
             <de><![CDATA[Die übergebene E-Mail-Adresse entspricht nicht der bei Google hinterlegten E-Mail-Adresse.]]></de>
-        </locale>
-
-        <!-- Login -->
-        <locale name="login.code">
-            <de><![CDATA[Google Authenticator Code]]></de>
-        </locale>
-        <locale name="login.btn.auth">
-            <de><![CDATA[Authentifizieren]]></de>
+            <en><![CDATA[The submitted email address does not correspond to the Google email address.]]></en>
         </locale>
 
     </groups>
@@ -176,127 +176,89 @@
     <groups name="quiqqer/authgoogle" datatype="js">
 
         <!-- Control: Settings -->
-        <locale name="controls.settings.generatekey.title">
-            <de><![CDATA[Neuer Authentifizierungs-Schlüssel]]></de>
-        </locale>
-        <locale name="controls.settings.generatekey.title.label">
-            <de><![CDATA[Bezeichnung]]></de>
-        </locale>
         <locale name="controls.settings.table.btn.add">
             <de><![CDATA[Google-Konto verknüpfen]]></de>
-        </locale>
-        <locale name="controls.settings.table.btn.delete">
-            <de><![CDATA[Konto-Verknüpfung löschen]]></de>
+            <en><![CDATA[Link Google Account]]></en>
         </locale>
         <locale name="controls.settings.table.header.account">
             <de><![CDATA[Google-Konto]]></de>
-        </locale>
-
-        <locale name="controls.settings.showkey.title">
-            <de><![CDATA[Authentifizierungs-Schlüssel - Details]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.template.tableHeader">
-            <de><![CDATA[Authentifizierungs-Schlüssel "[title]"]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.template.labelQrCode">
-            <de><![CDATA[QR-Code]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.template.labelKey">
-            <de><![CDATA[Schlüssel]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.template.labelCreateUser">
-            <de><![CDATA[Ersteller]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.template.labelCreateDate">
-            <de><![CDATA[Erstellungsdatum]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.template.labelRecoveryKeys">
-            <de><![CDATA[Einmal-Login-Codes]]></de>
-        </locale>
-        <locale name="controls.settings.deleteKeys.title">
-            <de><![CDATA[Authentifizierungs-Schlüssel löschen]]></de>
-        </locale>
-        <locale name="controls.settings.deleteKeys.info" html="true">
-            <de><![CDATA[Sind Sie sicher, dass Sie die folgenden Authentifizierungs-Schlüssel unwiderruflich löschen wollen? Alle mit diesen Schlüsseln verknüpften Geräte können sich danach nicht mehr mit generierten Codes zu diesen Schlüsseln authentifizieren.<br/><br/>[titles]]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.regenerate.recoverykeys.btn">
-            <de><![CDATA[Neu generieren]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.regenerate.warning.title">
-            <de><![CDATA[Einmal-Login-Codes neu generieren]]></de>
-        </locale>
-        <locale name="controls.settings.showkey.regenerate.warning">
-            <de><![CDATA[Sind Sie sicher, dass Sie die Einmal-Login-Codes neu generieren wollen? Alle alten Codes sind danach nicht mehr gültig und es können nur die neuen Codes verwendet werden.]]></de>
-        </locale>
-        <locale name="controls.settings.addAccount.info.not_authorized" html="true">
-            <de><![CDATA[Sie sind z.Z. bei Google eingeloggt, haben QUIQQER aber noch nicht autorisiert, ihr Google-Konto für den Authentifizierungs-Prozess zu benutzen. Wenn Sie das Google-Konto, mit welchem sie aktuell eingeloggt sind, für den Authentifizierungs-Prozess verwenden möchten, klicken Sie bitte auf "QUIQQER autorisieren". Möchten Sie ein anderes Google-Konto für die Authentifizierung verwenden, besuchen Sie bitte <a href="https://www.google.com" target="_blank">https://www.google.com</a> und loggen sich dort zunächst aus.]]></de>
+            <en><![CDATA[Google Account]]></en>
         </locale>
         <locale name="controls.settings.addAccount.info.connected" html="true">
             <de><![CDATA[Sie sind mit dem Google-Konto <b>[email]</b> ([name]) eingeloggt. Wenn Sie dieses Google-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Google-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
+            <en><![CDATA[You are currently logged in with the Google Account <b>[email]</b> ([name]). If you want to link this Google Account with this QUIQQER Account, please click <b>Link now</b>]]></en>
         </locale>
         <locale name="controls.settings.addAccount.info.notSignedIn">
             <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Google-Konto verknüpft. Bitte loggen Sie sich bei Google ein, um eine Konto-Verknüpfung zu erstellen.]]></de>
+            <en><![CDATA[This QUIQQER Account is currently not linked to a Google Account.]]></en>
         </locale>
         <locale name="controls.settings.wrong.user.info">
             <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
+            <en><![CDATA[The link to a Google Account can only be managed by the user himself.]]></en>
         </locale>
         <locale name="controls.settings.showAccountInfo.text">
             <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Google-Konto <b>[email]</b> ([name]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
+            <en><![CDATA[This QUIQQER Account is linked to the Google Account <b>[email]</b> ([name]) and can be used for authentication. If you want to remove this link, click <b>Unlink now</b>.]]></en>
         </locale>
         <locale name="controls.settings.addAccount.btn.connect">
             <de><![CDATA[Jetzt verknüpfen]]></de>
+            <en><![CDATA[Link now]]></en>
         </locale>
         <locale name="controls.settings.showAccountInfo.btn.disconnect">
             <de><![CDATA[Verknüpfung aufheben]]></de>
-        </locale>
-        <locale name="controls.settings.wrong.user.info">
-            <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
+            <en><![CDATA[Unlink now]]></en>
         </locale>
         <locale name="controls.settings.login.error">
             <de><![CDATA[Beim Google-Login ist ein Fehler aufgetreten. Bitte wiederholen Sie den Login-Vorgang.]]></de>
+            <en><![CDATA[There was an error with Google's login. Please repeat the login process.]]></en>
         </locale>
 
         <!-- Control: Register -->
         <locale name="controls.register.status.unknown">
             <de><![CDATA[Um ein QUIQQER-Benutzerkonto mit Google zu registrieren, benötigt QUIQQER Zugriff auf Ihr Google-Profil (nur Name) und die dort hinterlegte E-Mail-Adresse. Bitte loggen Sie sich bei Google ein.]]></de>
-        </locale>
-        <locale name="controls.register.status.not_authorized">
-            <de><![CDATA[Um ein QUIQQER-Benutzerkonto mit Google zu registrieren, benötigt QUIQQER Zugriff auf Ihr Google-Profil (nur Name) und die dort hinterlegte E-Mail-Adresse. Bitte klicken Sie auf <b>QUIQQER autorisieren</b>.]]></de>
+            <en><![CDATA[To register a QUIQQER user Account with Google, QUIQQER requires access to your Google profile (name only) and the e-mail address stored there. Please log in to Google.]]></en>
         </locale>
         <locale name="controls.register.status.connected.account.exists">
             <de><![CDATA[Das Google-Konto, mit welchem Sie gerade eingeloggt sind, ist bereits mit einem QUIQQER-Benutzerkonto verknüpft und kann daher nicht für eine Registrierung verwendet werden.]]></de>
-        </locale>
-        <locale name="controls.register.registration.profile.not.eligible">
-            <de><![CDATA[Für die Registrierung eines QUIQQER-Benutzerkontos ist es notwendig, dass Sie QUIQQER Zugriff auf Ihre bei Google hinterlegte E-Mail-Adresse geben. Bitte klicken Sie dazu auf <b>QUIQQER autorisieren</b>.]]></de>
+            <en><![CDATA[The Google Account that you are currently logged into is already linked to a QUIQQER user Account and can not be used for registration.]]></en>
         </locale>
         <locale name="controls.register.registration.confirm" html="true">
             <de><![CDATA[Bitte bestätigen Sie die Erstellung des QUIQQER-Benutzerkontos <b>[email]</b> mit einem Klick auf <b>Benutzerkonto erstellen</b>.]]></de>
+            <en><![CDATA[Please confirm the creation of the QUIQQER Account <b>[email]</b> with a click on <b>Create Account</b>.]]></en>
         </locale>
         <locale name="controls.register.registration.confirm.btn.text">
             <de><![CDATA[Benutzerkonto erstellen]]></de>
+            <en><![CDATA[Create account]]></en>
         </locale>
         <locale name="controls.register.registration.error">
             <de><![CDATA[Bei der Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]<br/><br/>Es kann kein QUIQQER-Benutzerkonto mit dem Google-Konto erstellt werden, mit welchem sie z.Z. eingeloggt sind. Bitte verwenden Sie ein anderes Google-Konto oder eine andere Registrierungsmethode.]]></de>
+            <en><![CDATA[An error occurred during the creation of the QUIQQER Account:<br/><br/>[error]<br/><br/>It is not possible to create a QUIQQER Account with the Google Account you are currently logged in with. Please use another Google Account or another registration method.]]></en>
         </locale>
         <locale name="controls.register.registration.success">
             <de><![CDATA[Das QUIQQER-Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
+            <en><![CDATA[QUIQQER account <b>[email]</b> was successfully created.]]></en>
         </locale>
 
         <!-- Control: Login -->
         <locale name="controls.login.status.unknown">
             <de><![CDATA[Bitte loggen Sie sich bei Google ein, um sich bei QUIQQER anzumelden.]]></de>
+            <en><![CDATA[Please log in with Google to sign in with QUIQQER.]]></en>
         </locale>
         <locale name="controls.login.register.status.connected" html="true">
             <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
+            <en><![CDATA[It is necessary to link your Google Account to your QUIQQER account to authenticate. To do this, please click <b>Link now</b>.]]></en>
         </locale>
         <locale name="controls.login.register.status.not_authorized" html="true">
-            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, müssen Sie QUIQQER zunächst autorisieren, auf Ihr Google-Profil und die dort hinterlegte E-Mail-Adresse zuzugreifen. Klicken Sie dazu bitte auf <b>QUIQQER autorisieren</b>.]]></de>
+            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
+            <en><![CDATA[It is necessary to link your Google Account to your QUIQQER account to authenticate. To do this, please click <b>Link now</b>.]]></en>
         </locale>
         <locale name="controls.login.wrong.google.user">
             <de><![CDATA[Das Google-Konto, bei welchem Sie z.Z. eingeloggt sind, ist nicht mit dem QUIQQER-Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte loggen Sie sich bei Google aus und loggen sich erneut mit dem Google-Konto ein, welches zu diesem QUIQQER-Benutzerkonto gehört oder welches sie mit dem QUIQQER-Benutzerkonto verknüpfen möchten.]]></de>
+            <en><![CDATA[The Google Account you are currently logged in with is not linked to the QUIQQER Account you are trying wo authenticate for. Please log in with the Google Account that is linked to the QUIQQER Account or a Google Account that is currently not linked to any other QUIQQER Account.]]></en>
         </locale>
         <locale name="controls.login.no.quiqqer.account">
             <de><![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein QUIQQER-Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
+            <en><![CDATA[The Google Account you are currently logged in with is not linked to the QUIQQER Account you are trying wo authenticate for. Please log in with another Google Account or use another authentication method.]]></en>
         </locale>
 
     </groups>
