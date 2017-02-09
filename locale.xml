@@ -55,11 +55,11 @@
         </locale>
         <locale name="settings.authSettings.maxLoginErrors.title">
             <de><![CDATA[Maximale Login-Versuche]]></de>
-            <de><![CDATA[Maximum no. of login attempts]]></de>
+            <en><![CDATA[Maximum no. of login attempts]]></en>
         </locale>
         <locale name="settings.authSettings.maxLoginErrors.description">
             <de><![CDATA[Maximale Versuche, die ein Benutzer hat, sich beim Login-Prozess mit einem gültigen (d.h.: zu seinem QUIQQER-Benutzerkonto gehörigen) Google-Konto anzumelden, bevor ein automatischer Logout stattfindet und der Authentifizierungs-Prozess von vorne gestartet wird.]]></de>
-            <de><![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></de>
+            <en><![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></en>
         </locale>
 
         <!-- Control: Login -->
@@ -108,7 +108,7 @@
         </locale>
         <locale name="message.ajax.connectAccount.success">
             <de><![CDATA[Das Google-Konto "[account]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit diesem QUIQQER-Benutzerkonto verwendet werden.]]></de>
-            <en><![CDATA[The Google Account "[account]" was succesfully linked to the QUIQQER Account "[qUserName]" (#[qUserId]). Authentication for this Account via Google Login can now be used.]]></en>
+            <en><![CDATA[The Google Account "[account]" was succesfully linked to the QUIQQER Account "[qUserName]" (#[qUserId]). Authentication for this account via Google Login can now be used.]]></en>
         </locale>
         <locale name="message.ajax.disconnectAccount.error">
             <de><![CDATA[Beim Aufheben der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
@@ -116,15 +116,15 @@
         </locale>
         <locale name="message.ajax.disconnectAccount.success" html="true">
             <de><![CDATA[Die Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) wurde erfolgreich gelöscht. Der Google-Login kann nun <b>nicht</b> mehr zur Authentifizierung für diesen QUIQQER-Benutzer verwendet werden.]]></de>
-            <en><![CDATA[The Google Account was succesfully unlinked from the QUIQQER Account "[qUserName]" (#[qUserId]). Google Login can]]></en>
+            <en><![CDATA[The Google Account was succesfully unlinked from the QUIQQER Account "[qUserName]" (#[qUserId]). Google Login can now no longer be used to authenticate for this QUIQQER Account.]]></en>
         </locale>
         <locale name="message.ajax.createAccount.error">
             <de><![CDATA[Bei Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-            <en><![CDATA[An error occurred while creating the QUIQQER user Account:<br/><br/>[error]]]></en>
+            <en><![CDATA[An error occurred while creating the QUIQQER Account:<br/><br/>[error]]]></en>
         </locale>
         <locale name="message.ajax.createAccount.success" html="true">
             <de><![CDATA[Das QUIQQER-Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
-            <en><![CDATA[The QUIQQER user Account <b>[email]</b> has been successfully created.]]></en>
+            <en><![CDATA[The QUIQQER Account <b>[email]</b> has been successfully created.]]></en>
         </locale>
         <locale name="message.ajax.loginAttemptsCheck.force.logout.attention">
             <de><![CDATA[Sie haben sich zu oft mit dem falschen Google-Konto angemeldet. Bitte starten Sie den Login-Vorgang erneut.]]></de>
@@ -138,11 +138,11 @@
         </locale>
         <locale name="exception.auth.no.account.connected">
             <de><![CDATA[Mit diesem Google-Konto ist kein QUIQQER-Benutzerkonto verknüpft.]]></de>
-            <en><![CDATA[No QUIQQER user Account is associated with this Google Account.]]></en>
+            <en><![CDATA[No QUIQQER Account is associated with this Google Account.]]></en>
         </locale>
         <locale name="exception.auth.wrong.account.for.user">
             <de><![CDATA[Dieses Google-Konto ist nicht mit dem übergebenen QUIQQER-Benutzerkonto verknüpft.]]></de>
-            <en><![CDATA[This Google Account is not linked to the QUIQQER user Account you submitted.]]></en>
+            <en><![CDATA[This Google Account is not linked to the QUIQQER Account you submitted.]]></en>
         </locale>
 
         <!-- Class: Google -->
@@ -156,15 +156,15 @@
         </locale>
         <locale name="exception.google.account.already.connected">
             <de><![CDATA[Das QUIQQER-Benutzerkonto "[userName]" (#[userId]) ist bereits mit einem Google-Konto verknüpft.]]></de>
-            <en><![CDATA[The QUIQQER user Account "[userName]" (#[userId]) is already linked to a Google Account.]]></en>
+            <en><![CDATA[The QUIQQER Account "[userName]" (#[userId]) is already linked to a Google Account.]]></en>
         </locale>
         <locale name="exception.google.email.already.exists">
             <de><![CDATA[Es existiert bereits ein QUIQQER-Benutzerkonto mit der E-Mail-Adresse "[email]".]]></de>
-            <en><![CDATA[There is already a QUIQQER user Account with the e-mail address "[email]".]]></en>
+            <en><![CDATA[There is already a QUIQQER Account with the e-mail address "[email]".]]></en>
         </locale>
         <locale name="exception.google.email.access.mandatory">
             <de><![CDATA[Für die Erstellung eines QUIQQER-Benutzerkontos ist es erforderlich, dass QUIQQER der Zugriff auf die bei Google hinterlegte E-Mail-Adresse gestattet wird.]]></de>
-            <en><![CDATA[For the creation of a QUIQQER user Account, QUIQQER is required to access the e-mail address stored at Google.]]></en>
+            <en><![CDATA[For the creation of a QUIQQER Account, QUIQQER is required to access the e-mail address stored at Google.]]></en>
         </locale>
         <locale name="exception.google.email.incorrect">
             <de><![CDATA[Die übergebene E-Mail-Adresse entspricht nicht der bei Google hinterlegten E-Mail-Adresse.]]></de>
@@ -190,7 +190,7 @@
         </locale>
         <locale name="controls.settings.addAccount.info.notSignedIn">
             <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Google-Konto verknüpft. Bitte loggen Sie sich bei Google ein, um eine Konto-Verknüpfung zu erstellen.]]></de>
-            <en><![CDATA[This QUIQQER Account is currently not linked to a Google Account.]]></en>
+            <en><![CDATA[This QUIQQER Account is currently not linked to a Google Account. Please log in with your Google Account to create a QUIQQER Account link.]]></en>
         </locale>
         <locale name="controls.settings.wrong.user.info">
             <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
@@ -216,11 +216,11 @@
         <!-- Control: Register -->
         <locale name="controls.register.status.unknown">
             <de><![CDATA[Um ein QUIQQER-Benutzerkonto mit Google zu registrieren, benötigt QUIQQER Zugriff auf Ihr Google-Profil (nur Name) und die dort hinterlegte E-Mail-Adresse. Bitte loggen Sie sich bei Google ein.]]></de>
-            <en><![CDATA[To register a QUIQQER user Account with Google, QUIQQER requires access to your Google profile (name only) and the e-mail address stored there. Please log in to Google.]]></en>
+            <en><![CDATA[To register a QUIQQER Account with Google, QUIQQER requires access to your Google profile (name only) and the e-mail address stored there. Please log in to Google.]]></en>
         </locale>
         <locale name="controls.register.status.connected.account.exists">
             <de><![CDATA[Das Google-Konto, mit welchem Sie gerade eingeloggt sind, ist bereits mit einem QUIQQER-Benutzerkonto verknüpft und kann daher nicht für eine Registrierung verwendet werden.]]></de>
-            <en><![CDATA[The Google Account that you are currently logged into is already linked to a QUIQQER user Account and can not be used for registration.]]></en>
+            <en><![CDATA[The Google Account that you are currently logged into is already linked to a QUIQQER Account and can not be used for registration.]]></en>
         </locale>
         <locale name="controls.register.registration.confirm" html="true">
             <de><![CDATA[Bitte bestätigen Sie die Erstellung des QUIQQER-Benutzerkontos <b>[email]</b> mit einem Klick auf <b>Benutzerkonto erstellen</b>.]]></de>
