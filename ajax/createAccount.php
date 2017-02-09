@@ -1,26 +1,26 @@
 <?php
 
-use QUI\Auth\Facebook\Facebook;
+use QUI\Auth\Google\Google;
 use QUI\Utils\Security\Orthos;
 
 /**
- * Create QUIQQER account with Facebook email adress
+ * Create QUIQQER account with Google email adress
  *
- * @param string $email - Facebook email address
- * @param string $fbToken - Facebook access token
+ * @param string $email - Google email address
+ * @param string $idToken - Google id_token
  * @return array - connection account data
  *
  * @throws QUI\Permissions\Exception
- * @throws QUI\Auth\Facebook\Exception
+ * @throws QUI\Auth\Google\Exception
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_createAccount',
-    function ($email, $fbToken) {
+    function ($email, $idToken) {
         $email = Orthos::clear($email);
 
         try {
-            $NewUser = Facebook::createQuiqqerAccount($email, $fbToken);
-        } catch (QUI\Auth\Facebook\Exception $Exception) {
+            $NewUser = Google::createQuiqqerAccount($email, $idToken);
+        } catch (QUI\Auth\Google\Exception $Exception) {
             throw $Exception; // throw exception to show it in the frontend
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
@@ -49,5 +49,5 @@ QUI::$Ajax->registerFunction(
 
         return $NewUser->getId();
     },
-    array('email', 'fbToken')
+    array('email', 'idToken')
 );

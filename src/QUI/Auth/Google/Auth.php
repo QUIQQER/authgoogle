@@ -90,8 +90,7 @@ class Auth extends AbstractAuthenticator
             ), 401);
         }
 
-        $fbProfile         = Google::getProfileData($token);
-        $connectionProfile = Google::getConnectedAccountByFacebookUserId($fbProfile['id']);
+        $connectionProfile = Google::getConnectedAccountByGoogleIdToken($token);
 
         if (empty($connectionProfile)) {
             throw new GoogleException(array(

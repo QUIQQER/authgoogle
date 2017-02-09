@@ -7,9 +7,9 @@
                 <conf name="clientId">
                     <type><![CDATA[string]]></type>
                 </conf>
-                <conf name="clientKey">
-                    <type><![CDATA[string]]></type>
-                </conf>
+                <!--<conf name="clientKey">-->
+                    <!--<type><![CDATA[string]]></type>-->
+                <!--</conf>-->
             </section>
             <section name="authSettings">
                 <conf name="maxLoginErrors">
@@ -48,14 +48,14 @@
                             </description>
                         </input>
 
-                        <input conf="apiSettings.clientKey" type="text">
-                            <text>
-                                <locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.title" />
-                            </text>
-                            <description>
-                                <locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.description" />
-                            </description>
-                        </input>
+                        <!--<input conf="apiSettings.clientKey" type="text">-->
+                            <!--<text>-->
+                                <!--<locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.title" />-->
+                            <!--</text>-->
+                            <!--<description>-->
+                                <!--<locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.description" />-->
+                            <!--</description>-->
+                        <!--</input>-->
                     </settings>
 
                     <settings title="authSettings" name="authSettings">

@@ -19,8 +19,6 @@
  * with his Google account
  * @event onAccountDisconnected [userId, self] - fires if the user disconnects his QUIQQER account from
  * his Google account
- * @event onAuthWithoutEmail [self] - fires if the user authorizes QUIQQER to use his Google account
- * but explicitly disallows use of Google E-Mail address
  */
 define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
@@ -104,7 +102,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
             this.Loader.show();
 
-            // check if user is allowed to edit facebook account connection
+            // check if user is allowed to edit google account connection
             QUIAjax.get(
                 'package_quiqqer_authgoogle_ajax_isEditUserSessionUser',
                 function (result) {
@@ -124,17 +122,15 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                         self.Loader.hide();
 
                         if (!Account) {
-                            self.$showConnectionInfo().then(function() {
+                            self.$showConnectionInfo().then(function () {
                                 self.fireEvent('loaded', [self]);
                             });
                             return;
                         }
 
-                        self.$showAccountInfo(Account).then(function() {
+                        self.$showAccountInfo(Account).then(function () {
                             self.fireEvent('loaded', [self]);
                         });
-                    }, function (Exception) {
-                        console.log(Exception.getCode());
                     });
                 }, {
                     'package': 'quiqqer/authgoogle',
@@ -150,7 +146,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
         },
 
         /**
-         * Show info of connected facebook account
+         * Show info of connected google account
          *
          * @param {Object} Account - Data of connected Google account
          * @return {Promise}
@@ -199,16 +195,9 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
         },
 
         /**
-         * Set information text
+         * Show info on how to connect a google account
          *
-         * @param {string} text
-         */
-        setInfoText: function(text) {
-            this.$InfoElm.set('html', text);
-        },
-
-        /**
-         * Show info on how to connect a facebook account
+         * @return {Promise}
          */
         $showConnectionInfo: function () {
             var self = this;
@@ -217,7 +206,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
             this.$BtnsElm.set('html', '');
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 Google.isSignedIn().then(function (isSignedIn) {
                     if (!isSignedIn) {
                         self.setInfoText(
@@ -225,28 +214,27 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                         );
 
                         Google.getLoginButton().inject(self.$BtnsElm);
+
+                        self.Loader.hide();
                         resolve();
                         return;
                     }
 
                     Promise.all([
                         Google.getProfileInfo(),
-                        Google.getAuthData()
+                        Google.getToken()
                     ]).then(function (result) {
                         resolve(); // fires onLoaded
 
-                        var Profile  = result[0];
-                        var AuthData = result[1];
-
-                        console.log(Profile);
-                        console.log(AuthData);
+                        var Profile = result[0];
+                        var token   = result[1];
 
                         self.setInfoText(
                             QUILocale.get(
                                 lg,
                                 'controls.settings.addAccount.info.connected', {
-                                    'name'     : Profile.name,
-                                    'email'    : Profile.email
+                                    'name' : Profile.name,
+                                    'email': Profile.email
                                 }
                             )
                         );
@@ -262,7 +250,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
                                     Google.connectQuiqqerAccount(
                                         self.getAttribute('uid'),
-                                        AuthData.id_token
+                                        token
                                     ).then(function (Account) {
                                         self.Loader.hide();
 
@@ -276,11 +264,20 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                                 }
                             }
                         }).inject(self.$BtnsElm);
-                    });
 
-                    self.Loader.hide();
+                        self.Loader.hide();
+                    });
                 });
             });
+        },
+
+        /**
+         * Set information text
+         *
+         * @param {string} text
+         */
+        setInfoText: function (text) {
+            this.$InfoElm.set('html', text);
         }
     });
 });

@@ -36,14 +36,16 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         Type   : 'package/quiqqer/authgoogle/bin/classes/Google',
 
         Binds: [
-            'getLoginButton'
+            'login',
+            'logout'
         ],
 
         options: {},
 
         initialize: function (options) {
             this.parent(options);
-            this.$authData   = false;
+            this.$AuthData   = false;
+            this.$token      = false;   // id_token of currently logged in user
             this.$loaded     = false;
             this.$GoogleUser = false; // currently logged in Google user
         },
@@ -62,18 +64,13 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 textimage: 'fa fa-google',
                 text     : QUILocale.get(lg, 'classes.google.login.btn.text'),
                 events   : {
-                    onClick: function () {
-                        GoogleAuth.signIn().then(function (result) {
-                            if (!GoogleAuth.isSignedIn.get()) {
-                                return;
-                            }
+                    onClick: function (Btn) {
+                        Btn.disable();
 
-                            self.$GoogleUser = GoogleAuth.currentUser.get();
-                            self.$authData   = self.$GoogleUser.getAuthResponse(true);
-
-                            self.fireEvent('login', [self.$authData, self]);
-                        }, function (Exception) {
-                            // nothing, user probably denied access to google account
+                        self.login().then(function () {
+                            Btn.enable();
+                        }, function () {
+                            Btn.enable();
                         });
                     }
                 }
@@ -87,45 +84,37 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
-         * Get Logout Button
+         * Login to Google (must be triggered by user click)
          *
-         * @param {bool} [rerequest] - Re-request facebook permissions
-         * @return {Object} - qui/controls/buttons/Button
+         * @return {Promise}
          */
-        getAuthButton: function (rerequest) {
+        login: function () {
             var self = this;
 
-            var AuthBtn = new QUIButton({
-                'class'  : 'quiqqer-auth-google-login-btn',
-                disabled : true,
-                textimage: 'fa fa-google',
-                text     : QUILocale.get(lg, 'classes.google.login.btn.authorize.text'),
-                events   : {
-                    onClick: function () {
-                        var Options = {
-                            scope: 'public_profile,email'
-                        };
-
-                        if (rerequest) {
-                            Options.auth_type = 'rerequest';
-                        }
-
-                        FB.login(function (response) {
-                            self.$authData = response.authResponse;
-
-                            if (response.authResponse) {
-                                self.fireEvent('login', [response.authResponse, self]);
-                            }
-                        }, Options);
+            return new Promise(function (resolve, reject) {
+                GoogleAuth.signIn().then(function () {
+                    if (!GoogleAuth.isSignedIn.get()) {
+                        reject("Google Login failed.");
+                        return;
                     }
-                }
-            });
 
-            this.$load().then(function () {
-                AuthBtn.enable();
-            });
+                    self.$GoogleUser = GoogleAuth.currentUser.get();
+                    self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
+                    self.$token      = self.$AuthData.id_token;
 
-            return AuthBtn;
+                    self.fireEvent('login', [self.$AuthData, self]);
+
+                    resolve();
+                }, function () {
+                    QUI.getMessageHandler().then(function (MH) {
+                        MH.addError(
+                            QUILocale.get(lg, 'controls.settings.login.error')
+                        )
+                    });
+
+                    reject("Google Login failed.");
+                });
+            });
         },
 
         /**
@@ -145,12 +134,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     onClick: function (Btn) {
                         Btn.disable();
 
-                        FB.logout(function (response) {
-                            self.$authData = null;
-                            self.fireEvent('logout', [self]);
+                        self.logout().then(function () {
                             Btn.enable();
-                        }, {
-                            accessToken: self.$authData.accessToken
+                        }, function () {
+                            Btn.enable();
                         });
                     }
                 }
@@ -164,6 +151,26 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
+         * Google logout
+         *
+         * @return {Promise}
+         */
+        logout: function () {
+            var self = this;
+
+            return new Promise(function (resolve, reject) {
+                GoogleAuth.signOut().then(function () {
+                    self.$GoogleUser = false;
+                    self.$AuthData   = false;
+                    self.$token      = false;
+
+                    self.fireEvent('logout', [self.$AuthData, self]);
+                    resolve();
+                }, reject);
+            });
+        },
+
+        /**
          * Get auth data of currently connected Google account
          *
          * @return {Promise}
@@ -172,7 +179,20 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             var self = this;
 
             return this.$load().then(function () {
-                return self.$authData
+                return self.$AuthData
+            });
+        },
+
+        /**
+         * Get Google id_token for currently connected Google account
+         *
+         * @return {Promise}
+         */
+        getToken: function () {
+            var self = this;
+
+            return this.$load().then(function () {
+                return self.$token
             });
         },
 
@@ -217,17 +237,17 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * Connect a facebook account with a quiqqer account
          *
          * @param {number} userId - QUIQQER User ID
-         * @param {string} gToken - Google id_token
+         * @param {string} idToken - Google id_token
          * @return {Promise}
          */
-        connectQuiqqerAccount: function (userId, gToken) {
+        connectQuiqqerAccount: function (userId, idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post(
                     'package_quiqqer_authgoogle_ajax_connectAccount',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         userId   : userId,
-                        gToken   : gToken,
+                        idToken  : idToken,
                         onError  : reject
                     }
                 )
@@ -275,16 +295,16 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         /**
          * Check if Google account is connected to a QUIQQER account
          *
-         * @param {number} fbUserId
+         * @param {string} idToken - Google API id_token
          * @return {Promise}
          */
-        isAccountConnectedToQuiqqer: function (fbUserId) {
+        isAccountConnectedToQuiqqer: function (idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_isFacebookAccountConnected',
+                    'package_quiqqer_authgoogle_ajax_isGoogleAccountConnected',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
-                        fbUserId : fbUserId,
+                        idToken  : idToken,
                         onError  : reject
                     }
                 );
@@ -345,7 +365,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                     }
 
                                     self.$GoogleUser = GoogleAuth.currentUser.get();
-                                    self.$authData   = self.$GoogleUser.getAuthResponse(true);
+                                    self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
+                                    self.$token      = self.$AuthData.id_token;
 
                                     resolve();
                                 });

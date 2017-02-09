@@ -4,6 +4,7 @@ namespace QUI\Auth\Google;
 
 use QUI;
 use QUI\Utils\Security\Orthos;
+use Google_Client as GoogleApi;
 
 /**
  * Class Google
@@ -29,7 +30,7 @@ class Google
     /**
      * Google API Object
      *
-     * @var FacebookApi
+     * @var GoogleApi
      */
     protected static $Api = null;
 
@@ -80,8 +81,8 @@ class Google
         $NewUser->setPassword(Orthos::getPassword(), $Users->getSystemUser()); // set random password
         $NewUser->activate(false, $Users->getSystemUser());
 
-        // automatically connect new quiqqer account with fb account
-        QUI::getSession()->set('uid', $NewUser->getId());
+        // automatically connect new quiqqer account with google account
+        QUI::getSession()->set('uid', $NewUser->getId());   // temporarily set uid for permission reasons
         self::connectQuiqqerAccount($NewUser->getId(), $accessToken);
         QUI::getSession()->set('uid', false);
 
@@ -121,10 +122,10 @@ class Google
         QUI::getDataBase()->insert(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
             array(
-                'userId'   => $User->getId(),
-                'fbUserId' => $profileData['id'],
-                'email'    => $profileData['email'],
-                'name'     => $profileData['name']
+                'userId'       => $User->getId(),
+                'googleUserId' => $profileData['sub'],
+                'email'        => $profileData['email'],
+                'name'         => $profileData['name']
             )
         );
     }
@@ -157,9 +158,12 @@ class Google
      */
     public static function validateAccessToken($accessToken)
     {
-        $profileData = self::getProfileData($accessToken);
+        $payload = self::getApi()->verifyIdToken($accessToken);
 
-        if (empty($profileData) || !isset($profileData['id'])) {
+        if (empty($payload)
+            || !isset($payload['aud'])
+            || $payload['aud'] != self::getClientId()
+        ) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
                 'exception.google.invalid.token'
@@ -175,10 +179,7 @@ class Google
      */
     public static function getProfileData($accessToken)
     {
-        $Response = self::getApi()->get('/me?fields=id,name,email', $accessToken);
-        $UserData = $Response->getGraphNode();
-
-        return $UserData->asArray();
+        return self::getApi()->verifyIdToken($accessToken);
     }
 
     /**
@@ -206,15 +207,19 @@ class Google
     /**
      * Get details of a connected Google account
      *
-     * @param int $userId - Google User ID
+     * @param string $idToken - Google API id_token
      * @return array|false - details as array or false if no account connected to given Google userID
      */
-    public static function getConnectedAccountByFacebookUserId($userId)
+    public static function getConnectedAccountByGoogleIdToken($idToken)
     {
-        $result = QUI::getDataBase()->fetch(array(
+        self::validateAccessToken($idToken);
+
+        $profile = self::getProfileData($idToken);
+
+        $result  = QUI::getDataBase()->fetch(array(
             'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
             'where' => array(
-                'fbUserId' => (int)$userId
+                'googleUserId' => $profile['sub']
             )
         ));
 
@@ -240,7 +245,7 @@ class Google
     /**
      * Get Google API Instance
      *
-     * @return FacebookApi
+     * @return GoogleApi
      * @throws Exception
      */
     protected static function getApi()
@@ -250,10 +255,9 @@ class Google
         }
 
         try {
-            self::$Api = new FacebookApi(array(
-                'app_id'                => self::getAppId(),
-                'app_secret'            => self::getAppSecret(),
-                'default_graph_version' => self::GRAPH_VERSION
+            self::$Api = new GoogleApi(array(
+                'client_id'     => self::getClientId(),
+//                'client_secret' => self::getClientKey()
             ));
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(

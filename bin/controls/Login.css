@@ -1,24 +1,22 @@
-.quiqqer-auth-facebook-login {
-    float: left;
+.quiqqer-auth-google-login {
     height: 100%;
     margin: 0;
     padding: 0;
     width: 100%;
 }
 
-.quiqqer-auth-facebook-login-info {
-    float: left;
+.quiqqer-auth-google-login-info {
     margin-bottom: 20px;
     width: 100%;
 }
 
-.quiqqer-auth-facebook-login-btn {
+.quiqqer-auth-google-login-btn {
     display: inline-block;
     float: none !important;
     margin: auto !important;
 }
 
-.quiqqer-auth-facebook-login-btns {
+.quiqqer-auth-google-login-btns {
     text-align: center;
     width: 100%;
 }

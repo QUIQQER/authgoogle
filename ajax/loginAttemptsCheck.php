@@ -7,10 +7,10 @@
  * @return bool - true = session destroyed; false = session still active
  */
 QUI::$Ajax->registerFunction(
-    'package_quiqqer_authgoogle_ajax_loginErrorCheck',
+    'package_quiqqer_authgoogle_ajax_loginAttemptsCheck',
     function () {
         $Session         = QUI::getSession();
-        $loginErrorCount = $Session->get('facebook_login_errors');
+        $loginErrorCount = $Session->get('google_login_errors');
         $maxLoginErrors  = QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('authSettings', 'maxLoginErrors');
 
         if (empty($loginErrorCount)) {
@@ -23,7 +23,7 @@ QUI::$Ajax->registerFunction(
             QUI::getMessagesHandler()->addAttention(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',
-                    'message.ajax.loginErrorCheck.force.logout.attention'
+                    'message.ajax.loginAttemptsCheck.force.logout.attention'
                 )
             );
 
@@ -32,7 +32,7 @@ QUI::$Ajax->registerFunction(
             return true;
         }
 
-        $Session->set('facebook_login_errors', $loginErrorCount);
+        $Session->set('google_login_errors', $loginErrorCount);
 
         return false;
     }

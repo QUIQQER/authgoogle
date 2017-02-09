@@ -6,18 +6,18 @@ use QUI\Auth\Google\Google;
  * Connect QUIQQER account with Google account
  *
  * @param int $userId - QUIQQER user id
- * @param string $gToken - Google API id_token
+ * @param string $idToken - Google API id_token
  * @return array - connection account data
  *
  * @throws QUI\Permissions\Exception
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_connectAccount',
-    function ($userId, $gToken) {
+    function ($userId, $idToken) {
         $userId = (int)$userId;
 
         try {
-            Google::connectQuiqqerAccount($userId, $gToken);
+            Google::connectQuiqqerAccount($userId, $idToken);
             $accountData = Google::getConnectedAccountByQuiqqerUserId($userId);
         } catch (QUI\Auth\Facebook\Exception $Exception) {
             QUI::getMessagesHandler()->addError(
@@ -60,5 +60,5 @@ QUI::$Ajax->registerFunction(
 
         return $accountData;
     },
-    array('userId', 'fbToken')
+    array('userId', 'idToken')
 );

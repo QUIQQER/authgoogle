@@ -1,20 +1,20 @@
-.quiqqer-auth-facebook-register {
+.quiqqer-auth-google-register {
     float: left;
     height: 100%;
     width: 100%;
 }
 
-.quiqqer-auth-facebook-register-info {
+.quiqqer-auth-google-register-info {
     float: left;
     width: 100%;
 }
 
-.quiqqer-auth-facebook-register-btns {
+.quiqqer-auth-google-register-btns {
     float: left;
     margin-top: 10px;
     width: 100%;
 }
 
-.quiqqer-auth-facebook-register-error {
+.quiqqer-auth-google-register-error {
     color: red;
 }

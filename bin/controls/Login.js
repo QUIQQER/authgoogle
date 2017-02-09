@@ -56,9 +56,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 onImport: this.$onImport
             });
 
-            this.Loader   = new QUILoader();
-            this.$InfoElm = null;
-            this.$BtnElm  = null;
+            this.Loader    = new QUILoader();
+            this.$InfoElm  = null;
+            this.$BtnElm   = null;
+            this.$signedIn = false;
         },
 
         /**
@@ -66,17 +67,17 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          */
         create: function () {
             this.$Elm = new Element('div', {
-                'class': 'quiqqer-auth-facebook-login',
-                'html' : '<div class="quiqqer-auth-facebook-login-info"></div>' +
-                '<div class="quiqqer-auth-facebook-login-btns"></div>'
+                'class': 'quiqqer-auth-google-login',
+                'html' : '<div class="quiqqer-auth-google-login-info"></div>' +
+                '<div class="quiqqer-auth-google-login-btns"></div>'
             });
 
             this.$InfoElm = this.$Elm.getElement(
-                '.quiqqer-auth-facebook-login-info'
+                '.quiqqer-auth-google-login-info'
             );
 
             this.$BtnElm = this.$Elm.getElement(
-                '.quiqqer-auth-facebook-login-btns'
+                '.quiqqer-auth-google-login-btns'
             );
 
             this.Loader.inject(this.$Elm);
@@ -100,6 +101,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             Google.addEvents({
                 onLogin: function () {
                     self.$BtnElm.set('html', '');
+                    self.$signedIn = true;
                     self.$login();
                 }
             });
@@ -107,6 +109,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             Google.addEvents({
                 onLogout: function () {
                     self.$BtnElm.set('html', '');
+                    self.$signedIn = false;
                     self.$login();
                 }
             });
@@ -120,88 +123,76 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             this.Loader.show();
 
-            Promise.all([
-                Google.getStatus(),
-                self.$getLoginUserId()
-            ]).then(function (result) {
-                var status      = result[0];
-                var loginUserId = result[1];
+            self.$getLoginUserId().then(function (loginUserId) {
+                if (!self.$signedIn) {
+                    self.$InfoElm.set(
+                        'html',
+                        QUILocale.get(lg, 'controls.login.status.unknown')
+                    );
 
-                switch (status) {
-                    case 'connected':
-                        Google.getAuthData().then(function (AuthData) {
-                            Google.isAccountConnectedToQuiqqer(AuthData.userID).then(function (connected) {
+                    self.$showLoginBtn();
+                    self.Loader.hide();
 
-                                if (!connected) {
-                                    if (loginUserId) {
-                                        self.$showSettings(loginUserId, status);
-                                    } else {
-                                        self.$InfoElm.set(
-                                            'html',
-                                            QUILocale.get(lg, 'controls.login.no.quiqqer.account')
-                                        );
+                    return;
+                }
 
-                                        Google.getLogoutButton().inject(self.$BtnElm);
-                                    }
+                Google.getToken().then(function (token) {
+                    Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
+                        if (!connected) {
+                            if (loginUserId) {
+                                self.$showSettings(loginUserId, status);
+                            } else {
+                                self.$InfoElm.set(
+                                    'html',
+                                    QUILocale.get(lg, 'controls.login.no.quiqqer.account')
+                                );
 
+                                Google.getLogoutButton().inject(self.$BtnElm);
+                            }
+
+                            self.Loader.hide();
+                            return;
+                        }
+
+                        // if there is no previous user id in the user session
+                        // Google auth is used as a primary authenticator
+                        if (!loginUserId) {
+                            self.$Input.value = token;
+                            self.$Form.fireEvent('submit', [self.$Form]);
+
+                            return;
+                        }
+
+                        // check if login user is google user
+                        self.$isLoginUserGoogleUser(token).then(function (isLoginUser) {
+                            self.Loader.hide();
+
+                            if (!isLoginUser) {
+                                self.Loader.show();
+
+                                self.$loginAttemptsCheck().then(function (maxLoginsExceeded) {
                                     self.Loader.hide();
-                                    return;
-                                }
 
-                                // if there is no previous user id in the user session
-                                // Google auth is used as a primary authenticator
-                                if (!loginUserId) {
-                                    self.$Input.value = AuthData.accessToken;
-                                    self.$Form.fireEvent('submit', [self.$Form]);
-
-                                    return;
-                                }
-
-                                // check if login user is facebook user
-                                self.$isLoginUserGoogleUser(AuthData.accessToken).then(function (isLoginUser) {
-                                    self.Loader.hide();
-
-                                    if (!isLoginUser) {
-                                        self.Loader.show();
-
-                                        self.$loginErrorCheck().then(function (maxLoginsExceeded) {
-                                            self.Loader.hide();
-
-                                            if (maxLoginsExceeded) {
-                                                window.location = window.location;
-                                                return;
-                                            }
-
-                                            self.$InfoElm.set(
-                                                'html',
-                                                QUILocale.get(lg, 'controls.login.wrong.facebook.user')
-                                            );
-
-                                            Google.getLogoutButton().inject(self.$BtnElm);
-                                        });
+                                    if (maxLoginsExceeded) {
+                                        window.location = window.location;
                                         return;
                                     }
 
-                                    self.$Input.value = AuthData.accessToken;
-                                    self.$Form.fireEvent('submit', [self.$Form]);
+                                    self.$InfoElm.set(
+                                        'html',
+                                        QUILocale.get(lg, 'controls.login.wrong.google.user')
+                                    );
+
+                                    Google.getLogoutButton().inject(self.$BtnElm);
                                 });
-                            });
+                                return;
+                            }
+
+                            self.$Input.value = token;
+                            self.$Form.fireEvent('submit', [self.$Form]);
                         });
-                        break;
-
-                    case 'not_authorized':
-                        self.$showSettings(loginUserId, status);
-                        break;
-
-                    case 'unknown':
-                        self.$InfoElm.set(
-                            'html',
-                            QUILocale.get(lg, 'controls.login.status.unknown')
-                        );
-
-                        self.$showLoginBtn();
-                        break;
-                }
+                    });
+                });
 
                 self.Loader.hide();
             });
@@ -267,16 +258,16 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         /**
          * Checks if the current QUIQQER Login user is the Google user
          *
-         * @param {string} fbToken - Google API token
+         * @param {string} idToken - Google API token
          * @return {Promise}
          */
-        $isLoginUserGoogleUser: function (fbToken) {
+        $isLoginUserGoogleUser: function (idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
                     'package_quiqqer_authgoogle_ajax_isLoginUserGoogleUser',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
-                        fbToken  : fbToken,
+                        idToken  : idToken,
                         onError  : reject
                     }
                 )
@@ -301,14 +292,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
-         * Check facebook login errors
+         * Check Google login attempts
          *
          * @return {Promise}
          */
-        $loginErrorCheck: function () {
+        $loginAttemptsCheck: function () {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post(
-                    'package_quiqqer_authgoogle_ajax_loginErrorCheck',
+                    'package_quiqqer_authgoogle_ajax_loginAttemptsCheck',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         onError  : reject

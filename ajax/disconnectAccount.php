@@ -1,6 +1,6 @@
 <?php
 
-use QUI\Auth\Facebook\Facebook;
+use QUI\Auth\Google\Google;
 
 /**
  * Disconnect QUIQQER account from Facebook account
@@ -16,7 +16,7 @@ QUI::$Ajax->registerFunction(
         $userId = (int)$userId;
 
         try {
-            Facebook::disconnectAccount($userId);
+            Google::disconnectAccount($userId);
         } catch (QUI\Auth\Facebook\Exception $Exception) {
             QUI::getMessagesHandler()->addError(
                 QUI::getLocale()->get(
