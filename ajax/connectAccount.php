@@ -51,7 +51,7 @@ QUI::$Ajax->registerFunction(
                 'quiqqer/authgoogle',
                 'message.ajax.connectAccount.success',
                 array(
-                    'fbAccount' => $accountData['name'] . ' (' . $accountData['email'] . ')',
+                    'account'   => $accountData['name'] . ' (' . $accountData['email'] . ')',
                     'qUserName' => QUI::getUsers()->get($accountData['userId'])->getUsername(),
                     'qUserId'   => $accountData['userId']
                 )

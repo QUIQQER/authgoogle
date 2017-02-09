@@ -114,7 +114,7 @@
             <de><![CDATA[Bei der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
         </locale>
         <locale name="message.ajax.connectAccount.success">
-            <de><![CDATA[Das Google-Konto "[fbAccount]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
+            <de><![CDATA[Das Google-Konto "[account]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit QUIQQER verwendet werden.]]></de>
         </locale>
         <locale name="message.ajax.disconnectAccount.error">
             <de><![CDATA[Beim Aufheben der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
@@ -232,10 +232,7 @@
             <de><![CDATA[Sie sind z.Z. bei Google eingeloggt, haben QUIQQER aber noch nicht autorisiert, ihr Google-Konto für den Authentifizierungs-Prozess zu benutzen. Wenn Sie das Google-Konto, mit welchem sie aktuell eingeloggt sind, für den Authentifizierungs-Prozess verwenden möchten, klicken Sie bitte auf "QUIQQER autorisieren". Möchten Sie ein anderes Google-Konto für die Authentifizierung verwenden, besuchen Sie bitte <a href="https://www.google.com" target="_blank">https://www.google.com</a> und loggen sich dort zunächst aus.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.info.connected" html="true">
-            <de><![CDATA[Sie sind mit dem Google-Konto <b>[name]</b> ([email]) eingeloggt. Wenn Sie dieses Google-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Google-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
-        </locale>
-        <locale name="controls.settings.addAccount.email.unknown">
-            <de><![CDATA[Sie sind mit dem Google-Konto <b>[name]</b> eingeloggt, haben QUIQQER jedoch nicht autorisiert, Ihre mit dem Google-Konto verknüpfte E-Mail-Adresse abzurufen. Dies ist jedoch notwendig, um Ihr Google-Konto zur Authentifizierung mit QUIQQER benutzen zu können. Klicken Sie auf <b>QUIQQER autorisieren</b>, um QUIQQER den Zugriff auf Ihre E-Mail-Adresse bei Google zu geben.]]></de>
+            <de><![CDATA[Sie sind mit dem Google-Konto <b>[email]</b> ([name]) eingeloggt. Wenn Sie dieses Google-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Google-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.info.notSignedIn">
             <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Google-Konto verknüpft. Bitte loggen Sie sich bei Google ein, um eine Konto-Verknüpfung zu erstellen.]]></de>
@@ -244,7 +241,7 @@
             <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
         </locale>
         <locale name="controls.settings.showAccountInfo.text">
-            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Google-Konto <b>[name]</b> ([email]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
+            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Google-Konto <b>[email]</b> ([name]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
         </locale>
         <locale name="controls.settings.addAccount.btn.connect">
             <de><![CDATA[Jetzt verknüpfen]]></de>
