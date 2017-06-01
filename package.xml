@@ -8,9 +8,15 @@
             <locale group="quiqqer/authgoogle" var="package.description"/>
         </description>
 
-       <provider>
-           <auth src="\QUI\Auth\Google\Auth" />
-       </provider>
+        <support>
+            <email>support@pcsg.de</email>
+            <issues>https://dev.quiqqer.com/quiqqer/authgoogle/issues</issues>
+            <source>https://dev.quiqqer.com/quiqqer/authgoogle</source>
+        </support>
+
+        <provider>
+            <auth src="\QUI\Auth\Google\Auth"/>
+        </provider>
 
     </package>
 </quiqqer>
