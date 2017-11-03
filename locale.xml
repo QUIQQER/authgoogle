@@ -91,6 +91,14 @@
         </locale>
 
         <!-- Registrar -->
+        <locale name="registrar.title">
+            <de><![CDATA[Registrierung per Google Konto]]></de>
+            <en><![CDATA[Registration via Google account]]></en>
+        </locale>
+        <locale name="registrar.description">
+            <de><![CDATA[Registrierung über Verknüpfung des QUIQQER Benutzerkontos mit einem Google Konto.]]></de>
+            <en><![CDATA[Registration via linking a QUIQQER account with a Google account.]]></en>
+        </locale>
         <locale name="registrar.javascript_required">
             <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Für die Registrierung mit Ihrem Google-Konto aktivieren Sie bitte JavaScript.]]></de>
             <en><![CDATA[JavaScript is disabled in your browser. To register with your Google Account, please enable JavaScript.]]></en>
@@ -270,6 +278,16 @@
         <locale name="controls.login.no.quiqqer.account">
             <de><![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein QUIQQER-Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
             <en><![CDATA[The Google Account you are currently logged in with is not linked to the QUIQQER Account you are trying wo authenticate for. Please log in with another Google Account or use another authentication method.]]></en>
+        </locale>
+
+        <!-- Control: frontend/controls/Registrar -->
+        <locale name="controls.frontend.registrar.registration_button">
+            <de><![CDATA[Jetzt mit Google registrieren]]></de>
+            <en><![CDATA[Register now with Google]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.already_connected">
+            <de><![CDATA[Dieses Google-Konto ist bereits mit einem QUIQQER Benutzerkonto verknüpft. Wenn Sie sich mit einem anderen Google-Konto verknüpfen möchten, ]]></de>
+            <en><![CDATA[Register now with Google]]></en>
         </locale>
 
     </groups>

@@ -60,21 +60,21 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         switch ($registrarSettings['activationMode']) {
             case FrontendUsers\Handler::ACTIVATION_MODE_MANUAL:
                 $msg = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
+                    'quiqqer/authgoogle',
                     'message.registrars.email.registration_success_manual'
                 );
                 break;
 
             case FrontendUsers\Handler::ACTIVATION_MODE_AUTO:
                 $msg = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
+                    'quiqqer/authgoogle',
                     'message.registrars.email.registration_success_auto'
                 );
                 break;
 
             case FrontendUsers\Handler::ACTIVATION_MODE_MAIL:
                 $msg = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
+                    'quiqqer/authgoogle',
                     'message.registrars.email.registration_success_mail'
                 );
                 break;
@@ -85,7 +85,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
             $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
+                    'quiqqer/authgoogle',
                     'registrars.email.password_auto_generate'
                 ) . "</p>";
         }
@@ -104,7 +104,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
             $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
+                    'quiqqer/authgoogle',
                     'registrars.email.password_auto_generate'
                 ) . "</p>";
         }
@@ -123,7 +123,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $usernameInput  = $settings['usernameInput'];
         $usernameExists = QUI::getUsers()->usernameExists($username);
 
-        $lg       = 'quiqqer/frontend-users';
+        $lg       = 'quiqqer/authgoogle';
         $lgPrefix = 'exception.registrars.email.';
 
         // Username check
@@ -205,7 +205,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $usernameExists   = $Users->usernameExists($username);
 
         $L        = QUI::getLocale();
-        $lg       = 'quiqqer/frontend-users';
+        $lg       = 'quiqqer/authgoogle';
         $lgPrefix = 'exception.registrars.email.';
 
         // Username check
@@ -315,7 +315,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             $Locale = QUI::getLocale();
         }
 
-        return $Locale->get('quiqqer/frontend-users', 'registrar.email.title');
+        return $Locale->get('quiqqer/authgoogle', 'registrar.title');
     }
 
     /**
@@ -330,6 +330,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             $Locale = QUI::getLocale();
         }
 
-        return $Locale->get('quiqqer/frontend-users', 'registrar.email.description');
+        return $Locale->get('quiqqer/authgoogle', 'registrar.description');
     }
 }

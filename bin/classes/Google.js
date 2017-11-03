@@ -84,6 +84,41 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
+         * Get Registration Button
+         *
+         * @return {Object} - qui/controls/buttons/Button
+         */
+        getRegistrationButton: function () {
+            var self = this;
+
+            var RegistrationBtn = new QUIButton({
+                'class'  : 'quiqqer-auth-google-registration-btn',
+                disabled : true,
+                textimage: 'fa fa-google',
+                text     : QUILocale.get(lg, 'controls.frontend.registrar.registration_button'),
+                events   : {
+                    onClick: function (Btn) {
+                        Btn.disable();
+
+                        self.login().then(function () {
+                            Btn.enable();
+                        }, function () {
+                            Btn.enable();
+                        });
+                    }
+                }
+            });
+
+            this.$load().then(function () {
+                RegistrationBtn.enable();
+            }, function(e) {
+                console.log(arguments);
+            });
+
+            return RegistrationBtn;
+        },
+
+        /**
          * Login to Google (must be triggered by user click)
          *
          * @return {Promise}

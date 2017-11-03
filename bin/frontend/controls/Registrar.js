@@ -49,6 +49,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.$signedIn   = false;
             this.$TokenInput = null;
+            this.$InfoElm    = null;
+            this.$BtnElm     = null;
             this.Loader      = new QUILoader();
             this.$Elm        = null;
         },
@@ -61,6 +63,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.$Elm        = this.getElm();
             this.$TokenInput = this.$Elm.getElement('input[name="token"]');
+            this.$BtnElm     = this.$Elm.getElement('.quiqqer-authgoogle-registrar-btn');
+            this.$InfoElm    = this.$Elm.getElement('.quiqqer-authgoogle-registrar-info');
 
             this.$login();
 
@@ -87,93 +91,85 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.Loader.show();
 
-            console.log(self.$signedIn);
-            return;
+            if (!self.$signedIn) {
+                self.$InfoElm.set(
+                    'html',
+                    QUILocale.get(lg, 'controls.login.status.unknown')
+                );
 
-            self.$getRegistrarUserId().then(function (loginUserId) {
-                if (!self.$signedIn) {
-                    self.$InfoElm.set(
-                        'html',
-                        QUILocale.get(lg, 'controls.login.status.unknown')
-                    );
+                Google.getRegistrationButton().inject(this.$BtnElm);
 
-                    self.$showRegistrarBtn();
-                    self.Loader.hide();
-
-                    return;
-                }
-
-                Google.getToken().then(function (token) {
-                    self.$token = token;
-
-                    Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
-                        if (!connected) {
-                            if (loginUserId) {
-                                self.$showSettings(loginUserId, status);
-                            } else {
-                                self.$InfoElm.set(
-                                    'html',
-                                    QUILocale.get(lg, 'controls.login.no.quiqqer.account')
-                                );
-
-                                Google.getLogoutButton().inject(self.$BtnElm);
-                            }
-
-                            self.Loader.hide();
-                            return;
-                        }
-
-                        // if there is no previous user id in the user session
-                        // Google auth is used as a primary authenticator
-                        if (!loginUserId) {
-                            self.$Input.value = token;
-                            self.$Form.fireEvent('submit', [self.$Form]);
-
-                            return;
-                        }
-
-                        // check if login user is google user
-                        self.$isRegistrarUserGoogleUser(token).then(function (isRegistrarUser) {
-                            self.Loader.hide();
-
-                            if (!isRegistrarUser) {
-                                self.Loader.show();
-
-                                self.$loginAttemptsCheck().then(function (maxRegistrarsExceeded) {
-                                    self.Loader.hide();
-
-                                    if (maxRegistrarsExceeded) {
-                                        window.location = window.location;
-                                        return;
-                                    }
-
-                                    self.$InfoElm.set(
-                                        'html',
-                                        QUILocale.get(lg, 'controls.login.wrong.google.user')
-                                    );
-
-                                    //self.$showConnectBtn();
-
-                                    Google.getLogoutButton().inject(self.$BtnElm);
-                                });
-                                return;
-                            }
-
-                            self.$Input.value = token;
-                            self.$Form.fireEvent('submit', [self.$Form]);
-                        });
-                    });
-                });
 
                 self.Loader.hide();
-            });
-        },
 
-        /**
-         * Show login button
-         */
-        $showRegistrarBtn: function () {
-            Google.getRegistrarButton().inject(this.$BtnElm);
+                return;
+            }
+
+            Google.getToken().then(function (token) {
+                self.$token = token;
+
+                Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
+                    if (connected) {
+                        self.$InfoElm.set(
+                            'html',
+                            QUILocale.get(lg, 'controls.frontend.registrar.already_connected')
+                        );
+
+                        Google.getLogoutButton().inject(self.$BtnElm);
+
+                        return;
+                    }
+
+                    if (!connected) {
+                        self.$InfoElm.set(
+                            'html',
+                            'Bitte kurwa verbinden!'
+                        );
+
+                        return;
+                    }
+
+                    // if there is no previous user id in the user session
+                    // Google auth is used as a primary authenticator
+                    if (!loginUserId) {
+                        self.$Input.value = token;
+                        self.$Form.fireEvent('submit', [self.$Form]);
+
+                        return;
+                    }
+
+                    // check if login user is google user
+                    self.$isRegistrarUserGoogleUser(token).then(function (isRegistrarUser) {
+                        self.Loader.hide();
+
+                        if (!isRegistrarUser) {
+                            self.Loader.show();
+
+                            self.$loginAttemptsCheck().then(function (maxRegistrarsExceeded) {
+                                self.Loader.hide();
+
+                                if (maxRegistrarsExceeded) {
+                                    window.location = window.location;
+                                    return;
+                                }
+
+                                self.$InfoElm.set(
+                                    'html',
+                                    QUILocale.get(lg, 'controls.login.wrong.google.user')
+                                );
+
+                                //self.$showConnectBtn();
+
+                                Google.getLogoutButton().inject(self.$BtnElm);
+                            });
+                            return;
+                        }
+
+                        self.$Input.value = token;
+                        self.$Form.fireEvent('submit', [self.$Form]);
+                    });
+                });
+            });
         },
 
         /**
