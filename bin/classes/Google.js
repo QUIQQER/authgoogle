@@ -178,8 +178,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         getAuthData: function () {
             var self = this;
 
-            return this.$load().then(function () {
-                return self.$AuthData
+            return new Promise(function (resolve, reject) {
+                self.$load().then(function () {
+                    resolve(self.$AuthData);
+                }, reject);
             });
         },
 
@@ -191,8 +193,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         getToken: function () {
             var self = this;
 
-            return this.$load().then(function () {
-                return self.$token
+            return new Promise(function (resolve, reject) {
+                self.$load().then(function () {
+                    resolve(self.$token);
+                }, reject);
             });
         },
 
@@ -202,8 +206,12 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         isSignedIn: function () {
-            return this.$load().then(function () {
-                return Promise.resolve(GoogleAuth.isSignedIn.get());
+            var self = this;
+
+            return new Promise(function (resolve, reject) {
+                self.$load().then(function () {
+                    resolve(GoogleAuth.isSignedIn.get());
+                }, reject);
             });
         },
 
@@ -335,11 +343,15 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         return;
                     }
 
-                    new Element('script', {
-                        src  : 'https://apis.google.com/js/platform.js',
-                        async: 'async',
-                        defer: 'defer'
-                    }).inject(document.head);
+                    try {
+                        new Element('script', {
+                            src  : 'https://apis.google.com/js/platform.js',
+                            async: 'async',
+                            defer: 'defer'
+                        }).inject(document.head);
+                    } catch (e) {
+                        console.log(e);
+                    }
 
                     var waitForGoogleApi = setInterval(function () {
                         if (typeof gapi === 'undefined') {
@@ -370,9 +382,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                                     resolve();
                                 });
-                            });
+                            }, reject);
                         });
-
                     }, 200);
                 });
             });

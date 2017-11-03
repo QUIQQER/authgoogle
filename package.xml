@@ -23,6 +23,7 @@
 
         <provider>
             <auth src="\QUI\Auth\Google\Auth"/>
+            <registrar src="\QUI\Registration\Google\Registrar"/>
         </provider>
 
     </package>

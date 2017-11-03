@@ -89,6 +89,13 @@
             <de><![CDATA[Die Google Authentifikation kann nicht verwendet werden, da noch keine oder eine fehlerhafte Client-ID in den Einstellungen festgelegt ist. Bitte legen Sie eine korrekte Client-ID in den Einstellung ("Google Authentifikation") fest.]]></de>
             <en><![CDATA[Google cannot be used because there is no or a wrong Client-ID set in the settings. Please set a correct Client-ID in the settings ("Google authentication").]]></en>
         </locale>
+
+        <!-- Registrar -->
+        <locale name="registrar.javascript_required">
+            <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Für die Registrierung mit Ihrem Google-Konto aktivieren Sie bitte JavaScript.]]></de>
+            <en><![CDATA[JavaScript is disabled in your browser. To register with your Google Account, please enable JavaScript.]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/authgoogle" datatype="php">
@@ -211,6 +218,10 @@
         <locale name="controls.settings.login.error">
             <de><![CDATA[Beim Google-Login ist ein Fehler aufgetreten. Bitte wiederholen Sie den Login-Vorgang.]]></de>
             <en><![CDATA[There was an error with Google's login. Please repeat the login process.]]></en>
+        </locale>
+        <locale name="controls.settings.api_error">
+            <de><![CDATA[Bei der Verbindung zur Google API ist ein Fehler aufgetreten. Bitte überprüfen Sie die Einstellungen des "Google Authentifikation"-Moduls.]]></de>
+            <en><![CDATA[An error occurred while connecting to the Google API. Please check the settings of the "Google Authentication" module.]]></en>
         </locale>
 
         <!-- Control: Register -->

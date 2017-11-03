@@ -102,6 +102,14 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
             this.Loader.show();
 
+            var ShowApiError = function() {
+                self.Loader.hide();
+                self.$InfoElm.set(
+                    'html',
+                    QUILocale.get(lg, 'controls.settings.api_error')
+                );
+            };
+
             // check if user is allowed to edit google account connection
             QUIAjax.get(
                 'package_quiqqer_authgoogle_ajax_isEditUserSessionUser',
@@ -124,13 +132,13 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                         if (!Account) {
                             self.$showConnectionInfo().then(function () {
                                 self.fireEvent('loaded', [self]);
-                            });
+                            }, ShowApiError);
                             return;
                         }
 
                         self.$showAccountInfo(Account).then(function () {
                             self.fireEvent('loaded', [self]);
-                        });
+                        }, ShowApiError);
                     });
                 }, {
                     'package': 'quiqqer/authgoogle',
@@ -266,8 +274,8 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                         }).inject(self.$BtnsElm);
 
                         self.Loader.hide();
-                    });
-                });
+                    }, reject);
+                }, reject);
             });
         },
 

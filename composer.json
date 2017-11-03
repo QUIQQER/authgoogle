@@ -1,29 +1,29 @@
 {
-    "name" : "quiqqer/authgoogle",
-    "type" : "quiqqer-module",
-    "description" : "QUIQQER authentication with Google account",
-    "version" : "dev-dev",
-    "license" : "GPL-3.0+",
-    "homepage": "https://www.quiqqer.com",
-    "authors" : [
-        {
-            "name": "Patrick Müller",
-            "email": "p.mueller@pcsg.de",
-            "homepage": "http://www.pcsg.de",
-            "role": "Developer"
-        }
-    ],
-    "support" : {
-        "email": "support@pcsg.de",
-        "url": "http://www.pcsg.de"
-    },
-    "require": {
-        "google/apiclient": "^2.1"
+  "name": "quiqqer/authgoogle",
+  "type": "quiqqer-module",
+  "description": "QUIQQER authentication with Google account",
+  "version": "dev-dev",
+  "license": "GPL-3.0+",
+  "homepage": "https://www.quiqqer.com",
+  "authors": [
+    {
+      "name": "Patrick Müller",
+      "email": "p.mueller@pcsg.de",
+      "homepage": "http://www.pcsg.de",
+      "role": "Developer"
     }
-    ,"autoload": {
-  "psr-4": {
-      "QUI\\Auth\\Google\\": "src/QUI/Auth/Google"
-   }
-}
-
+  ],
+  "support": {
+    "email": "support@pcsg.de",
+    "url": "http://www.pcsg.de"
+  },
+  "require": {
+    "google/apiclient": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "QUI\\Auth\\Google\\": "src/QUI/Auth/Google",
+      "QUI\\Registration\\Google\\": "src/QUI/Registration/Google"
+    }
+  }
 }

@@ -304,6 +304,10 @@ class Google
      */
     protected static function checkEditPermission($userId)
     {
+        if (QUI::getUserBySession()->getId() === QUI::getUsers()->getSystemUser()->getId()) {
+            return;
+        }
+
         if ((int)QUI::getSession()->get('uid') !== (int)$userId
             || !$userId
         ) {

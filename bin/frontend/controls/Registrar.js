@@ -1,10 +1,10 @@
 /**
- * Google Authentication for QUIQQER
+ * QUIQQER account registration via Google Account
  *
- * @module package/quiqqer/authgoogle/bin/controls/Login
+ * @module package/quiqqer/authgoogle/bin/frontend/controls/Registrar
  * @author www.pcsg.de (Patrick Müller)
  */
-define('package/quiqqer/authgoogle/bin/controls/Login', [
+define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'qui/controls/Control',
     'qui/controls/windows/Confirm',
@@ -16,7 +16,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
     'Ajax',
     'Locale',
 
-    'css!package/quiqqer/authgoogle/bin/controls/Login.css'
+    'css!package/quiqqer/authgoogle/bin/frontend/controls/Registrar.css'
 
 ], function (QUIControl, QUIConfirm, QUIButton, QUILoader, Google,
              QUIAjax, QUILocale) {
@@ -26,14 +26,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/authgoogle/bin/controls/Login',
+        Type   : 'package/quiqqer/authgoogle/bin/frontend/controls/Registrar',
 
         Binds: [
             '$onImport',
             '$login',
             '$showSettings',
-            '$showLoginBtn',
-            '$getLoginUserId'
+            '$showRegistrarBtn',
+            '$getRegistrarUserId'
         ],
 
         options: {
@@ -47,34 +47,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 onImport: this.$onImport
             });
 
-            this.Loader    = new QUILoader();
-            this.$InfoElm  = null;
-            this.$BtnElm   = null;
-            this.$signedIn = false;
-            this.$token    = false;
-        },
-
-        /**
-         * event on DOMElement creation
-         */
-        create: function () {
-            this.$Elm = new Element('div', {
-                'class': 'quiqqer-auth-google-login',
-                'html' : '<div class="quiqqer-auth-google-login-info"></div>' +
-                '<div class="quiqqer-auth-google-login-btns"></div>'
-            });
-
-            this.$InfoElm = this.$Elm.getElement(
-                '.quiqqer-auth-google-login-info'
-            );
-
-            this.$BtnElm = this.$Elm.getElement(
-                '.quiqqer-auth-google-login-btns'
-            );
-
-            this.Loader.inject(this.$Elm);
-
-            return this.$Elm;
+            this.$signedIn   = false;
+            this.$TokenInput = null;
+            this.Loader      = new QUILoader();
+            this.$Elm        = null;
         },
 
         /**
@@ -83,16 +59,13 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $onImport: function () {
             var self = this;
 
-            this.$Input      = this.getElm();
-            this.$Input.type = 'hidden';
-            this.$Form       = this.$Input.getParent('form');
+            this.$Elm        = this.getElm();
+            this.$TokenInput = this.$Elm.getElement('input[name="token"]');
 
-            this.create().inject(this.$Input, 'after');
             this.$login();
 
             Google.addEvents({
                 onLogin: function () {
-                    self.$BtnElm.set('html', '');
                     self.$signedIn = true;
                     self.$login();
                 }
@@ -100,7 +73,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             Google.addEvents({
                 onLogout: function () {
-                    self.$BtnElm.set('html', '');
                     self.$signedIn = false;
                     self.$login();
                 }
@@ -108,21 +80,24 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
-         * Login
+         * Registrar
          */
         $login: function () {
             var self = this;
 
             this.Loader.show();
 
-            self.$getLoginUserId().then(function (loginUserId) {
+            console.log(self.$signedIn);
+            return;
+
+            self.$getRegistrarUserId().then(function (loginUserId) {
                 if (!self.$signedIn) {
                     self.$InfoElm.set(
                         'html',
                         QUILocale.get(lg, 'controls.login.status.unknown')
                     );
 
-                    self.$showLoginBtn();
+                    self.$showRegistrarBtn();
                     self.Loader.hide();
 
                     return;
@@ -158,16 +133,16 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                         }
 
                         // check if login user is google user
-                        self.$isLoginUserGoogleUser(token).then(function (isLoginUser) {
+                        self.$isRegistrarUserGoogleUser(token).then(function (isRegistrarUser) {
                             self.Loader.hide();
 
-                            if (!isLoginUser) {
+                            if (!isRegistrarUser) {
                                 self.Loader.show();
 
-                                self.$loginAttemptsCheck().then(function (maxLoginsExceeded) {
+                                self.$loginAttemptsCheck().then(function (maxRegistrarsExceeded) {
                                     self.Loader.hide();
 
-                                    if (maxLoginsExceeded) {
+                                    if (maxRegistrarsExceeded) {
                                         window.location = window.location;
                                         return;
                                     }
@@ -194,105 +169,23 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             });
         },
 
-        //$showConnectBtn: function () {
-        //    var self = this;
-        //
-        //    new QUIButton({
-        //        text     : 'Jetzt verknüpfen',
-        //        textimage: 'fa fa-link',
-        //        events   : {
-        //            onClick: function () {
-        //                self.Loader.show();
-        //
-        //                Google.connectQuiqqerAccount(
-        //                    self.getAttribute('uid'),
-        //                    self.$token
-        //                ).then(function (Account) {
-        //                    self.Loader.hide();
-        //
-        //                    if (!Account) {
-        //                        return;
-        //                    }
-        //
-        //                    self.$InfoElm.set(
-        //                        'html',
-        //                        'Account erfolgreich verknüpft!'
-        //                    );
-        //
-        //                    self.$login();
-        //                });
-        //            }
-        //        }
-        //    }).inject(self.$BtnElm);
-        //},
-
-        /**
-         * Shows settings control
-         *
-         * @param {number} uid - QUIQQER User ID
-         * @param {string} status - Google Login status
-         */
-        $showSettings: function (uid, status) {
-            var self = this;
-
-            this.Loader.show();
-            this.$InfoElm.set('html', '');
-
-            var emailProvided = true;
-
-            require([
-                'package/quiqqer/authgoogle/bin/controls/Settings'
-            ], function (SettingsControl) {
-                self.Loader.hide();
-                var Settings = new SettingsControl({
-                    uid   : uid,
-                    events: {
-                        onAccountConnected: function (Account, Control) {
-                            self.$login();
-                            Control.destroy();
-                        },
-                        onLoaded          : function () {
-                            switch (status) {
-                                case 'connected':
-                                    if (!emailProvided) {
-                                        Settings.setInfoText(
-                                            QUILocale.get(lg, 'controls.login.register.status.not_authorized')
-                                        );
-
-                                        return;
-                                    }
-
-                                    Settings.setInfoText(
-                                        QUILocale.get(lg, 'controls.login.register.status.connected')
-                                    );
-                                    break;
-                            }
-                        },
-                        onAuthWithoutEmail: function () {
-                            emailProvided = false;
-                        }
-                    }
-                }).inject(self.$InfoElm);
-            });
-        },
-
         /**
          * Show login button
          */
-        $showLoginBtn: function () {
-            Google.getLoginButton().inject(this.$BtnElm);
+        $showRegistrarBtn: function () {
+            Google.getRegistrarButton().inject(this.$BtnElm);
         },
 
         /**
-         * Checks if the current QUIQQER Login user is the Google user
+         * Checks if the current QUIQQER Registrar user is the Google user
          *
          * @param {string} idToken - Google API token
          * @return {Promise}
          */
-        $isLoginUserGoogleUser: function (idToken) {
+        $isRegistrarUserGoogleUser: function (idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_isLoginUserGoogleUser',
+                    'package_quiqqer_authgoogle_ajax_isRegistrarUserGoogleUser',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         idToken  : idToken,
@@ -303,14 +196,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
-         * Get ID of Login User
+         * Get ID of Registrar User
          *
          * @return {Promise}
          */
-        $getLoginUserId: function () {
+        $getRegistrarUserId: function () {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_getLoginUserId',
+                    'package_quiqqer_authgoogle_ajax_getRegistrarUserId',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         onError  : reject
