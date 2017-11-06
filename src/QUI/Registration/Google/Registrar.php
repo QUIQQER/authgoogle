@@ -9,6 +9,7 @@ namespace QUI\Registration\Google;
 use QUI;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
+use QUI\Auth\Google\Google;
 
 /**
  * Class Email\Registrar
@@ -26,11 +27,24 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
         $Handler    = FrontendUsers\Handler::getInstance();
-        $settings   = $Handler->getRegistrationSettings();
+        $settings   = $Handler->getRegistrarSettings($this->getType());
         $SystemUser = QUI::getUsers()->getSystemUser();
+        $token      = $this->getAttribute('token');
+
+        // set user data
+        $profileData = Google::getProfileData($token);
+
+        $User->setAttributes(array(
+            'email'     => $profileData['email'],
+            'firstname' => empty($profileData['given_name']) ? null : $profileData['given_name'],
+            'lastname'  => empty($profileData['family_name']) ? null : $profileData['family_name']
+        ));
 
         $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         $User->save($SystemUser);
+
+        // connect Google account with QUIQQER account
+        Google::connectQuiqqerAccount($User->getId(), $token, false);
 
         $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
 
@@ -55,39 +69,31 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function getSuccessMessage()
     {
         $registrarSettings = $this->getSettings();
-        $settings          = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
 
         switch ($registrarSettings['activationMode']) {
             case FrontendUsers\Handler::ACTIVATION_MODE_MANUAL:
                 $msg = QUI::getLocale()->get(
                     'quiqqer/authgoogle',
-                    'message.registrars.email.registration_success_manual'
+                    'message.registrar.registration_success_manual'
                 );
                 break;
 
             case FrontendUsers\Handler::ACTIVATION_MODE_AUTO:
                 $msg = QUI::getLocale()->get(
                     'quiqqer/authgoogle',
-                    'message.registrars.email.registration_success_auto'
+                    'message.registrar.registration_success_auto'
                 );
                 break;
 
             case FrontendUsers\Handler::ACTIVATION_MODE_MAIL:
                 $msg = QUI::getLocale()->get(
                     'quiqqer/authgoogle',
-                    'message.registrars.email.registration_success_mail'
+                    'message.registrar.registration_success_mail'
                 );
                 break;
 
             default:
                 return parent::getPendingMessage();
-        }
-
-        if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
-            $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/authgoogle',
-                    'registrars.email.password_auto_generate'
-                ) . "</p>";
         }
 
         return $msg;
@@ -99,17 +105,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getPendingMessage()
     {
-        $msg      = parent::getPendingMessage();
-        $settings = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
-
-        if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
-            $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/authgoogle',
-                    'registrars.email.password_auto_generate'
-                ) . "</p>";
-        }
-
-        return $msg;
+        return QUI::getLocale()->get(
+            'quiqqer/authgoogle', 'message.registrar.registration_pending'
+        );
     }
 
     /**
@@ -117,75 +115,52 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function validate()
     {
-        $username       = $this->getUsername();
-        $Handler        = FrontendUsers\Handler::getInstance();
-        $settings       = $Handler->getRegistrationSettings();
-        $usernameInput  = $settings['usernameInput'];
-        $usernameExists = QUI::getUsers()->usernameExists($username);
-
         $lg       = 'quiqqer/authgoogle';
-        $lgPrefix = 'exception.registrars.email.';
+        $lgPrefix = 'exception.registrar.';
 
-        // Username check
-        if ($usernameInput !== $Handler::USERNAME_INPUT_NONE) {
-            // Check if username input is enabled
-            if (empty($username)
-                && $usernameInput === $Handler::USERNAME_INPUT_REQUIRED) {
-                throw new FrontendUsers\Exception(array(
-                    $lg,
-                    $lgPrefix . 'empty_username'
-                ));
-            }
+        $token = $this->getAttribute('token');
 
-            if ($usernameExists) {
-                throw new FrontendUsers\Exception(array(
-                    $lg,
-                    $lgPrefix . 'username_already_exists'
-                ));
-            }
-        } else {
-            // Check if username input is not enabled
-            if ($usernameExists) {
-                throw new FrontendUsers\Exception(array(
-                    $lg,
-                    $lgPrefix . 'email_already_exists'
-                ));
-            }
+        if (empty($token)) {
+            throw new FrontendUsers\Exception(array(
+                $lg,
+                $lgPrefix . 'token_invalid'
+            ));
         }
 
         try {
-            QUI::getUsers()->getUserByName($username);
-
-            // Username already exists
+            Google::validateAccessToken($token);
+        } catch (\Exception $Exception) {
             throw new FrontendUsers\Exception(array(
                 $lg,
-                $lgPrefix . 'username_already_exists'
+                $lgPrefix . 'token_invalid'
             ));
-        } catch (\Exception $Exception) {
-            // Username does not exist
         }
 
-        $email = $this->getAttribute('email');
+        $email = $this->getUsername();
 
-        if (QUI::getUsers()->emailExists($email)) {
+        if (empty($email)) {
+            throw new FrontendUsers\Exception(array(
+                $lg,
+                $lgPrefix . 'email_address_empty'
+            ));
+        }
+
+        if (QUI::getUsers()->usernameExists($email)) {
             throw new FrontendUsers\Exception(array(
                 $lg,
                 $lgPrefix . 'email_already_exists'
             ));
         }
 
-        // Address validation
-        if ((int)$settings['addressInput']) {
-            foreach ($Handler->getAddressFieldSettings() as $field => $settings) {
-                $val = $this->getAttribute($field);
+        $settings    = $this->getRegistrationSettings();
+        $profileData = Google::getProfileData($token);
 
-                if ($settings['required'] && empty($val)) {
-                    throw new FrontendUsers\Exception(array(
-                        $lg,
-                        $lgPrefix . 'missing_address_fields'
-                    ));
-                }
-            }
+        if (!(int)$settings['allowUnverifiedEmailAddresses']
+            && !(int)$profileData['email_verified']) {
+            throw new FrontendUsers\Exception(array(
+                $lg,
+                $lgPrefix . 'email_not_verified'
+            ));
         }
     }
 
@@ -196,77 +171,8 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getInvalidFields()
     {
-        $username         = $this->getUsername();
-        $invalidFields    = array();
-        $RegistrarHandler = FrontendUsers\Handler::getInstance();
-        $settings         = $RegistrarHandler->getRegistrationSettings();
-        $usernameInput    = $settings['usernameInput'];
-        $Users            = QUI::getUsers();
-        $usernameExists   = $Users->usernameExists($username);
-
-        $L        = QUI::getLocale();
-        $lg       = 'quiqqer/authgoogle';
-        $lgPrefix = 'exception.registrars.email.';
-
-        // Username check
-        if ($usernameInput !== $RegistrarHandler::USERNAME_INPUT_NONE) {
-            // Check if username input is enabled
-            if (empty($username)
-                && $usernameInput === $RegistrarHandler::USERNAME_INPUT_REQUIRED) {
-                $invalidFields['username'] = new InvalidFormField(
-                    'username',
-                    $L->get($lg, $lgPrefix . 'empty_username')
-                );
-            }
-
-            if ($usernameExists) {
-                $invalidFields['username'] = new InvalidFormField(
-                    'username',
-                    $L->get($lg, $lgPrefix . 'username_already_exists')
-                );
-            }
-        } else {
-            // Check if username input is not enabled
-            if ($usernameExists) {
-                $invalidFields['email'] = new InvalidFormField(
-                    'email',
-                    $L->get($lg, $lgPrefix . 'email_already_exists')
-                );
-            }
-        }
-
-        // Email check
-        $email = $this->getAttribute('email');
-
-        if (empty($email)) {
-            $invalidFields['email'] = new InvalidFormField(
-                'email',
-                $L->get($lg, $lgPrefix . 'empty_email')
-            );
-        }
-
-        if ($Users->emailExists($email)) {
-            $invalidFields['email'] = new InvalidFormField(
-                'email',
-                $L->get($lg, $lgPrefix . 'email_already_exists')
-            );
-        }
-
-        // Address validation
-        if ((int)$settings['addressInput']) {
-            foreach ($RegistrarHandler->getAddressFieldSettings() as $field => $settings) {
-                $val = $this->getAttribute($field);
-
-                if ($settings['required'] && empty($val)) {
-                    $invalidFields[$field] = new InvalidFormField(
-                        $field,
-                        $L->get($lg, $lgPrefix . 'missing_field')
-                    );
-                }
-            }
-        }
-
-        return $invalidFields;
+        // Registration via Google account does not use form fields
+        return array();
     }
 
     /**
@@ -274,14 +180,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getUsername()
     {
-        $data = $this->getAttributes();
+        $userData = Google::getProfileData($this->getAttribute('token'));
 
-        if (isset($data['username'])) {
-            return $data['username'];
-        }
-
-        if (isset($data['email'])) {
-            return $data['email'];
+        if (!empty($userData['email'])) {
+            return $userData['email'];
         }
 
         return '';
@@ -292,15 +194,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getControl()
     {
-        $invalidFields = array();
-
-        if (!empty($_POST['registration'])) {
-            $invalidFields = $this->getInvalidFields();
-        }
-
-        return new Control(array(
-            'invalidFields' => $invalidFields
-        ));
+        return new Control();
     }
 
     /**
@@ -331,5 +225,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         return $Locale->get('quiqqer/authgoogle', 'registrar.description');
+    }
+
+    /**
+     * Get registration settings for this plugin
+     *
+     * @return array
+     */
+    protected function getRegistrationSettings()
+    {
+        return QUI::getPackage('quiqqer/authgoogle')->getConfig()->getSection('registration');
     }
 }

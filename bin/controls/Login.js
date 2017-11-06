@@ -115,13 +115,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             this.Loader.show();
 
+            this.$InfoElm.set('html', '');
+
             self.$getLoginUserId().then(function (loginUserId) {
                 if (!self.$signedIn) {
-                    self.$InfoElm.set(
-                        'html',
-                        QUILocale.get(lg, 'controls.login.status.unknown')
-                    );
-
                     self.$showLoginBtn();
                     self.Loader.hide();
 

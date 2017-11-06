@@ -3,7 +3,7 @@
 use QUI\Auth\Google\Google;
 
 /**
- * Disconnect QUIQQER account from Facebook account
+ * Disconnect QUIQQER account from Google account
  *
  * @param int $userId - QUIQQER user id
  * @return bool - success
@@ -17,7 +17,7 @@ QUI::$Ajax->registerFunction(
 
         try {
             Google::disconnectAccount($userId);
-        } catch (QUI\Auth\Facebook\Exception $Exception) {
+        } catch (QUI\Auth\Google\Exception $Exception) {
             QUI::getMessagesHandler()->addError(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',

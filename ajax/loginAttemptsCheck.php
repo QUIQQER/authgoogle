@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Checks the maximum login attempts for Facebook authentication
+ * Checks the maximum login attempts for Google authentication
  * and destroys the session if the threshold is reached
  *
  * @return bool - true = session destroyed; false = session still active

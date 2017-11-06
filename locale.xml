@@ -61,6 +61,18 @@
             <de><![CDATA[Maximale Versuche, die ein Benutzer hat, sich beim Login-Prozess mit einem gültigen (d.h.: zu seinem QUIQQER-Benutzerkonto gehörigen) Google-Konto anzumelden, bevor ein automatischer Logout stattfindet und der Authentifizierungs-Prozess von vorne gestartet wird.]]></de>
             <en><![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></en>
         </locale>
+        <locale name="settings.registration.title">
+            <de><![CDATA[Registrierung]]></de>
+            <en><![CDATA[Registration]]></en>
+        </locale>
+        <locale name="settings.registration.allowUnverifiedEmailAddresses.title">
+            <de><![CDATA[Nicht-verifizierte Google-Konten erlauben]]></de>
+            <en><![CDATA[Allow unverified Google accounts]]></en>
+        </locale>
+        <locale name="settings.registration.allowUnverifiedEmailAddresses.description">
+            <de><![CDATA[Google-Konten zur Registrierung zulassen, deren E-Mail-Adresse noch nicht bestätigt wurde]]></de>
+            <en><![CDATA[Allow Google accounts to register whose email address has not yet been verified]]></en>
+        </locale>
 
         <!-- Control: Login -->
         <locale name="controls.login.status.not_authorized">
@@ -92,16 +104,36 @@
 
         <!-- Registrar -->
         <locale name="registrar.title">
-            <de><![CDATA[Registrierung per Google Konto]]></de>
+            <de><![CDATA[Registrierung per Google-Konto]]></de>
             <en><![CDATA[Registration via Google account]]></en>
         </locale>
         <locale name="registrar.description">
-            <de><![CDATA[Registrierung über Verknüpfung des QUIQQER Benutzerkontos mit einem Google Konto.]]></de>
+            <de><![CDATA[Registrierung über Verknüpfung des QUIQQER Benutzerkontos mit einem Google-Konto.]]></de>
             <en><![CDATA[Registration via linking a QUIQQER account with a Google account.]]></en>
         </locale>
         <locale name="registrar.javascript_required">
             <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Für die Registrierung mit Ihrem Google-Konto aktivieren Sie bitte JavaScript.]]></de>
             <en><![CDATA[JavaScript is disabled in your browser. To register with your Google Account, please enable JavaScript.]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.registration_button">
+            <de><![CDATA[Jetzt mit Google registrieren]]></de>
+            <en><![CDATA[Register now with Google]]></en>
+        </locale>
+        <locale name="message.registrar.registration_success_manual">
+            <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
+            <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
+        </locale>
+        <locale name="message.registrar.registration_success_auto">
+            <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
+            <en><![CDATA[The registration was successful. Your user account has been activated automatically.]]></en>
+        </locale>
+        <locale name="message.registrar.registration_success_mail">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert.]]></de>
+            <en><![CDATA[Your user account has been activated successfully.]]></en>
+        </locale>
+        <locale name="message.registrar.registration_pending">
+            <de><![CDATA[Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren. Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail an Ihre Google Mail-Adresse zugesandt wurde.]]></de>
+            <en><![CDATA[The registration was successful! Before you can log in, you must activate your user account. Please click on the activation link, which was sent to you by e-mail to your Google Mail address.]]></en>
         </locale>
 
     </groups>
@@ -186,6 +218,24 @@
             <en><![CDATA[The submitted email address does not correspond to the Google email address.]]></en>
         </locale>
 
+        <!-- Class: Registrar -->
+        <locale name="exception.registrar.token_invalid">
+            <de><![CDATA[Bei der Überprüfung Ihres Google-Kontos ist ein Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <en><![CDATA[There was an error checking your Google account. Please contact an administrator.]]></en>
+        </locale>
+        <locale name="exception.registrar.email_address_empty">
+            <de><![CDATA[Ihre E-Mail-Adresse konnte nicht aus Ihrem Google-Profil abgerufen werden. Bitte autorisieren Sie den Zugriff auf Ihre E-Mail-Adresse.]]></de>
+            <en><![CDATA[Your email address could not be retrieved from your Google profile. Please authorize access to your e-mail address.]]></en>
+        </locale>
+        <locale name="exception.registrar.email_already_exists">
+            <de><![CDATA[Es existiert bereits ein Benutzerkonto mit Ihrer bei Google hinterlegten E-Mail-Adresse.]]></de>
+            <en><![CDATA[There is already a user account with your Google e-mail address.]]></en>
+        </locale>
+        <locale name="exception.registrar.email_not_verified">
+            <de><![CDATA[Ihre bei Google hinterlegte E-Mail-Adresse ist noch nicht verifiziert. Bitte verifizieren Sie Ihre E-Mail-Adresse, um sich zu registrieren.]]></de>
+            <en><![CDATA[Your Google e-mail address is not yet verified. Please verify your e-mail address to register.]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/authgoogle" datatype="js">
@@ -260,8 +310,8 @@
 
         <!-- Control: Login -->
         <locale name="controls.login.status.unknown">
-            <de><![CDATA[Bitte loggen Sie sich bei Google ein, um sich bei QUIQQER anzumelden.]]></de>
-            <en><![CDATA[Please log in with Google to sign in with QUIQQER.]]></en>
+            <de><![CDATA[Bitte loggen Sie sich bei Google ein, um sich anzumelden.]]></de>
+            <en><![CDATA[Please log in with Google to sign in.]]></en>
         </locale>
         <locale name="controls.login.register.status.connected" html="true">
             <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem QUIQQER-Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
@@ -281,13 +331,21 @@
         </locale>
 
         <!-- Control: frontend/controls/Registrar -->
-        <locale name="controls.frontend.registrar.registration_button">
-            <de><![CDATA[Jetzt mit Google registrieren]]></de>
-            <en><![CDATA[Register now with Google]]></en>
+        <locale name="controls.frontend.registrar.already_connected" html="true">
+            <de><![CDATA[Das Google-Konto, mit welchem Sie momentan eingeloggt sind (<b>[email]</b>), ist bereits mit einem Benutzerkonto verknüpft. Bitte loggen Sie sich mit diesem Benutzerkonto ein oder loggen Sie sich aus Ihrem Google-Konto aus, um sich ggf. mit einem anderen Google-Konto zu registrieren.]]></de>
+            <en><![CDATA[The Google account you're currently logged in with (<b>[email]</b>) is already linked to a user account. Please log in with this account or log out of your Google account to sign up with a different Google account.]]></en>
         </locale>
-        <locale name="controls.frontend.registrar.already_connected">
-            <de><![CDATA[Dieses Google-Konto ist bereits mit einem QUIQQER Benutzerkonto verknüpft. Wenn Sie sich mit einem anderen Google-Konto verknüpfen möchten, ]]></de>
-            <en><![CDATA[Register now with Google]]></en>
+        <locale name="controls.frontend.registrar.already_connected_and_authenticated" html="true">
+            <de><![CDATA[Das Google-Konto, mit welchem Sie momentan eingeloggt sind (<b>[email]</b>), ist bereits mit einem Benutzerkonto verknüpft. Mit diesem Benutzerkonto sind Sie z.Z. auch eingeloggt. Um ein anderes Google-Konto zur registrieren, loggen Sie sich bitte zunächst aus.]]></de>
+            <en><![CDATA[The Google account you're currently logged in to (<b>[email]</b>) is already linked to a user account. You are currently signed in with this user account. To sign up with another Google Account, please log out first.]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.general_error">
+            <de><![CDATA[Die Registrierung per Google-Konto kann z.Z. nicht verwendet werden. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <en><![CDATA[The registration via Google account is not available at the moment. Please contact an administrator.]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.login_popup.title">
+            <de><![CDATA[Mit Google einloggen]]></de>
+            <en><![CDATA[Sign in with Google]]></en>
         </locale>
 
     </groups>

@@ -21,7 +21,7 @@ class Google
      * Currently used version of Google API
      *
      * Version list:
-     * https://developers.facebook.com/docs/apps/changelog
+     * https://developers.google.com/docs/apps/changelog
      *
      * @var string
      */
@@ -94,13 +94,16 @@ class Google
      *
      * @param int $uid
      * @param string $accessToken
+     * @param bool $checkPermission (optional) - check permission to edit quiqqer account [default: true]
      * @return void
      *
      * @throws QUI\Auth\Google\Exception
      */
-    public static function connectQuiqqerAccount($uid, $accessToken)
+    public static function connectQuiqqerAccount($uid, $accessToken, $checkPermission = true)
     {
-        self::checkEditPermission($uid);
+        if ($checkPermission !== false) {
+            self::checkEditPermission($uid);
+        }
 
         $User = QUI::getUsers()->get($uid);
 
@@ -134,10 +137,13 @@ class Google
      * Disconnect Google account from QUIQQER account
      *
      * @param int $userId - QUIQQER User ID
+     * @param bool $checkPermission (optional) [default: true]
      */
-    public static function disconnectAccount($userId)
+    public static function disconnectAccount($userId, $checkPermission = true)
     {
-        self::checkEditPermission($userId);
+        if ($checkPermission !== false) {
+            self::checkEditPermission($userId);
+        }
 
         QUI::getDataBase()->delete(
             QUI::getDBTableName(self::TBL_ACCOUNTS),

@@ -17,6 +17,12 @@
                     <defaultvalue>3</defaultvalue>
                 </conf>
             </section>
+            <section name="registration">
+                <conf name="allowUnverifiedEmailAddresses">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+            </section>
         </config>
 
         <window>
@@ -56,6 +62,21 @@
                                 <!--<locale group="quiqqer/authgoogle" var="settings.apiSettings.clientKey.description" />-->
                             <!--</description>-->
                         <!--</input>-->
+                    </settings>
+
+                    <settings title="registration" name="registration">
+                        <title>
+                            <locale group="quiqqer/authgoogle" var="settings.registration.title" />
+                        </title>
+
+                        <input conf="registration.allowUnverifiedEmailAddresses" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/authgoogle" var="settings.registration.allowUnverifiedEmailAddresses.title" />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/authgoogle" var="settings.registration.allowUnverifiedEmailAddresses.description" />
+                            </description>
+                        </input>
                     </settings>
 
                     <settings title="authSettings" name="authSettings">

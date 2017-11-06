@@ -86,14 +86,13 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         /**
          * Get Registration Button
          *
-         * @return {Object} - qui/controls/buttons/Button
+         * @return {Promise}
          */
         getRegistrationButton: function () {
             var self = this;
 
             var RegistrationBtn = new QUIButton({
                 'class'  : 'quiqqer-auth-google-registration-btn',
-                disabled : true,
                 textimage: 'fa fa-google',
                 text     : QUILocale.get(lg, 'controls.frontend.registrar.registration_button'),
                 events   : {
@@ -109,13 +108,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 }
             });
 
-            this.$load().then(function () {
-                RegistrationBtn.enable();
-            }, function(e) {
-                console.log(arguments);
-            });
-
-            return RegistrationBtn;
+            return new Promise(function (resolve, reject) {
+                this.$load().then(function () {
+                    resolve(RegistrationBtn);
+                }, reject);
+            }.bind(this));
         },
 
         /**
@@ -127,7 +124,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             var self = this;
 
             return new Promise(function (resolve, reject) {
-                GoogleAuth.signIn().then(function () {
+                GoogleAuth.signIn({
+                    prompt: 'select_account'
+                }).then(function () {
                     if (!GoogleAuth.isSignedIn.get()) {
                         reject("Google Login failed.");
                         return;
@@ -141,12 +140,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                     resolve();
                 }, function () {
-                    QUI.getMessageHandler().then(function (MH) {
-                        MH.addError(
-                            QUILocale.get(lg, 'controls.settings.login.error')
-                        )
-                    });
-
                     reject("Google Login failed.");
                 });
             });
@@ -277,7 +270,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
-         * Connect a facebook account with a quiqqer account
+         * Connect a google account with a quiqqer account
          *
          * @param {number} userId - QUIQQER User ID
          * @param {string} idToken - Google id_token
@@ -298,7 +291,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
-         * Connect a facebook account with a quiqqer account
+         * Connect a google account with a quiqqer account
          *
          * @param {number} userId - QUIQQER User ID
          * @return {Promise}

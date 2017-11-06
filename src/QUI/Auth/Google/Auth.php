@@ -100,7 +100,7 @@ class Auth extends AbstractAuthenticator
         }
 
         // if there is no user set, Google is used as primary login
-        // and Login user is the user connected to the facebook profile
+        // and Login user is the user connected to the Google profile
         // used in the login process.
         if (is_null($this->User)) {
             $this->User = QUI::getUsers()->get($connectionProfile['userId']);

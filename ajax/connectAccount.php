@@ -19,7 +19,7 @@ QUI::$Ajax->registerFunction(
         try {
             Google::connectQuiqqerAccount($userId, $idToken);
             $accountData = Google::getConnectedAccountByQuiqqerUserId($userId);
-        } catch (QUI\Auth\Facebook\Exception $Exception) {
+        } catch (QUI\Auth\Google\Exception $Exception) {
             QUI::getMessagesHandler()->addError(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',

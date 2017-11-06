@@ -11,7 +11,7 @@ use QUI\Control;
 /**
  * Class Register
  *
- * Facebook Login Control
+ * Google Login Control
  *
  * @package QUI\Auth\Google
  */
