@@ -1,3 +1,8 @@
+{if $isAuth}
+<div class="">
+    {locale group="quiqqer/authgoogle" var="controls.frontend.registrar.already_authenticated"}
+</div>
+{else}
 <noscript>
     <p>{locale group="quiqqer/authgoogle" var="registrar.javascript_required"}</p>
 </noscript>
@@ -12,3 +17,4 @@
         </span>
     </button>
 </div>
+{/if}

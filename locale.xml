@@ -135,6 +135,10 @@
             <de><![CDATA[Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren. Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail an Ihre Google Mail-Adresse zugesandt wurde.]]></de>
             <en><![CDATA[The registration was successful! Before you can log in, you must activate your user account. Please click on the activation link, which was sent to you by e-mail to your Google Mail address.]]></en>
         </locale>
+        <locale name="controls.frontend.registrar.already_authenticated" html="true">
+            <de><![CDATA[Sie sind z.Z. eingeloggt. Bitte loggen Sie sich aus, um mit Google ein Benutzerkonto zu registrieren.]]></de>
+            <en><![CDATA[You are currently logged in. Please log out to registrer an account via Google.]]></en>
+        </locale>
 
     </groups>
 
@@ -340,12 +344,8 @@
 
         <!-- Control: frontend/controls/Registrar -->
         <locale name="controls.frontend.registrar.already_connected" html="true">
-            <de><![CDATA[Das Google-Konto, mit welchem Sie momentan eingeloggt sind (<b>[email]</b>), ist bereits mit einem Benutzerkonto verknüpft. Bitte loggen Sie sich mit diesem Benutzerkonto ein oder loggen Sie sich aus Ihrem Google-Konto aus, um sich ggf. mit einem anderen Google-Konto zu registrieren.]]></de>
-            <en><![CDATA[The Google account you're currently logged in with (<b>[email]</b>) is already linked to a user account. Please log in with this account or log out of your Google account to sign up with a different Google account.]]></en>
-        </locale>
-        <locale name="controls.frontend.registrar.already_connected_and_authenticated" html="true">
-            <de><![CDATA[Das Google-Konto, mit welchem Sie momentan eingeloggt sind (<b>[email]</b>), ist bereits mit einem Benutzerkonto verknüpft. Mit diesem Benutzerkonto sind Sie z.Z. auch eingeloggt. Um ein anderes Google-Konto zur registrieren, loggen Sie sich bitte zunächst aus.]]></de>
-            <en><![CDATA[The Google account you're currently logged in to (<b>[email]</b>) is already linked to a user account. You are currently signed in with this user account. To sign up with another Google Account, please log out first.]]></en>
+            <de><![CDATA[Das Google-Konto <b>[email]</b> ist bereits mit einem Benutzerkonto verknüpft. Bitte loggen Sie sich mit diesem Benutzerkonto ein oder schließen Sie dieses Fenster, um sich ggf. mit einem anderen Google-Konto zu registrieren.]]></de>
+            <en><![CDATA[The Google account <b>[email]</b> is already linked to a user account. Please log in with this account or close this window to sign up with a different Google account.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.general_error">
             <de><![CDATA[Die Registrierung per Google-Konto kann z.Z. nicht verwendet werden. Bitte wenden Sie sich an einen Administrator.]]></de>

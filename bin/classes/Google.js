@@ -47,6 +47,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             this.$AuthData   = false;
             this.$token      = false;   // id_token of currently logged in user
             this.$loaded     = false;
+            this.$loggedIn   = false;
             this.$GoogleUser = false; // currently logged in Google user
         },
 
@@ -120,6 +121,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         login: function () {
+            if (this.$loggedIn) {
+                return Promise.resolve();
+            }
+
             var self = this;
 
             return new Promise(function (resolve, reject) {
@@ -134,6 +139,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     self.$GoogleUser = GoogleAuth.currentUser.get();
                     self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
                     self.$token      = self.$AuthData.id_token;
+                    self.$loggedIn   = true;
 
                     self.fireEvent('login', [self.$AuthData, self]);
 
@@ -183,6 +189,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         logout: function () {
+            if (!this.$loggedIn) {
+                return Promise.resolve();
+            }
+
             var self = this;
 
             return new Promise(function (resolve, reject) {
@@ -192,6 +202,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     self.$token      = false;
 
                     self.fireEvent('logout', [self.$AuthData, self]);
+                    self.$loggedIn = false;
+
                     resolve();
                 }, reject);
             });
