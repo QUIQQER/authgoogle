@@ -142,7 +142,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
          *
          * This is shown if the user visits the registration page
          * and a QUIQQER account is already registered with his Google account
-
          */
         $showLoginInfo: function () {
             var self = this;
@@ -255,25 +254,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
         },
 
         /**
-         * Checks if the current QUIQQER Registrar user is the Google user
-         *
-         * @param {string} idToken - Google API token
-         * @return {Promise}
-         */
-        $isRegistrarUserGoogleUser: function (idToken) {
-            return new Promise(function (resolve, reject) {
-                QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_isRegistrarUserGoogleUser',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        idToken  : idToken,
-                        onError  : reject
-                    }
-                )
-            });
-        },
-
-        /**
          * Get ID of Registrar User
          *
          * @return {Promise}
@@ -282,23 +262,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get(
                     'package_quiqqer_authgoogle_ajax_getRegistrarUserId',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        onError  : reject
-                    }
-                )
-            });
-        },
-
-        /**
-         * Check Google login attempts
-         *
-         * @return {Promise}
-         */
-        $loginAttemptsCheck: function () {
-            return new Promise(function (resolve, reject) {
-                QUIAjax.post(
-                    'package_quiqqer_authgoogle_ajax_loginAttemptsCheck',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
                         onError  : reject

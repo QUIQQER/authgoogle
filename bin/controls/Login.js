@@ -277,7 +277,15 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * Show login button
          */
         $showLoginBtn: function () {
-            Google.getLoginButton().inject(this.$BtnElm);
+            var self = this;
+
+            Google.getLoginButton().then(function (LoginBtn) {
+                LoginBtn.inject(self.$BtnElm);
+            }, function () {
+                self.$InfoElm.set('html', QUILocale.get(lg,
+                    'controls.login.general_error'
+                ));
+            });
         },
 
         /**

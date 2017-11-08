@@ -105,22 +105,20 @@ class Google
             self::checkEditPermission($uid);
         }
 
-        $User = QUI::getUsers()->get($uid);
+        $User        = QUI::getUsers()->get($uid);
+        $profileData = self::getProfileData($accessToken);
 
-        if (self::isQuiqqerAcccountConnected($uid)) {
+        if (self::existsQuiqqerAccount($accessToken)) {
             throw new Exception(array(
                 'quiqqer/authgoogle',
-                'exception.google.account.already.connected',
+                'exception.google.account_already_connected',
                 array(
-                    'userId'   => $uid,
-                    'userName' => $User->getUsername()
+                    'email' => $profileData['email']
                 )
             ));
         }
 
         self::validateAccessToken($accessToken);
-
-        $profileData = self::getProfileData($accessToken);
 
         QUI::getDataBase()->insert(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
@@ -138,6 +136,7 @@ class Google
      *
      * @param int $userId - QUIQQER User ID
      * @param bool $checkPermission (optional) [default: true]
+     * @return void
      */
     public static function disconnectAccount($userId, $checkPermission = true)
     {
@@ -222,7 +221,7 @@ class Google
 
         $profile = self::getProfileData($idToken);
 
-        $result  = QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch(array(
             'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
             'where' => array(
                 'googleUserId' => $profile['sub']
@@ -237,15 +236,24 @@ class Google
     }
 
     /**
-     * Checks if a quiqqer account is already connected to a Google account
+     * Checks if a QUIQQER account exists for a given access token
      *
-     * @param int $userId - QUIQQER User ID
+     * @param string $token - Google API access token
      * @return bool
      */
-    public static function isQuiqqerAcccountConnected($userId)
+    public static function existsQuiqqerAccount($token)
     {
-        $accountData = self::getConnectedAccountByQuiqqerUserId($userId);
-        return !empty($accountData);
+        $profile = self::getProfileData($token);
+
+        $result = QUI::getDataBase()->fetch(array(
+            'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
+            'where' => array(
+                'googleUserId' => $profile['sub']
+            ),
+            'limit' => 1
+        ));
+
+        return !empty($result);
     }
 
     /**
@@ -262,7 +270,7 @@ class Google
 
         try {
             self::$Api = new GoogleApi(array(
-                'client_id'     => self::getClientId(),
+                'client_id' => self::getClientId(),
 //                'client_secret' => self::getClientKey()
             ));
         } catch (\Exception $Exception) {

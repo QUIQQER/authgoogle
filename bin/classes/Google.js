@@ -53,14 +53,13 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         /**
          * Get Login Button
          *
-         * @return {Object} - qui/controls/buttons/Button
+         * @return {Promise}
          */
         getLoginButton: function () {
             var self = this;
 
             var LoginBtn = new QUIButton({
                 'class'  : 'quiqqer-auth-google-login-btn',
-                disabled : true,
                 textimage: 'fa fa-google',
                 text     : QUILocale.get(lg, 'classes.google.login.btn.text'),
                 events   : {
@@ -76,11 +75,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 }
             });
 
-            this.$load().then(function () {
-                LoginBtn.enable();
-            });
-
-            return LoginBtn;
+            return new Promise(function (resolve, reject) {
+                this.$load().then(function () {
+                    resolve(LoginBtn);
+                }, reject);
+            }.bind(this));
         },
 
         /**
@@ -378,7 +377,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             defer: 'defer'
                         }).inject(document.head);
                     } catch (e) {
-                        console.log(e);
+                        reject('Google API initialization failed.');
                     }
 
                     var waitForGoogleApi = setInterval(function () {

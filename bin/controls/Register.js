@@ -111,7 +111,14 @@ define('package/quiqqer/authgoogle/bin/controls/Register', [
                     self.Loader.hide();
 
                     self.setInfoText(QUILocale.get(lg, 'controls.register.status.unknown'));
-                    Google.getLoginButton().inject(self.$BtnsElm);
+
+                    Google.getLoginButton().then(function (LoginBtn) {
+                        LoginBtn.inject(this.$BtnElm);
+                    }, function () {
+                        self.setInfoText(QUILocale.get(lg,
+                            'controls.register.general_error'
+                        ));
+                    });
                     return;
                 }
 

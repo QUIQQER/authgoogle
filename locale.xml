@@ -201,9 +201,9 @@
             <de><![CDATA[Ungültiges Google Zugriffs-Token.]]></de>
             <en><![CDATA[Invalid Google Access Token.]]></en>
         </locale>
-        <locale name="exception.google.account.already.connected">
-            <de><![CDATA[Das QUIQQER-Benutzerkonto "[userName]" (#[userId]) ist bereits mit einem Google-Konto verknüpft.]]></de>
-            <en><![CDATA[The QUIQQER Account "[userName]" (#[userId]) is already linked to a Google Account.]]></en>
+        <locale name="exception.google.account_already_connected">
+            <de><![CDATA[Das Google-Konto "[email]" ist bereits mit einem Benutzerkonto verknüpft.]]></de>
+            <en><![CDATA[The Google account "[email]" is already connected to a user account.]]></en>
         </locale>
         <locale name="exception.google.email.already.exists">
             <de><![CDATA[Es existiert bereits ein QUIQQER-Benutzerkonto mit der E-Mail-Adresse "[email]".]]></de>
@@ -232,8 +232,8 @@
             <en><![CDATA[There is already a user account with your Google e-mail address.]]></en>
         </locale>
         <locale name="exception.registrar.email_not_verified">
-            <de><![CDATA[Ihre bei Google hinterlegte E-Mail-Adresse ist noch nicht verifiziert. Bitte verifizieren Sie Ihre E-Mail-Adresse, um sich zu registrieren.]]></de>
-            <en><![CDATA[Your Google e-mail address is not yet verified. Please verify your e-mail address to register.]]></en>
+            <de><![CDATA[Ihre bei Google hinterlegte E-Mail-Adresse ist noch nicht verifiziert. Bitte verifizieren Sie Ihre E-Mail-Adresse bei Google, um sich zu registrieren.]]></de>
+            <en><![CDATA[Your Google e-mail address is not yet verified. Please verify your e-mail address at Google to register.]]></en>
         </locale>
 
     </groups>
@@ -307,6 +307,10 @@
             <de><![CDATA[Das QUIQQER-Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
             <en><![CDATA[QUIQQER account <b>[email]</b> was successfully created.]]></en>
         </locale>
+        <locale name="controls.register.general_error">
+            <de><![CDATA[Google-Login kann z.Z. nicht verwendet werden. Bitte wenden Sie sich an einen Administrator oder überprüfen Sie sie Google API-Einstellungen.]]></de>
+            <en><![CDATA[Google Login is not available at the moment. Please contact an administrator or check the Google API settings.]]></en>
+        </locale>
 
         <!-- Control: Login -->
         <locale name="controls.login.status.unknown">
@@ -328,6 +332,10 @@
         <locale name="controls.login.no.quiqqer.account">
             <de><![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein QUIQQER-Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
             <en><![CDATA[The Google Account you are currently logged in with is not linked to the QUIQQER Account you are trying wo authenticate for. Please log in with another Google Account or use another authentication method.]]></en>
+        </locale>
+        <locale name="controls.login.general_error">
+            <de><![CDATA[Google-Login kann z.Z. nicht verwendet werden.]]></de>
+            <en><![CDATA[Google Login is not available at the moment.]]></en>
         </locale>
 
         <!-- Control: frontend/controls/Registrar -->

@@ -4,16 +4,6 @@
  * @module package/quiqqer/authgoogle/bin/controls/Settings
  * @author www.pcsg.de (Patrick Müller)
  *
- * @require qui/controls/Control
- * @require qui/controls/windows/Confirm
- * @require qui/controls/buttons/Button
- * @requrie qui/controls/loader/Loader
- * @require package/quiqqer/authgoogle/bin/Google
- * @require Mustache
- * @require Ajax
- * @require Locale
- * @require css!package/quiqqer/authgoogle/bin/controls/Settings.css
- *
  * @event onLoaded [self] - fires when all information is gathered and control is loaded
  * @event onAccountConnected [Account, self] - fires if the user connects his QUIQQER account
  * with his Google account
@@ -221,7 +211,13 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                             QUILocale.get(lg, 'controls.settings.addAccount.info.notSignedIn')
                         );
 
-                        Google.getLoginButton().inject(self.$BtnsElm);
+                        Google.getLoginButton().then(function (LoginBtn) {
+                            LoginBtn.inject(self.$BtnsElm);
+                        }, function () {
+                            self.$InfoElm.set('html', QUILocale.get(lg,
+                                'controls.login.general_error'
+                            ));
+                        });
 
                         self.Loader.hide();
                         resolve();

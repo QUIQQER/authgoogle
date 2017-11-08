@@ -11,8 +11,7 @@ use QUI\Auth\Google\Google;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_isGoogleAccountConnected',
     function ($idToken) {
-        $connectedAccount = Google::getConnectedAccountByGoogleIdToken($idToken);
-        return !empty($connectedAccount);
+        return Google::existsQuiqqerAccount($idToken);
     },
     array('idToken')
 );

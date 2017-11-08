@@ -7,7 +7,6 @@
 namespace QUI\Registration\Google;
 
 use QUI;
-use QUI\Countries\Controls\Select as CountrySelect;
 
 /**
  * Class Control

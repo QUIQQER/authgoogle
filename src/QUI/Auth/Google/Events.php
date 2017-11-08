@@ -19,6 +19,4 @@ class Events
     {
         Google::disconnectAccount($User->getId(), false);
     }
-
-
 }
