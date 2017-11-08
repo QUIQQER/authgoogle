@@ -12,18 +12,18 @@
 
         <!-- Package -->
         <locale name="package.title">
-            <de><![CDATA[Google Login für QUIQQER]]></de>
-            <en><![CDATA[Google Login for QUIQQER]]></en>
+            <de><![CDATA[Google Registrierung und Login für QUIQQER]]></de>
+            <en><![CDATA[Google Registration and Login for QUIQQER]]></en>
         </locale>
         <locale name="package.description">
-            <de><![CDATA[QUIQQER Authentifikation mittels Google-Konto]]></de>
-            <en><![CDATA[QUIQQER authentication via Google Account]]></en>
+            <de><![CDATA[QUIQQER Registrierung und Authentifikation mittels Google-Konto]]></de>
+            <en><![CDATA[QUIQQER registration and authentication via Google Account]]></en>
         </locale>
 
         <!-- Settings -->
         <locale name="settings.title">
-            <de><![CDATA[Google Authentifikation]]></de>
-            <en><![CDATA[Google Authentication]]></en>
+            <de><![CDATA[Google Registrierung / Login]]></de>
+            <en><![CDATA[Google Registration / Login]]></en>
         </locale>
         <locale name="settings.category.settings.title">
             <de><![CDATA[Einstellungen]]></de>

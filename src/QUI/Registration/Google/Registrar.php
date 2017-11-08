@@ -10,6 +10,7 @@ use QUI;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\Auth\Google\Google;
+use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 
 /**
  * Class Email\Registrar
@@ -37,8 +38,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $User->setAttributes(array(
             'email'     => $profileData['email'],
             'firstname' => empty($profileData['given_name']) ? null : $profileData['given_name'],
-            'lastname'  => empty($profileData['family_name']) ? null : $profileData['family_name']
+            'lastname'  => empty($profileData['family_name']) ? null : $profileData['family_name'],
         ));
+
+        $User->setAttribute(FrontendUsersHandler::USER_ATTR_EMAIL_VERIFIED, boolval($profileData['email_verified']));
 
         $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         $User->save($SystemUser);
@@ -106,7 +109,8 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function getPendingMessage()
     {
         return QUI::getLocale()->get(
-            'quiqqer/authgoogle', 'message.registrar.registration_pending'
+            'quiqqer/authgoogle',
+            'message.registrar.registration_pending'
         );
     }
 
