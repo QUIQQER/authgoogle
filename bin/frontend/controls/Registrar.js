@@ -66,15 +66,18 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.$Elm = this.getElm();
 
+            var RegistrarForm = this.$Elm.getElement('.quiqqer-authgoogle-registrar-form');
+
+            if (!RegistrarForm) {
+                return;
+            }
+
+            RegistrarForm.removeClass('quiqqer-authgoogle__hidden');
+
             this.Loader.inject(this.$Elm);
 
             this.$Form       = this.$Elm.getParent('form');
             this.$TokenInput = this.$Elm.getElement('input[name="token"]');
-
-            if (!this.$TokenInput) {
-                return;
-            }
-
             this.$BtnElm  = this.$Elm.getElement('.quiqqer-authgoogle-registrar-btn');
             this.$InfoElm = this.$Elm.getElement('.quiqqer-authgoogle-registrar-info');
 
@@ -192,19 +195,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                         }
                     }
                 }).open();
-            });
-        },
-
-        /**
-         * Checks if user is currently logged in (QUIQQER)
-         *
-         * @return {Promise}
-         */
-        $checkLoginStatus: function () {
-            return new Promise(function (resolve, reject) {
-                QUIAjax.get('ajax_isAuth', resolve, {
-                    onError: reject
-                })
             });
         },
 

@@ -2,3 +2,7 @@
     float: left;
     width: 100%;
 }
+
+.quiqqer-authgoogle__hidden {
+    display: none;
+}

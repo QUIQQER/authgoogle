@@ -13,7 +13,7 @@
         <!-- Package -->
         <locale name="package.title">
             <de><![CDATA[Google Registrierung und Login für QUIQQER]]></de>
-            <en><![CDATA[Google Registration and Login for QUIQQER]]></en>
+            <en><![CDATA[Google registration and login for QUIQQER]]></en>
         </locale>
         <locale name="package.description">
             <de><![CDATA[QUIQQER Registrierung und Authentifikation mittels Google-Konto]]></de>
