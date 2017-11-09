@@ -104,8 +104,8 @@
 
         <!-- Registrar -->
         <locale name="registrar.title">
-            <de><![CDATA[Registrierung per Google-Konto]]></de>
-            <en><![CDATA[Registration via Google account]]></en>
+            <de><![CDATA[Registrierung per Google]]></de>
+            <en><![CDATA[Registration via Google]]></en>
         </locale>
         <locale name="registrar.description">
             <de><![CDATA[Registrierung über Verknüpfung des QUIQQER Benutzerkontos mit einem Google-Konto.]]></de>
