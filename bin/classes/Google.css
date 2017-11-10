@@ -4,6 +4,7 @@
 .quiqqer-auth-google-registration-btn,
 .quiqqer-auth-google-registration-btn:disabled,
 .quiqqer-auth-google-registration-btn:hover {
-    background-color: #dd4b39;
+    background-color: #dd4b39 !important;
+    border-color: #dd4b39 !important;
     color: #FFF;
 }

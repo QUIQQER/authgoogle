@@ -353,8 +353,8 @@
             <en><![CDATA[The Google account <b>[email]</b> is already linked to a user account. Please log in with this account or close this window to sign up with a different Google account.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.general_error">
-            <de><![CDATA[Die Registrierung per Google-Konto kann z.Z. nicht verwendet werden. Bitte wenden Sie sich an einen Administrator.]]></de>
-            <en><![CDATA[The registration via Google account is not available at the moment. Please contact an administrator.]]></en>
+            <de><![CDATA[Die Registrierung per Google-Konto kann z.Z. nicht verwendet werden.]]></de>
+            <en><![CDATA[The registration via Google account is not available at the moment.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.login_popup.title">
             <de><![CDATA[Mit Google einloggen]]></de>

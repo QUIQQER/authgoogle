@@ -18,76 +18,11 @@ class Google
     const TBL_ACCOUNTS = 'quiqqer_auth_google';
 
     /**
-     * Currently used version of Google API
-     *
-     * Version list:
-     * https://developers.google.com/docs/apps/changelog
-     *
-     * @var string
-     */
-    const GRAPH_VERSION = 'v2.8';
-
-    /**
      * Google API Object
      *
      * @var GoogleApi
      */
     protected static $Api = null;
-
-    /**
-     * Create a new QUIQQER account with a Google email address
-     *
-     * @param string $email - Google email address
-     * @param string $accessToken - Google access token
-     * @return QUI\Users\User - Newly created user
-     *
-     * @throws QUI\Auth\Google\Exception
-     */
-    public static function createQuiqqerAccount($email, $accessToken)
-    {
-        $Users = QUI::getUsers();
-
-        if ($Users->emailExists($email)) {
-            throw new Exception(array(
-                'quiqqer/authgoogle',
-                'exception.google.email.already.exists',
-                array(
-                    'email' => $email
-                )
-            ));
-        }
-
-        self::validateAccessToken($accessToken);
-
-        $profileData = self::getProfileData($accessToken);
-
-        if (!isset($profileData['email'])) {
-            throw new Exception(array(
-                'quiqqer/authgoogle',
-                'exception.google.email.access.mandatory'
-            ));
-        }
-
-        if ($profileData['email'] != $email) {
-            throw new Exception(array(
-                'quiqqer/authgoogle',
-                'exception.google.email.incorrect'
-            ));
-        }
-
-        $NewUser = $Users->createChild($email, $Users->getSystemUser());
-        $NewUser->setAttribute('email', $email);
-        $NewUser->save($Users->getSystemUser());
-        $NewUser->setPassword(Orthos::getPassword(), $Users->getSystemUser()); // set random password
-        $NewUser->activate(false, $Users->getSystemUser());
-
-        // automatically connect new quiqqer account with google account
-        QUI::getSession()->set('uid', $NewUser->getId());   // temporarily set uid for permission reasons
-        self::connectQuiqqerAccount($NewUser->getId(), $accessToken);
-        QUI::getSession()->set('uid', false);
-
-        return $NewUser;
-    }
 
     /**
      * Connect a QUIQQER account with a Google account

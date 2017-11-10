@@ -191,38 +191,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             });
         },
 
-        //$showConnectBtn: function () {
-        //    var self = this;
-        //
-        //    new QUIButton({
-        //        text     : 'Jetzt verknüpfen',
-        //        textimage: 'fa fa-link',
-        //        events   : {
-        //            onClick: function () {
-        //                self.Loader.show();
-        //
-        //                Google.connectQuiqqerAccount(
-        //                    self.getAttribute('uid'),
-        //                    self.$token
-        //                ).then(function (Account) {
-        //                    self.Loader.hide();
-        //
-        //                    if (!Account) {
-        //                        return;
-        //                    }
-        //
-        //                    self.$InfoElm.set(
-        //                        'html',
-        //                        'Account erfolgreich verknüpft!'
-        //                    );
-        //
-        //                    self.$login();
-        //                });
-        //            }
-        //        }
-        //    }).inject(self.$BtnElm);
-        //},
-
         /**
          * Shows settings control
          *
