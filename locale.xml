@@ -240,6 +240,11 @@
             <en><![CDATA[Your Google e-mail address is not yet verified. Please verify your e-mail address at Google to register.]]></en>
         </locale>
 
+        <!-- Class: Login -->
+        <locale name="login.javascript_required">
+            <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Um sich mit Google einzuloggen, aktivieren Sie bitte JavaScript.]]></de>
+            <en><![CDATA[JavaScript is disabled in your browser. To sign in with Google please enable JavaScript.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/authgoogle" datatype="js">
