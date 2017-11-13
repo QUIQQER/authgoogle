@@ -33,7 +33,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             '$login',
             '$showSettings',
             '$showLoginBtn',
-            '$getLoginUserId'
+            '$getLoginUserId',
+            '$showMsg',
+            '$clearMsg'
         ],
 
         options: {
@@ -115,7 +117,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             this.Loader.show();
 
-            this.$InfoElm.set('html', '');
+            this.$clearMsg();
 
             self.$getLoginUserId().then(function (loginUserId) {
                 if (!self.$signedIn) {
@@ -133,11 +135,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                             if (loginUserId) {
                                 self.$showSettings(loginUserId, status);
                             } else {
-                                self.$InfoElm.set(
-                                    'html',
-                                    QUILocale.get(lg, 'controls.login.no.quiqqer.account')
-                                );
-
+                                self.$showMsg(QUILocale.get(lg, 'controls.login.no.quiqqer.account'));
                                 Google.getLogoutButton().inject(self.$BtnElm);
                             }
 
@@ -169,10 +167,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                         return;
                                     }
 
-                                    self.$InfoElm.set(
-                                        'html',
-                                        QUILocale.get(lg, 'controls.login.wrong.google.user')
-                                    );
+                                    self.$showMsg(QUILocale.get(lg, 'controls.login.wrong.google.user'));
 
                                     //self.$showConnectBtn();
 
@@ -201,7 +196,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             var self = this;
 
             this.Loader.show();
-            this.$InfoElm.set('html', '');
+            this.$clearMsg();
 
             var emailProvided = true;
 
@@ -250,7 +245,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             Google.getLoginButton().then(function (LoginBtn) {
                 LoginBtn.inject(self.$BtnElm);
             }, function () {
-                self.$InfoElm.set('html', QUILocale.get(lg,
+                self.$showMsg(QUILocale.get(lg,
                     'controls.login.general_error'
                 ));
             });
@@ -307,6 +302,23 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     }
                 )
             });
+        },
+
+        /**
+         * Show info message
+         *
+         * @param {String} msg
+         */
+        $showMsg: function (msg) {
+            this.$InfoElm.setStyle('display', '');
+            this.$InfoElm.set('html', msg);
+        },
+
+        /**
+         * Clear info message
+         */
+        $clearMsg: function() {
+            this.$InfoElm.setStyle('display', 'none');
         }
     });
 });
