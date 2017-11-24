@@ -31,7 +31,11 @@ class Auth extends AbstractAuthenticator
     public function __construct($user = '')
     {
         if (!empty($user)) {
-            $this->User = QUI::getUsers()->getUserByName($user);
+            try {
+                $this->User = QUI::getUsers()->getUserByName($user);
+            } catch (\Exception $Exception) {
+                $this->User = QUI::getUsers()->getNobody();
+            }
         }
     }
 
