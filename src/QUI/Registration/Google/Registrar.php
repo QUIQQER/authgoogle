@@ -240,4 +240,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     {
         return QUI::getPackage('quiqqer/authgoogle')->getConfig()->getSection('registration');
     }
+
+    /**
+     * Check if this Registrar can send passwords
+     *
+     * @return bool
+     */
+    public function canSendPassword()
+    {
+        return true;
+    }
 }
