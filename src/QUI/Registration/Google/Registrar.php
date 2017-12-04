@@ -23,12 +23,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 {
     /**
      * @param QUI\Interfaces\Users\User $User
-     * @return int
+     * @return void
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
-        $Handler    = FrontendUsers\Handler::getInstance();
-        $settings   = $Handler->getRegistrarSettings($this->getType());
         $SystemUser = QUI::getUsers()->getSystemUser();
         $token      = $this->getAttribute('token');
 
@@ -48,21 +46,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         // connect Google account with QUIQQER account
         Google::connectQuiqqerAccount($User->getId(), $token, false);
-
-        $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
-
-        switch ($settings['activationMode']) {
-            case $Handler::ACTIVATION_MODE_MAIL:
-                $Handler->sendActivationMail($User, $this);
-                $returnStatus = $Handler::REGISTRATION_STATUS_PENDING;
-                break;
-
-            case $Handler::ACTIVATION_MODE_AUTO:
-                $User->activate(false, $SystemUser);
-                break;
-        }
-
-        return $returnStatus;
     }
 
     /**
