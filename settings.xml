@@ -30,7 +30,7 @@
                 <locale group="quiqqer/authgoogle" var="settings.title" />
             </title>
             <params>
-                <icon>fa fa-google-plus</icon>
+                <icon>fa fa-google</icon>
             </params>
 
             <categories>
