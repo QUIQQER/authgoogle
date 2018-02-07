@@ -8,6 +8,11 @@
             <locale group="quiqqer/authgoogle" var="package.description"/>
         </description>
 
+        <preview>
+            <image src="URL_OPT_DIR/quiqqer/authgoogle/bin/images/preview/Frontend_Registration.png"/>
+            <image src="URL_OPT_DIR/quiqqer/authgoogle/bin/images/preview/Backend_Settings.png"/>
+        </preview>
+
         <support>
             <email><![CDATA[support@pcsg.de]]></email>
             <forum><![CDATA[https://community.quiqqer.com]]></forum>
@@ -18,7 +23,7 @@
 
         <copyright>
             <name><![CDATA[PCSG - Computer & Internet Service OHG]]></name>
-            <license><![CDATA[]]></license>
+            <license><![CDATA[GPL-3.0+]]></license>
         </copyright>
 
         <provider>

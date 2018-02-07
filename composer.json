@@ -18,7 +18,7 @@
     "url": "http://www.pcsg.de"
   },
   "require": {
-    "quiqqer/quiqqer/": ">=1.1|dev-master|dev-dev",
+    "quiqqer/quiqqer": ">=1.1|dev-master|dev-dev",
     "google/apiclient": "^2.1"
   },
   "autoload": {

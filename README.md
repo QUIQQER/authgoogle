@@ -1,40 +1,39 @@
-authgoogle
+QUIQQER Google authentication and registration
 ========
 
-QUIQQER authentication with Google account
+This module provides a registrar (registration option) for the `quiqqer/frontend-users` module. Users can sign up using their Google account.
 
-Paketname:
+This module further provides an authentication for QUIQQER. Users can sign in using their Google account.
+
+Package Name:
 
     quiqqer/authgoogle
 
 
-Features (Funktionen)
+Features
 --------
-QUIQQER authentication with Google account
+* Registration via Google account (requires `quiqqer/frontend-users`)
+* Authentication via Google account
 
 Installation
 ------------
+The Package Name is: quiqqer/authgoogle
 
-Der Paketname ist: quiqqer/authgoogle
 
-
-Mitwirken
+Contribute
 ----------
-
-- Issue Tracker: 
-- Source Code: 
+- Project: https://dev.quiqqer.com/quiqqer/authgoogle
+- Issue Tracker: https://dev.quiqqer.com/quiqqer/authgoogle/issues
+- Source Code: https://dev.quiqqer.com/quiqqer/authgoogle/tree/master
 
 
 Support
 -------
+If you have found errors, wishes or suggestions for improvement,
+you can contact us by email at support@pcsg.de.
 
-Falls Sie einen Fehler gefunden haben oder Verbesserungen wünschen,
-senden Sie bitte eine E-Mail an support@pcsg.de.
+We will transfer your message to the responsible developers.
 
-
-Lizenz
+License
 -------
-
-
-Entwickler
---------
+GPL-3.0+
