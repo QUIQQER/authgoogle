@@ -1,3 +1,5 @@
+![QUIQQER Auth Google](bin/images/Readme.jpg)
+
 QUIQQER Google authentication and registration
 ========
 
