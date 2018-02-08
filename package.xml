@@ -8,6 +8,8 @@
             <locale group="quiqqer/authgoogle" var="package.description"/>
         </description>
 
+        <image src="URL_OPT_DIR/quiqqer/authgoogle/bin/images/Logo.jpg"/>
+
         <preview>
             <image src="URL_OPT_DIR/quiqqer/authgoogle/bin/images/preview/Frontend_Registration.png"/>
             <image src="URL_OPT_DIR/quiqqer/authgoogle/bin/images/preview/Backend_Settings.png"/>
