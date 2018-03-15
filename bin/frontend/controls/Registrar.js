@@ -35,7 +35,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             '$showRegistrarBtn',
             '$getRegistrarUserId',
             '$showInfo',
-            '$clearInfo'
+            '$clearInfo',
+            '$register'
         ],
 
         options: {
@@ -49,13 +50,14 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 onImport: this.$onImport
             });
 
-            this.$signedIn   = false;
-            this.$TokenInput = null;
-            this.$Form       = null;
-            this.$InfoElm    = null;
-            this.$BtnElm     = null;
-            this.Loader      = new QUILoader();
-            this.$Elm        = null;
+            this.$signedIn               = false;
+            this.$TokenInput             = null;
+            this.$Form                   = null;
+            this.$InfoElm                = null;
+            this.$BtnElm                 = null;
+            this.Loader                  = new QUILoader();
+            this.$Elm                    = null;
+            this.$registrationBtnClicked = false;
         },
 
         /**
@@ -78,22 +80,25 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.$Form       = this.$Elm.getParent('form');
             this.$TokenInput = this.$Elm.getElement('input[name="token"]');
-            this.$BtnElm  = this.$Elm.getElement('.quiqqer-authgoogle-registrar-btn');
-            this.$InfoElm = this.$Elm.getElement('.quiqqer-authgoogle-registrar-info');
+            this.$BtnElm     = this.$Elm.getElement('.quiqqer-authgoogle-registrar-btn');
+            this.$InfoElm    = this.$Elm.getElement('.quiqqer-authgoogle-registrar-info');
 
             this.$login();
 
             Google.addEvents({
                 onLogin: function () {
                     self.$signedIn = true;
-                    self.$login();
+
+                    if (self.$registrationBtnClicked) {
+                        self.$registrationBtnClicked = false;
+                        self.$register();
+                    }
                 }
             });
 
             Google.addEvents({
                 onLogout: function () {
                     self.$signedIn = false;
-                    self.$login();
                 }
             });
         },
@@ -104,32 +109,51 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
         $login: function () {
             var self = this;
 
-            this.Loader.show();
             this.$clearInfo();
 
-            if (!self.$signedIn) {
-                Google.getRegistrationButton().then(function (RegistrationBtn) {
-                    self.$clearButtons();
-                    RegistrationBtn.inject(self.$BtnElm);
-                }, function () {
-                    self.$clearButtons();
-                    self.$showInfo(
-                        QUILocale.get(lg, 'controls.frontend.registrar.general_error')
-                    );
-                });
-
-                self.Loader.hide();
-
+            if (self.$signedIn) {
                 return;
             }
 
-            Google.getToken().then(function (token) {
+            this.Loader.show();
+
+            Google.getRegistrationButton().then(function (RegistrationBtn) {
+                self.$clearButtons();
+                self.Loader.hide();
+
+                RegistrationBtn.inject(self.$BtnElm);
+
+                RegistrationBtn.addEvent('onClick', function () {
+                    self.$registrationBtnClicked = true;
+                });
+            }, function () {
+                self.$clearButtons();
+                self.Loader.hide();
+
+                self.$showInfo(
+                    QUILocale.get(lg, 'controls.frontend.registrar.general_error')
+                );
+            });
+        },
+
+        /**
+         * Start registration process
+         *
+         * @return {Promise}
+         */
+        $register: function () {
+            var self = this;
+
+            this.Loader.show();
+
+            return Google.getToken().then(function (token) {
                 self.$token = token;
 
                 Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
+                    self.Loader.hide();
+
                     if (connected) {
-                        self.$clearButtons();
-                        self.Loader.show();
+                        //self.$clearButtons();
                         self.$showLoginInfo();
 
                         return;
@@ -138,6 +162,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.$TokenInput.value = token;
                     self.$Form.submit();
                 }, function () {
+                    self.Loader.hide();
+
                     self.$showInfo(
                         QUILocale.get(lg, 'controls.frontend.registrar.general_error')
                     );
@@ -185,13 +211,16 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                             );
 
                             // Login
-                            Google.logout().then(function() {
+                            Google.logout().then(function () {
                                 new QUILogin().inject(
                                     Content.getElement('.google-login')
                                 );
 
                                 Popup.Loader.hide();
                             });
+                        },
+                        onClose: function() {
+                            self.$clearInfo();
                         }
                     }
                 }).open();

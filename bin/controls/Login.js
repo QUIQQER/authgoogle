@@ -49,11 +49,12 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 onImport: this.$onImport
             });
 
-            this.Loader    = new QUILoader();
-            this.$InfoElm  = null;
-            this.$BtnElm   = null;
-            this.$signedIn = false;
-            this.$token    = false;
+            this.Loader           = new QUILoader();
+            this.$InfoElm         = null;
+            this.$BtnElm          = null;
+            this.$signedIn        = false;
+            this.$token           = false;
+            this.$loginBtnClicked = false;
         },
 
         /**
@@ -94,9 +95,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             Google.addEvents({
                 onLogin: function () {
-                    self.$BtnElm.set('html', '');
                     self.$signedIn = true;
-                    self.$login();
+
+                    if (self.$loginBtnClicked) {
+                        self.$loginBtnClicked = false;
+
+                        self.$BtnElm.set('html', '');
+                        self.$login();
+                    }
                 }
             });
 
@@ -104,7 +110,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 onLogout: function () {
                     self.$BtnElm.set('html', '');
                     self.$signedIn = false;
-                    self.$login();
                 }
             });
         },
@@ -244,6 +249,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             Google.getLoginButton().then(function (LoginBtn) {
                 LoginBtn.inject(self.$BtnElm);
+
+                LoginBtn.addEvent('onClick', function() {
+                    self.$loginBtnClicked = true;
+                });
             }, function () {
                 self.$showMsg(QUILocale.get(lg,
                     'controls.login.general_error'
@@ -317,7 +326,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         /**
          * Clear info message
          */
-        $clearMsg: function() {
+        $clearMsg: function () {
             this.$InfoElm.setStyle('display', 'none');
         }
     });
