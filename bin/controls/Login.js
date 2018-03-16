@@ -94,21 +94,15 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.$login();
 
             Google.addEvents({
-                onLogin: function () {
+                onLogin : function () {
                     self.$signedIn = true;
 
                     if (self.$loginBtnClicked) {
                         self.$loginBtnClicked = false;
-
-                        self.$BtnElm.set('html', '');
                         self.$login();
                     }
-                }
-            });
-
-            Google.addEvents({
+                },
                 onLogout: function () {
-                    self.$BtnElm.set('html', '');
                     self.$signedIn = false;
                 }
             });
@@ -136,14 +130,8 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     self.$token = token;
 
                     Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
-                        if (!connected) {
-                            if (loginUserId) {
-                                self.$showSettings(loginUserId, status);
-                            } else {
-                                self.$showMsg(QUILocale.get(lg, 'controls.login.no.quiqqer.account'));
-                                Google.getLogoutButton().inject(self.$BtnElm);
-                            }
-
+                        if (!connected && loginUserId) {
+                            self.$showSettings(loginUserId, status);
                             self.Loader.hide();
                             return;
                         }
@@ -245,13 +233,21 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * Show login button
          */
         $showLoginBtn: function () {
-            var self = this;
+            var self          = this;
+            var FakeButtonElm = this.$Elm.getParent().getElement(
+                '.quiqqer-auth-google-login-btn'
+            )
 
             Google.getLoginButton().then(function (LoginBtn) {
+                FakeButtonElm.destroy();
                 LoginBtn.inject(self.$BtnElm);
 
-                LoginBtn.addEvent('onClick', function() {
+                LoginBtn.addEvent('onClick', function () {
                     self.$loginBtnClicked = true;
+
+                    if (self.$signedIn) {
+                        self.$login();
+                    }
                 });
             }, function () {
                 self.$showMsg(QUILocale.get(lg,
@@ -275,7 +271,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                         idToken  : idToken,
                         onError  : reject
                     }
-                )
+                );
             });
         },
 
@@ -292,7 +288,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                         'package': 'quiqqer/authgoogle',
                         onError  : reject
                     }
-                )
+                );
             });
         },
 
@@ -309,7 +305,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                         'package': 'quiqqer/authgoogle',
                         onError  : reject
                     }
-                )
+                );
             });
         },
 
