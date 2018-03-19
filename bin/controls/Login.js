@@ -236,7 +236,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             var self          = this;
             var FakeButtonElm = this.$Elm.getParent().getElement(
                 '.quiqqer-auth-google-login-btn'
-            )
+            );
 
             Google.getLoginButton().then(function (LoginBtn) {
                 FakeButtonElm.destroy();
@@ -253,6 +253,8 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 self.$showMsg(QUILocale.get(lg,
                     'controls.login.general_error'
                 ));
+
+                FakeButtonElm.destroy();
             });
         },
 

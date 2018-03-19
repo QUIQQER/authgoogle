@@ -125,6 +125,10 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
                 RegistrationBtn.addEvent('onClick', function () {
                     self.$registrationBtnClicked = true;
+
+                    if (self.$signedIn) {
+                        self.$register();
+                    }
                 });
             }, function () {
                 self.$clearButtons();
