@@ -8,7 +8,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'qui/controls/Control',
     'qui/controls/windows/Popup',
-    'qui/controls/buttons/Button',
     'qui/controls/loader/Loader',
 
     'controls/users/Login',
@@ -19,7 +18,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'css!package/quiqqer/authgoogle/bin/frontend/controls/Registrar.css'
 
-], function (QUIControl, QUIPopup, QUIButton, QUILoader, QUILogin, Google,
+], function (QUIControl, QUIPopup, QUILoader, QUILogin, Google,
              QUIAjax, QUILocale) {
     "use strict";
 
@@ -203,7 +202,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     backgroundClosable: false,
                     titleCloseButton  : true,
                     events            : {
-                        onOpen: function (Popup) {
+                        onOpen : function (Popup) {
                             Popup.Loader.show();
 
                             var Content = Popup.getContent();
@@ -223,7 +222,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                                 Popup.Loader.hide();
                             });
                         },
-                        onClose: function() {
+                        onClose: function () {
                             self.$clearInfo();
                         }
                     }
@@ -266,7 +265,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                         'package': 'quiqqer/authgoogle',
                         onError  : reject
                     }
-                )
+                );
             });
         }
     });
