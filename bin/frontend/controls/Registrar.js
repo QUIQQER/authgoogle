@@ -57,6 +57,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             this.Loader                  = new QUILoader();
             this.$Elm                    = null;
             this.$registrationBtnClicked = false;
+            this.$SubmitBtn              = null;
         },
 
         /**
@@ -81,21 +82,23 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             this.$TokenInput = this.$Elm.getElement('input[name="token"]');
             this.$BtnElm     = this.$Elm.getElement('.quiqqer-authgoogle-registrar-btn');
             this.$InfoElm    = this.$Elm.getElement('.quiqqer-authgoogle-registrar-info');
+            this.$SubmitBtn  = this.$Elm.getElement('button[type="submit"]');
+
+            this.$Form.addEvent('submit', function (event) {
+                event.stop();
+            });
 
             this.$login();
 
             Google.addEvents({
-                onLogin: function () {
+                onLogin : function () {
                     self.$signedIn = true;
 
                     if (self.$registrationBtnClicked) {
                         self.$registrationBtnClicked = false;
                         self.$register();
                     }
-                }
-            });
-
-            Google.addEvents({
+                },
                 onLogout: function () {
                     self.$signedIn = false;
                 }
@@ -116,7 +119,13 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.Loader.show();
 
-            Google.getRegistrationButton().then(function (RegistrationBtn) {
+            Promise.all([
+                Google.getRegistrationButton(),
+                Google.isSignedIn()
+            ]).then(function (result) {
+                var RegistrationBtn = result[0];
+                self.$signedIn      = result[1];
+
                 self.$clearButtons();
                 self.Loader.hide();
 
@@ -163,7 +172,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     }
 
                     self.$TokenInput.value = token;
-                    self.$Form.submit();
+                    self.$SubmitBtn.click(); // simulate form submit by button click to trigger form submit event
                 }, function () {
                     self.Loader.hide();
 
