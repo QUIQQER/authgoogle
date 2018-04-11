@@ -135,6 +135,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.$registrationBtnClicked = true;
 
                     if (self.$signedIn) {
+                        self.$registrationBtnClicked = false;
                         self.$register();
                     }
                 });
