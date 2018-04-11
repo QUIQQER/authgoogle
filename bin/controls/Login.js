@@ -7,8 +7,6 @@
 define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'qui/controls/Control',
-    'qui/controls/windows/Confirm',
-    'qui/controls/buttons/Button',
     'qui/controls/loader/Loader',
 
     'package/quiqqer/authgoogle/bin/Google',
@@ -18,7 +16,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'css!package/quiqqer/authgoogle/bin/controls/Login.css'
 
-], function (QUIControl, QUIConfirm, QUIButton, QUILoader, Google,
+], function (QUIControl, QUILoader, Google,
              QUIAjax, QUILocale) {
     "use strict";
 
@@ -53,8 +51,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.$InfoElm         = null;
             this.$BtnElm          = null;
             this.$signedIn        = false;
-            this.$token           = false;
             this.$loginBtnClicked = false;
+            this.$init            = true;
+            this.$autoLogin       = false;
         },
 
         /**
@@ -89,6 +88,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.$Input      = this.getElm();
             this.$Input.type = 'hidden';
             this.$Form       = this.$Input.getParent('form');
+            this.$autoLogin  = this.$Input.get('data-autologin') === "1";
 
             this.create().inject(this.$Input, 'after');
             this.$login();
@@ -118,12 +118,23 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             this.$clearMsg();
 
-            self.$getLoginUserId().then(function (loginUserId) {
-                if (!self.$signedIn) {
-                    self.$showLoginBtn();
-                    self.Loader.hide();
+            Promise.all([
+                self.$getLoginUserId(),
+                Google.isSignedIn()
+            ]).then(function (result) {
+                var loginUserId = result[0];
 
-                    return;
+                self.$signedIn = result[1];
+
+                self.$showLoginBtn();
+
+                if (self.$init) {
+                    self.$init = false;
+
+                    if (!self.$signedIn || !self.$autoLogin) {
+                        self.Loader.hide();
+                        return;
+                    }
                 }
 
                 Google.getToken().then(function (token) {
@@ -239,7 +250,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             );
 
             Google.getLoginButton().then(function (LoginBtn) {
-                FakeButtonElm.destroy();
+                if (FakeButtonElm) {
+                    FakeButtonElm.destroy();
+                }
+
                 LoginBtn.inject(self.$BtnElm);
 
                 LoginBtn.addEvent('onClick', function () {
@@ -254,7 +268,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     'controls.login.general_error'
                 ));
 
-                FakeButtonElm.destroy();
+                if (FakeButtonElm) {
+                    FakeButtonElm.destroy();
+                }
             });
         },
 

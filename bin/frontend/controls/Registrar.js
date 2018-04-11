@@ -197,13 +197,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             Google.getProfileInfo().then(function (ProfileData) {
                 self.Loader.hide();
 
-                var msg = QUILocale.get(lg,
-                    'controls.frontend.registrar.already_connected', {
-                        email: ProfileData.email
-                    });
-
-                self.$showInfo(msg);
-
                 new QUIPopup({
                     icon              : 'fa fa-sign-in',
                     title             : QUILocale.get(lg, 'controls.frontend.registrar.login_popup.title'),
@@ -212,27 +205,37 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     titleCloseButton  : true,
                     events            : {
                         onOpen : function (Popup) {
-                            Popup.Loader.show();
-
                             var Content = Popup.getContent();
 
                             Content.set(
                                 'html',
-                                '<p>' + msg + '</p>' +
-                                '<div class="google-login"></div>'
+                                '<p>' +
+                                QUILocale.get(lg,
+                                    'controls.frontend.registrar.already_connected', {
+                                        email: ProfileData.email
+                                    }) +
+                                '</p>' +
+                                '<div class="google-login">' +
+                                '<p>' +
+                                QUILocale.get(lg,
+                                    'controls.frontend.registrar.already_connected.login.label') +
+                                '</p>' +
+                                '</div>'
                             );
 
                             // Login
-                            Google.logout().then(function () {
-                                new QUILogin().inject(
-                                    Content.getElement('.google-login')
-                                );
-
-                                Popup.Loader.hide();
-                            });
+                            new QUILogin({
+                                authenticators: ['QUI\\Auth\\Google\\Auth']
+                            }).inject(
+                                Content.getElement('.google-login')
+                            );
                         },
                         onClose: function () {
-                            self.$clearInfo();
+                            self.Loader.show();
+
+                            Google.logout().then(function () {
+                                self.Loader.hide();
+                            });
                         }
                     }
                 }).open();

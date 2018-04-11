@@ -61,6 +61,14 @@
             <de><![CDATA[Maximale Versuche, die ein Benutzer hat, sich beim Login-Prozess mit einem gültigen (d.h.: zu seinem QUIQQER-Benutzerkonto gehörigen) Google-Konto anzumelden, bevor ein automatischer Logout stattfindet und der Authentifizierungs-Prozess von vorne gestartet wird.]]></de>
             <en><![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></en>
         </locale>
+        <locale name="settings.authSettings.autoLogin.title">
+            <de><![CDATA[Automatischer Login]]></de>
+            <en><![CDATA[Auto Sign In]]></en>
+        </locale>
+        <locale name="settings.authSettings.autoLogin.description">
+            <de><![CDATA[Loggt den Benutzer automatisch ein, falls er schon mit einem (verknüpften) Google-Konto angemeldet ist]]></de>
+            <en><![CDATA[Automatically logs the user in if he is signed in with a (connected) Google account]]></en>
+        </locale>
         <locale name="settings.registration.title">
             <de><![CDATA[Registrierung]]></de>
             <en><![CDATA[Registration]]></en>
@@ -205,10 +213,6 @@
             <de><![CDATA[Ungültiges Google Zugriffs-Token.]]></de>
             <en><![CDATA[Invalid Google Access Token.]]></en>
         </locale>
-        <locale name="exception.google.account_already_connected">
-            <de><![CDATA[Das Google-Konto "[email]" ist bereits mit einem Benutzerkonto verknüpft.]]></de>
-            <en><![CDATA[The Google account "[email]" is already connected to a user account.]]></en>
-        </locale>
         <locale name="exception.google.email.already.exists">
             <de><![CDATA[Es existiert bereits ein QUIQQER-Benutzerkonto mit der E-Mail-Adresse "[email]".]]></de>
             <en><![CDATA[There is already a QUIQQER Account with the e-mail address "[email]".]]></en>
@@ -351,6 +355,10 @@
         <locale name="controls.frontend.registrar.already_connected" html="true">
             <de><![CDATA[Das Google-Konto <b>[email]</b> ist bereits mit einem Benutzerkonto verknüpft. Bitte loggen Sie sich mit diesem Benutzerkonto ein oder schließen Sie dieses Fenster, um sich ggf. mit einem anderen Google-Konto zu registrieren.]]></de>
             <en><![CDATA[The Google account <b>[email]</b> is already linked to a user account. Please log in with this account or close this window to sign up with a different Google account.]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.already_connected.login.label">
+            <de><![CDATA[Jetzt mit Google einloggen]]></de>
+            <en><![CDATA[Sign In with Google]]></en>
         </locale>
         <locale name="controls.frontend.registrar.general_error">
             <de><![CDATA[Die Registrierung per Google-Konto kann z.Z. nicht verwendet werden.]]></de>

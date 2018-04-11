@@ -3,3 +3,11 @@
     height: 100%;
     width: 100%;
 }
+
+.google-login p {
+    text-align: center;
+}
+
+.google-login button {
+    margin-top: 20px !important;
+}
