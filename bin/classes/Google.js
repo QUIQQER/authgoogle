@@ -16,6 +16,7 @@
  */
 define('package/quiqqer/authgoogle/bin/classes/Google', [
 
+    'qui/QUI',
     'qui/classes/DOM',
     'qui/controls/buttons/Button',
 
@@ -24,7 +25,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
     'css!package/quiqqer/authgoogle/bin/classes/Google.css'
 
-], function (QDOM, QUIButton, QUIAjax, QUILocale) {
+], function (QUI, QDOM, QUIButton, QUIAjax, QUILocale) {
     "use strict";
 
     var lg         = 'quiqqer/authgoogle';
@@ -297,7 +298,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         idToken  : idToken,
                         onError  : reject
                     }
-                )
+                );
             });
         },
 
@@ -316,7 +317,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         userId   : userId,
                         onError  : reject
                     }
-                )
+                );
             });
         },
 
@@ -376,7 +377,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         QUI.getMessageHandler().then(function (MH) {
                             MH.addAttention(
                                 QUILocale.get(lg, 'classes.google.warn.no.clientId')
-                            )
+                            );
                         });
 
                         return;
@@ -415,6 +416,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                         return;
                                     }
 
+                                    self.$loggedIn   = true;
                                     self.$GoogleUser = GoogleAuth.currentUser.get();
                                     self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
                                     self.$token      = self.$AuthData.id_token;

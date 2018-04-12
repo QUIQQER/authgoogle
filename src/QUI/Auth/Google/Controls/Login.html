@@ -3,8 +3,17 @@
 </noscript>
 
 <div class="quiqqer-auth-google-login">
+    <div class="quiqqer-auth-google-login-btns">
+        <button class="qui-button quiqqer-auth-google-login-btn qui-utils-noselect" disabled>
+            <span class="qui-button-text-image fa fa-google" style=""></span>
+            <span class="qui-button-text">
+            {locale group="quiqqer/authgoogle" var="classes.google.login.btn.text"}
+        </span>
+        </button>
+    </div>
     <input type="hidden"
            name="token"
            class="quiqqer-auth-google-login-token"
-           data-qui="package/quiqqer/authgoogle/bin/controls/Login"/>
+           data-qui="package/quiqqer/authgoogle/bin/controls/Login"
+           data-autologin="{$autoLogin}"/>
 </div>

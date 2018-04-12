@@ -8,7 +8,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'qui/controls/Control',
     'qui/controls/windows/Popup',
-    'qui/controls/buttons/Button',
     'qui/controls/loader/Loader',
 
     'controls/users/Login',
@@ -19,7 +18,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'css!package/quiqqer/authgoogle/bin/frontend/controls/Registrar.css'
 
-], function (QUIControl, QUIPopup, QUIButton, QUILoader, QUILogin, Google,
+], function (QUIControl, QUIPopup, QUILoader, QUILogin, Google,
              QUIAjax, QUILocale) {
     "use strict";
 
@@ -58,6 +57,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             this.Loader                  = new QUILoader();
             this.$Elm                    = null;
             this.$registrationBtnClicked = false;
+            this.$SubmitBtn              = null;
         },
 
         /**
@@ -82,21 +82,23 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             this.$TokenInput = this.$Elm.getElement('input[name="token"]');
             this.$BtnElm     = this.$Elm.getElement('.quiqqer-authgoogle-registrar-btn');
             this.$InfoElm    = this.$Elm.getElement('.quiqqer-authgoogle-registrar-info');
+            this.$SubmitBtn  = this.$Elm.getElement('button[type="submit"]');
+
+            this.$Form.addEvent('submit', function (event) {
+                event.stop();
+            });
 
             this.$login();
 
             Google.addEvents({
-                onLogin: function () {
+                onLogin : function () {
                     self.$signedIn = true;
 
                     if (self.$registrationBtnClicked) {
                         self.$registrationBtnClicked = false;
                         self.$register();
                     }
-                }
-            });
-
-            Google.addEvents({
+                },
                 onLogout: function () {
                     self.$signedIn = false;
                 }
@@ -117,7 +119,13 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.Loader.show();
 
-            Google.getRegistrationButton().then(function (RegistrationBtn) {
+            Promise.all([
+                Google.getRegistrationButton(),
+                Google.isSignedIn()
+            ]).then(function (result) {
+                var RegistrationBtn = result[0];
+                self.$signedIn      = result[1];
+
                 self.$clearButtons();
                 self.Loader.hide();
 
@@ -125,6 +133,11 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
                 RegistrationBtn.addEvent('onClick', function () {
                     self.$registrationBtnClicked = true;
+
+                    if (self.$signedIn) {
+                        self.$registrationBtnClicked = false;
+                        self.$register();
+                    }
                 });
             }, function () {
                 self.$clearButtons();
@@ -160,7 +173,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     }
 
                     self.$TokenInput.value = token;
-                    self.$Form.submit();
+                    self.$SubmitBtn.click(); // simulate form submit by button click to trigger form submit event
                 }, function () {
                     self.Loader.hide();
 
@@ -185,13 +198,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             Google.getProfileInfo().then(function (ProfileData) {
                 self.Loader.hide();
 
-                var msg = QUILocale.get(lg,
-                    'controls.frontend.registrar.already_connected', {
-                        email: ProfileData.email
-                    });
-
-                self.$showInfo(msg);
-
                 new QUIPopup({
                     icon              : 'fa fa-sign-in',
                     title             : QUILocale.get(lg, 'controls.frontend.registrar.login_popup.title'),
@@ -199,28 +205,38 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     backgroundClosable: false,
                     titleCloseButton  : true,
                     events            : {
-                        onOpen: function (Popup) {
-                            Popup.Loader.show();
-
+                        onOpen : function (Popup) {
                             var Content = Popup.getContent();
 
                             Content.set(
                                 'html',
-                                '<p>' + msg + '</p>' +
-                                '<div class="google-login"></div>'
+                                '<p>' +
+                                QUILocale.get(lg,
+                                    'controls.frontend.registrar.already_connected', {
+                                        email: ProfileData.email
+                                    }) +
+                                '</p>' +
+                                '<div class="google-login">' +
+                                '<p>' +
+                                QUILocale.get(lg,
+                                    'controls.frontend.registrar.already_connected.login.label') +
+                                '</p>' +
+                                '</div>'
                             );
 
                             // Login
-                            Google.logout().then(function () {
-                                new QUILogin().inject(
-                                    Content.getElement('.google-login')
-                                );
-
-                                Popup.Loader.hide();
-                            });
+                            new QUILogin({
+                                authenticators: ['QUI\\Auth\\Google\\Auth']
+                            }).inject(
+                                Content.getElement('.google-login')
+                            );
                         },
-                        onClose: function() {
-                            self.$clearInfo();
+                        onClose: function () {
+                            self.Loader.show();
+
+                            Google.logout().then(function () {
+                                self.Loader.hide();
+                            });
                         }
                     }
                 }).open();
@@ -262,7 +278,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                         'package': 'quiqqer/authgoogle',
                         onError  : reject
                     }
-                )
+                );
             });
         }
     });
