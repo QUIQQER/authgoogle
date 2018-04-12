@@ -187,6 +187,20 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 });
 
                 self.Loader.hide();
+            }, function() {
+                self.Loader.hide();
+
+                var FakeButtonElm = self.$Elm.getParent().getElement(
+                    '.quiqqer-auth-google-login-btn'
+                );
+
+                if (FakeButtonElm) {
+                    FakeButtonElm.destroy();
+                }
+
+                self.$showMsg(QUILocale.get(lg,
+                    'controls.login.general_error'
+                ));
             });
         },
 
