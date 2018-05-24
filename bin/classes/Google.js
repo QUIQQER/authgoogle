@@ -45,11 +45,13 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
         initialize: function (options) {
             this.parent(options);
-            this.$AuthData   = false;
-            this.$token      = false;   // id_token of currently logged in user
-            this.$loaded     = false;
-            this.$loggedIn   = false;
-            this.$GoogleUser = false; // currently logged in Google user
+            this.$AuthData      = false;
+            this.$token         = false;   // id_token of currently logged in user
+            this.$loaded        = false;
+            this.$loggedIn      = false;
+            this.$GoogleUser    = false; // currently logged in Google user
+            this.$scriptsLoaded = false;
+            this.$waitForApi    = false;
         },
 
         /**
@@ -383,49 +385,66 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         return;
                     }
 
-                    try {
-                        new Element('script', {
-                            src  : 'https://apis.google.com/js/platform.js',
-                            async: 'async',
-                            defer: 'defer'
-                        }).inject(document.head);
-                    } catch (e) {
-                        reject('Google API initialization failed.');
+                    if (!self.$scriptsLoaded) {
+                        try {
+                            new Element('script', {
+                                src  : 'https://apis.google.com/js/platform.js',
+                                async: 'async',
+                                defer: 'defer'
+                            }).inject(document.head);
+
+                            self.$scriptsLoaded = true;
+                        } catch (e) {
+                            reject('Google API initialization failed.');
+                        }
                     }
 
-                    var waitForGoogleApi = setInterval(function () {
-                        if (typeof gapi === 'undefined') {
-                            return;
-                        }
+                    if (!self.$waitForApi) {
+                        var waitForGoogleApi = setInterval(function () {
+                            if (typeof gapi === 'undefined') {
+                                return;
+                            }
 
-                        clearInterval(waitForGoogleApi);
+                            clearInterval(waitForGoogleApi);
 
-                        // initiale Google API
-                        gapi.load('auth2', function () {
-                            var GoogleAuthInstance = gapi.auth2.init({
-                                client_id: clientId
-                            });
-
-                            GoogleAuthInstance.then(function () {
-                                GoogleAuth   = GoogleAuthInstance;
-                                self.$loaded = true;
-
-                                self.isSignedIn().then(function (isSignedIn) {
-                                    if (!isSignedIn) {
-                                        resolve();
-                                        return;
-                                    }
-
-                                    self.$loggedIn   = true;
-                                    self.$GoogleUser = GoogleAuth.currentUser.get();
-                                    self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
-                                    self.$token      = self.$AuthData.id_token;
-
-                                    resolve();
+                            // initiale Google API
+                            gapi.load('auth2', function () {
+                                var GoogleAuthInstance = gapi.auth2.init({
+                                    client_id: clientId
                                 });
-                            }, reject);
-                        });
-                    }, 200);
+
+                                GoogleAuthInstance.then(function () {
+                                    GoogleAuth   = GoogleAuthInstance;
+                                    self.$loaded = true;
+
+                                    self.isSignedIn().then(function (isSignedIn) {
+                                        if (!isSignedIn) {
+                                            resolve();
+                                            return;
+                                        }
+
+                                        self.$loggedIn   = true;
+                                        self.$GoogleUser = GoogleAuth.currentUser.get();
+                                        self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
+                                        self.$token      = self.$AuthData.id_token;
+
+                                        resolve();
+                                    });
+                                }, reject);
+                            });
+                        }, 200);
+
+                        self.$waitForApi = true;
+                    } else {
+                        var waitForGoogleLoad = setInterval(function () {
+                            if (!self.$loaded) {
+                                return;
+                            }
+
+                            clearInterval(waitForGoogleLoad);
+                            resolve();
+                        }, 200);
+                    }
                 });
             });
         },
