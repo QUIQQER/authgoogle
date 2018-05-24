@@ -58,6 +58,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             this.$Elm                    = null;
             this.$registrationBtnClicked = false;
             this.$SubmitBtn              = null;
+            this.$FakeBtn                = null;
+            this.$RegisterBtn            = null;
         },
 
         /**
@@ -117,21 +119,19 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 return;
             }
 
-            this.Loader.show();
-
             Promise.all([
                 Google.getRegistrationButton(),
                 Google.isSignedIn()
             ]).then(function (result) {
-                var RegistrationBtn = result[0];
+                self.$RegisterBtn = result[0];
                 self.$signedIn      = result[1];
 
                 self.$clearButtons();
                 self.Loader.hide();
 
-                RegistrationBtn.inject(self.$BtnElm);
+                self.$RegisterBtn.inject(self.$BtnElm);
 
-                RegistrationBtn.addEvent('onClick', function () {
+                self.$RegisterBtn.addEvent('onClick', function () {
                     self.$registrationBtnClicked = true;
 
                     if (self.$signedIn) {
@@ -140,12 +140,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     }
                 });
             }, function () {
-                self.$clearButtons();
-                self.Loader.hide();
-
-                self.$showInfo(
-                    QUILocale.get(lg, 'controls.frontend.registrar.general_error')
-                );
+                self.$showGeneralError();
             });
         },
 
@@ -176,10 +171,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.$SubmitBtn.click(); // simulate form submit by button click to trigger form submit event
                 }, function () {
                     self.Loader.hide();
-
-                    self.$showInfo(
-                        QUILocale.get(lg, 'controls.frontend.registrar.general_error')
-                    );
+                    self.$showGeneralError();
                 });
             });
         },
@@ -248,6 +240,19 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
          */
         $clearButtons: function () {
             this.$BtnElm.set('html', '');
+        },
+
+        /**
+         * Disable registration button and show error message in btn elm title
+         */
+        $showGeneralError: function () {
+            if (this.$RegisterBtn) {
+                this.$RegisterBtn.setAttribute('title', QUILocale.get(lg,
+                    'controls.frontend.registrar.general_error'
+                ));
+
+                this.$RegisterBtn.disable();
+            }
         },
 
         /**
