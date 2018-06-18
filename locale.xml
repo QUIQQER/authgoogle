@@ -350,6 +350,10 @@
             <de><![CDATA[Google-Login kann z.Z. nicht verwendet werden.]]></de>
             <en><![CDATA[Google Login is not available at the moment.]]></en>
         </locale>
+        <locale name="controls.login.popup.btn.text">
+            <de><![CDATA[Jetzt mit Google einloggen]]></de>
+            <en><![CDATA[Log in now with Google]]></en>
+        </locale>
 
         <!-- Control: frontend/controls/Registrar -->
         <locale name="controls.frontend.registrar.already_connected" html="true">

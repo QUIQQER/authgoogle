@@ -8,6 +8,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'qui/controls/Control',
     'qui/controls/loader/Loader',
+    'qui/controls/windows/Confirm',
 
     'package/quiqqer/authgoogle/bin/Google',
 
@@ -16,8 +17,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'css!package/quiqqer/authgoogle/bin/controls/Login.css'
 
-], function (QUIControl, QUILoader, Google,
-             QUIAjax, QUILocale) {
+], function (QUIControl, QUILoader, QUIConfirm, Google, QUIAjax, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/authgoogle';
@@ -28,12 +28,13 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
         Binds: [
             '$onImport',
-            '$login',
+            '$authenticate',
             '$showSettings',
             '$showLoginBtn',
             '$getLoginUserId',
             '$showMsg',
-            '$clearMsg'
+            '$clearMsg',
+            '$openLoginPopup'
         ],
 
         options: {
@@ -95,10 +96,22 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 '.quiqqer-auth-google-login-btn'
             );
 
+            this.$FakeLoginBtn.addEvents({
+                click: function (event) {
+                    event.stop();
+                    //localStorage.setItem('quiqqer_auth_google_autoconnect', true);
+                    self.$showLoginBtn().then(self.$openLoginPopup);
+                }
+            });
+
             this.create().inject(this.$Input, 'after');
 
-            this.$showLoginBtn();
-            this.$login();
+            if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
+                this.$showLoginBtn();
+                //this.$authenticate();
+            } else {
+                this.$FakeLoginBtn.disabled = false;
+            }
 
             Google.addEvents({
                 onLogin : function () {
@@ -106,7 +119,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                     if (self.$loginBtnClicked) {
                         self.$loginBtnClicked = false;
-                        self.$login();
+                        self.$authenticate();
                     }
                 },
                 onLogout: function () {
@@ -116,14 +129,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
-         * Login
+         * Authenticate with Google account
          */
-        $login: function () {
+        $authenticate: function () {
             var self = this;
 
             this.$clearMsg();
 
-            Promise.all([
+            return Promise.all([
                 self.$getLoginUserId(),
                 Google.isSignedIn()
             ]).then(function (result) {
@@ -131,14 +144,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                 self.$signedIn = result[1];
 
-                if (self.$init) {
-                    self.$init = false;
-
-                    if (!self.$signedIn || !self.$autoLogin) {
-                        self.Loader.hide();
-                        return;
-                    }
-                }
+                //if (self.$init) {
+                //    self.$init = false;
+                //
+                //    if (!self.$signedIn || !self.$autoLogin) {
+                //        self.Loader.hide();
+                //        return;
+                //    }
+                //}
 
                 Google.getToken().then(function (token) {
                     self.$token = token;
@@ -191,10 +204,59 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
+         * Opens Popup with a separate Google Login button
+         *
+         * This is only needed if the user first has to "agree" to the connection
+         * to Google by clicking the original Login button
+         */
+        $openLoginPopup: function () {
+            var self = this;
+
+            new QUIConfirm({
+                'class'  : 'quiqqer-auth-google-login-popup',
+                icon     : 'fa fa-google',
+                title    : 'Google Login',
+                maxHeight: 200,
+                maxWidth : 350,
+                buttons  : false,
+                events   : {
+                    onOpen: function (Popup) {
+                        var Content = Popup.getContent();
+
+                        Content.set('html', '');
+
+                        Popup.Loader.show();
+
+                        Google.getLoginButton().then(function (LoginBtn) {
+                            Popup.Loader.hide();
+
+                            LoginBtn.inject(Content);
+
+                            LoginBtn.setAttribute(
+                                'text',
+                                QUILocale.get(lg, 'controls.login.popup.btn.text')
+                            );
+
+                            LoginBtn.addEvent('onClick', function () {
+                                self.$init            = false;
+                                self.$loginBtnClicked = true;
+
+                                self.$authenticate();
+                                Popup.close();
+                            });
+                        }, function () {
+                            Popup.close();
+                            self.$showGeneralError();
+                        });
+                    }
+                }
+            }).open();
+        },
+
+        /**
          * Show general error message on button and disable login btn
          */
-        $showGeneralError: function()
-        {
+        $showGeneralError: function () {
             if (this.$FakeLoginBtn) {
                 this.$FakeLoginBtn.set('title', QUILocale.get(lg,
                     'controls.login.general_error'
@@ -232,7 +294,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     uid   : uid,
                     events: {
                         onAccountConnected: function (Account, Control) {
-                            self.$login();
+                            self.$authenticate();
                             Control.destroy();
                         },
                         onLoaded          : function () {
@@ -262,11 +324,13 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
         /**
          * Show login button
+         *
+         * @return {Promise}
          */
         $showLoginBtn: function () {
             var self = this;
 
-            Google.getLoginButton().then(function (LoginBtn) {
+            return Google.getLoginButton().then(function (LoginBtn) {
                 self.$LoginBtn = LoginBtn;
 
                 if (self.$FakeLoginBtn) {
@@ -278,10 +342,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                 self.$LoginBtn.addEvent('onClick', function () {
                     self.$loginBtnClicked = true;
-
-                    if (self.$signedIn) {
-                        self.$login();
-                    }
+                    self.$authenticate();
                 });
             }, function () {
                 self.$showGeneralError();
