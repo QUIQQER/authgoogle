@@ -125,7 +125,9 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             });
 
             if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                this.$init();
+                this.$init().catch(function() {
+                    // nothing
+                });
             } else {
                 FakeRegisterBtn.disabled = false;
             }
