@@ -102,8 +102,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     onClick: function (Btn) {
                         Btn.disable();
 
-                        console.log("login on Google btn click");
-
                         self.login().then(function () {
                             Btn.enable();
                         }, function () {
