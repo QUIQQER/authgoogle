@@ -372,6 +372,14 @@
             <de><![CDATA[Mit Google einloggen]]></de>
             <en><![CDATA[Sign in with Google]]></en>
         </locale>
+        <locale name="controls.frontend.registrar.popup.btn.text">
+            <de><![CDATA[Jetzt mit Google registrieren]]></de>
+            <en><![CDATA[Register now with Google]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.popup.title">
+            <de><![CDATA[Registrierung per Google-Konto]]></de>
+            <en><![CDATA[Registration via Google account]]></en>
+        </locale>
 
     </groups>
 </locales>

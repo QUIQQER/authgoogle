@@ -21,3 +21,11 @@
     text-align: center;
     width: 100%;
 }
+
+.quiqqer-auth-google-login-popup {
+    text-align: center;
+}
+
+.quiqqer-auth-google-login-popup button {
+    float: none !important;
+}

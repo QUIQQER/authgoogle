@@ -99,8 +99,17 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.$FakeLoginBtn.addEvents({
                 click: function (event) {
                     event.stop();
-                    //localStorage.setItem('quiqqer_auth_google_autoconnect', true);
-                    self.$showLoginBtn().then(self.$openLoginPopup);
+                    localStorage.setItem('quiqqer_auth_google_autoconnect', true);
+
+                    self.$FakeLoginBtn.disabled = true;
+                    self.Loader.show();
+                    
+                    self.$showLoginBtn().then(function() {
+                        self.Loader.hide();
+                        self.$openLoginPopup();
+                    }, function() {
+                        self.Loader.hide();
+                    });
                 }
             });
 
@@ -130,6 +139,8 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
         /**
          * Authenticate with Google account
+         *
+         * @return {Promise}
          */
         $authenticate: function () {
             var self = this;
@@ -144,14 +155,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                 self.$signedIn = result[1];
 
-                //if (self.$init) {
-                //    self.$init = false;
-                //
-                //    if (!self.$signedIn || !self.$autoLogin) {
-                //        self.Loader.hide();
-                //        return;
-                //    }
-                //}
+                if (!self.$signedIn) {
+                    return;
+                }
 
                 Google.getToken().then(function (token) {
                     self.$token = token;
@@ -330,22 +336,27 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $showLoginBtn: function () {
             var self = this;
 
-            return Google.getLoginButton().then(function (LoginBtn) {
-                self.$LoginBtn = LoginBtn;
+            return new Promise(function(resolve, reject) {
+                Google.getLoginButton().then(function (LoginBtn) {
+                    self.$LoginBtn = LoginBtn;
 
-                if (self.$FakeLoginBtn) {
-                    self.$FakeLoginBtn.destroy();
-                    self.$FakeLoginBtn = null;
-                }
+                    if (self.$FakeLoginBtn) {
+                        self.$FakeLoginBtn.destroy();
+                        self.$FakeLoginBtn = null;
+                    }
 
-                self.$LoginBtn.inject(self.$BtnElm);
+                    self.$LoginBtn.inject(self.$BtnElm);
 
-                self.$LoginBtn.addEvent('onClick', function () {
-                    self.$loginBtnClicked = true;
-                    self.$authenticate();
+                    self.$LoginBtn.addEvent('onClick', function () {
+                        self.$loginBtnClicked = true;
+                        self.$authenticate();
+                    });
+
+                    resolve();
+                }, function () {
+                    self.$showGeneralError();
+                    reject();
                 });
-            }, function () {
-                self.$showGeneralError();
             });
         },
 
