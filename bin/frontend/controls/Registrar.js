@@ -8,6 +8,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'qui/controls/Control',
     'qui/controls/windows/Popup',
+    'qui/controls/windows/Confirm',
     'qui/controls/loader/Loader',
 
     'controls/users/Login',
@@ -18,8 +19,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'css!package/quiqqer/authgoogle/bin/frontend/controls/Registrar.css'
 
-], function (QUIControl, QUIPopup, QUILoader, QUILogin, Google,
-             QUIAjax, QUILocale) {
+], function (QUIControl, QUIPopup, QUIConfirm, QUILoader, QUILogin, Google, QUIAjax, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/authgoogle';
@@ -30,12 +30,13 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
         Binds: [
             '$onImport',
-            '$login',
+            '$init',
             '$showRegistrarBtn',
             '$getRegistrarUserId',
             '$showInfo',
             '$clearInfo',
-            '$register'
+            '$register',
+            '$openRegistrationPopup'
         ],
 
         options: {
@@ -90,7 +91,24 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 event.stop();
             });
 
-            this.$login();
+            var FakeRegisterBtn = this.$Elm.getElement('.quiqqer-auth-google-registration-btn');
+
+            FakeRegisterBtn.addEvents({
+                click: function (event) {
+                    event.stop();
+                    localStorage.setItem('quiqqer_auth_google_autoconnect', true);
+
+                    FakeRegisterBtn.disabled = true;
+                    self.Loader.show();
+
+                    self.$init().then(function() {
+                        self.Loader.hide();
+                        self.$openRegistrationPopup();
+                    }, function() {
+                        self.Loader.hide();
+                    });
+                }
+            });
 
             Google.addEvents({
                 onLogin : function () {
@@ -105,43 +123,107 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.$signedIn = false;
                 }
             });
+
+            if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
+                this.$init();
+            } else {
+                FakeRegisterBtn.disabled = false;
+            }
         },
 
         /**
-         * Start login process
+         * Initialize registration via Google account
+         *
+         * @return {Promise}
          */
-        $login: function () {
+        $init: function () {
             var self = this;
 
             this.$clearInfo();
 
             if (self.$signedIn) {
-                return;
+                return Promise.resolve();
             }
 
-            Promise.all([
-                Google.getRegistrationButton(),
-                Google.isSignedIn()
-            ]).then(function (result) {
-                self.$RegisterBtn = result[0];
-                self.$signedIn      = result[1];
+            return new Promise(function(resolve, reject) {
+                Promise.all([
+                    Google.getRegistrationButton(),
+                    Google.isSignedIn()
+                ]).then(function (result) {
+                    self.$RegisterBtn = result[0];
+                    self.$signedIn    = result[1];
 
-                self.$clearButtons();
-                self.Loader.hide();
+                    self.$clearButtons();
+                    self.Loader.hide();
 
-                self.$RegisterBtn.inject(self.$BtnElm);
+                    self.$RegisterBtn.inject(self.$BtnElm);
 
-                self.$RegisterBtn.addEvent('onClick', function () {
-                    self.$registrationBtnClicked = true;
+                    self.$RegisterBtn.addEvent('onClick', function () {
+                        self.$registrationBtnClicked = true;
 
-                    if (self.$signedIn) {
-                        self.$registrationBtnClicked = false;
-                        self.$register();
-                    }
+                        if (self.$signedIn) {
+                            self.$registrationBtnClicked = false;
+                            self.$register();
+                        }
+                    });
+
+                    resolve();
+                }, function () {
+                    self.$showGeneralError();
+                    reject();
                 });
-            }, function () {
-                self.$showGeneralError();
             });
+        },
+
+        /**
+         * Opens Popup with a separate Google Registration button
+         *
+         * This is only needed if the user first has to "agree" to the connection
+         * to Google by clicking the original Registration button
+         */
+        $openRegistrationPopup: function () {
+            var self = this;
+
+            new QUIConfirm({
+                'class'  : 'quiqqer-auth-google-registration-popup',
+                icon     : 'fa fa-google',
+                title    : QUILocale.get(lg, 'controls.frontend.registrar.popup.title'),
+                maxHeight: 200,
+                maxWidth : 400,
+                buttons  : false,
+                events   : {
+                    onOpen: function (Popup) {
+                        var Content = Popup.getContent();
+
+                        Content.set('html', '');
+                        Popup.Loader.show();
+
+                        Google.getRegistrationButton().then(function (RegistrationBtn) {
+                            Popup.Loader.hide();
+
+                            RegistrationBtn.inject(Content);
+
+                            RegistrationBtn.setAttribute(
+                                'text',
+                                QUILocale.get(lg, 'controls.frontend.registrar.popup.btn.text')
+                            );
+
+                            RegistrationBtn.addEvent('onClick', function () {
+                                self.$registrationBtnClicked = true;
+
+                                if (self.$signedIn) {
+                                    self.$register();
+                                }
+
+                                Popup.close();
+                            });
+                        }, function () {
+                            Popup.close();
+                            self.$showGeneralError();
+                        });
+                    }
+                }
+            }).open();
         },
 
         /**

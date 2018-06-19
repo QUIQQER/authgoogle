@@ -102,6 +102,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     onClick: function (Btn) {
                         Btn.disable();
 
+                        console.log("login on Google btn click");
+
                         self.login().then(function () {
                             Btn.enable();
                         }, function () {
@@ -423,10 +425,12 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                             return;
                                         }
 
-                                        self.$loggedIn   = true;
                                         self.$GoogleUser = GoogleAuth.currentUser.get();
                                         self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
                                         self.$token      = self.$AuthData.id_token;
+
+                                        self.$loggedIn = true;
+                                        self.fireEvent('login', [self.$AuthData, self]);
 
                                         resolve();
                                     });
