@@ -33,11 +33,11 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         // set user data
         $profileData = Google::getProfileData($token);
 
-        $User->setAttributes(array(
+        $User->setAttributes([
             'email'     => $profileData['email'],
             'firstname' => empty($profileData['given_name']) ? null : $profileData['given_name'],
             'lastname'  => empty($profileData['family_name']) ? null : $profileData['family_name'],
-        ));
+        ]);
 
         $User->setAttribute(FrontendUsersHandler::USER_ATTR_EMAIL_VERIFIED, boolval($profileData['email_verified']));
 
@@ -108,35 +108,35 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $token = $this->getAttribute('token');
 
         if (empty($token)) {
-            throw new FrontendUsers\Exception(array(
+            throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'token_invalid'
-            ));
+                $lgPrefix.'token_invalid'
+            ]);
         }
 
         try {
             Google::validateAccessToken($token);
         } catch (\Exception $Exception) {
-            throw new FrontendUsers\Exception(array(
+            throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'token_invalid'
-            ));
+                $lgPrefix.'token_invalid'
+            ]);
         }
 
         $email = $this->getUsername();
 
         if (empty($email)) {
-            throw new FrontendUsers\Exception(array(
+            throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'email_address_empty'
-            ));
+                $lgPrefix.'email_address_empty'
+            ]);
         }
 
         if (QUI::getUsers()->usernameExists($email)) {
-            throw new FrontendUsers\Exception(array(
+            throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'email_already_exists'
-            ));
+                $lgPrefix.'email_already_exists'
+            ]);
         }
 
         $settings    = $this->getRegistrationSettings();
@@ -144,10 +144,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if (!(int)$settings['allowUnverifiedEmailAddresses']
             && !(int)$profileData['email_verified']) {
-            throw new FrontendUsers\Exception(array(
+            throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'email_not_verified'
-            ));
+                $lgPrefix.'email_not_verified'
+            ]);
         }
     }
 
@@ -159,7 +159,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function getInvalidFields()
     {
         // Registration via Google account does not use form fields
-        return array();
+        return [];
     }
 
     /**
@@ -212,6 +212,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         return $Locale->get('quiqqer/authgoogle', 'registrar.description');
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return 'fa fa-google';
     }
 
     /**
