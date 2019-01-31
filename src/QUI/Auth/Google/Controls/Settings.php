@@ -1,8 +1,9 @@
 <?php
 
 /**
- * This file contains
+ * This file contains QUI\Auth\Google\Controls\Settings
  */
+
 namespace QUI\Auth\Google\Controls;
 
 use QUI;

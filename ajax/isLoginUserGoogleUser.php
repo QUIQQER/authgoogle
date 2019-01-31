@@ -30,5 +30,5 @@ QUI::$Ajax->registerFunction(
 
         return (int)$profileData['sub'] === (int)$accountData['googleUserId'];
     },
-    array('idToken')
+    ['idToken']
 );

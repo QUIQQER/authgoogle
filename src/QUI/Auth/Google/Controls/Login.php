@@ -27,7 +27,7 @@ class Login extends Control
     {
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Login.css');
+        $this->addCSSFile(dirname(__FILE__).'/Login.css');
     }
 
     /**
@@ -42,6 +42,6 @@ class Login extends Control
             'autoLogin' => boolval($Conf->get('authSettings', 'autoLogin')) ? "1" : "0"
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Login.html');
+        return $Engine->fetch(dirname(__FILE__).'/Login.html');
     }
 }
