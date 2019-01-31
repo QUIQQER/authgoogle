@@ -11,5 +11,5 @@ QUI::$Ajax->registerFunction(
     function ($userId) {
         return (int)QUI::getSession()->get('uid') === (int)$userId;
     },
-    array('userId')
+    ['userId']
 );

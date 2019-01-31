@@ -13,5 +13,5 @@ QUI::$Ajax->registerFunction(
     function ($idToken) {
         return Google::existsQuiqqerAccount($idToken);
     },
-    array('idToken')
+    ['idToken']
 );

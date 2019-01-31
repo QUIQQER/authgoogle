@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * This file contains QUI\Auth\Google\Auth
+ */
+
 namespace QUI\Auth\Google;
 
 use QUI;
@@ -77,10 +81,10 @@ class Auth extends AbstractAuthenticator
         if (!is_array($authData)
             || !isset($authData['token'])
         ) {
-            throw new GoogleException(array(
+            throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.data'
-            ), 401);
+            ], 401);
         }
 
         $token = $authData['token'];
@@ -88,33 +92,40 @@ class Auth extends AbstractAuthenticator
         try {
             Google::validateAccessToken($token);
         } catch (GoogleException $Exception) {
-            throw new GoogleException(array(
+            throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.data'
-            ), 401);
+            ], 401);
         }
 
         $connectionProfile = Google::getConnectedAccountByGoogleIdToken($token);
 
         if (empty($connectionProfile)) {
-            throw new GoogleException(array(
+            throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.no.account.connected'
-            ), 1001);
+            ], 1001);
         }
 
         // if there is no user set, Google is used as primary login
         // and Login user is the user connected to the Google profile
         // used in the login process.
         if (is_null($this->User)) {
-            $this->User = QUI::getUsers()->get($connectionProfile['userId']);
+            try {
+                $this->User = QUI::getUsers()->get($connectionProfile['userId']);
+            } catch (QUI\Exception $Exception) {
+                throw new GoogleException([
+                    'quiqqer/authgoogle',
+                    'exception.auth.no.account.connected'
+                ], 1001);
+            }
         }
 
         if ((int)$connectionProfile['userId'] !== (int)$this->User->getId()) {
-            throw new GoogleException(array(
+            throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.account.for.user'
-            ), 401);
+            ], 401);
         }
     }
 

@@ -4,12 +4,6 @@
  * @module package/quiqqer/authgoogle/bin/classes/Google
  * @author www.pcsg.de (Patrick Müller)
  *
- * @require qui/classes/DOM
- * @require qui/controls/buttons/Button
- * @requrie Ajax
- * @require Locale
- * @require css!package/quiqqer/authgoogle/bin/classes/Google.css
- *
  * @event onLoaded [this] - Fires if everything has loaded
  * @event onLogin [authResponse, this] - Fires if the user successfully authenticates with Google
  * @event onLogout [this] - Fires if the user clicks the Logout button
@@ -41,7 +35,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             'logout'
         ],
 
-        options: {},
+        options: {
+            text: null
+        },
 
         initialize: function (options) {
             this.parent(options);
@@ -60,12 +56,17 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         getLoginButton: function () {
-            var self = this;
+            var self = this,
+                text = this.getAttribute('text');
+
+            if (text === false) {
+                text = QUILocale.get(lg, 'classes.google.login.btn.text');
+            }
 
             var LoginBtn = new QUIButton({
                 'class'  : 'quiqqer-auth-google-login-btn',
                 textimage: 'fa fa-google',
-                text     : QUILocale.get(lg, 'classes.google.login.btn.text'),
+                text     : text,
                 events   : {
                     onClick: function (Btn) {
                         Btn.disable();
@@ -151,6 +152,15 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     reject("Google Login failed.");
                 });
             });
+        },
+
+        /**
+         * Is the user already logged in, in google
+         *
+         * @return {boolean}
+         */
+        isLoggedIn: function () {
+            return this.$loggedIn;
         },
 
         /**
@@ -292,15 +302,12 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          */
         connectQuiqqerAccount: function (userId, idToken) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.post(
-                    'package_quiqqer_authgoogle_ajax_connectAccount',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        userId   : userId,
-                        idToken  : idToken,
-                        onError  : reject
-                    }
-                );
+                QUIAjax.post('package_quiqqer_authgoogle_ajax_connectAccount', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    userId   : userId,
+                    idToken  : idToken,
+                    onError  : reject
+                });
             });
         },
 
@@ -312,14 +319,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          */
         disconnectQuiqqerAccount: function (userId) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.post(
-                    'package_quiqqer_authgoogle_ajax_disconnectAccount',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        userId   : userId,
-                        onError  : reject
-                    }
-                );
+                QUIAjax.post('package_quiqqer_authgoogle_ajax_disconnectAccount', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    userId   : userId,
+                    onError  : reject
+                });
             });
         },
 
@@ -331,14 +335,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          */
         getAccountByQuiqqerUserId: function (userId) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_getAccountByQuiqqerUserId',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        userId   : userId,
-                        onError  : reject
-                    }
-                );
+                QUIAjax.get('package_quiqqer_authgoogle_ajax_getAccountByQuiqqerUserId', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    userId   : userId,
+                    onError  : reject
+                });
             });
         },
 
@@ -350,14 +351,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          */
         isAccountConnectedToQuiqqer: function (idToken) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_isGoogleAccountConnected',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        idToken  : idToken,
-                        onError  : reject
-                    }
-                );
+                QUIAjax.get('package_quiqqer_authgoogle_ajax_isGoogleAccountConnected', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    idToken  : idToken,
+                    onError  : reject
+                });
             });
         },
 
@@ -408,8 +406,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             clearInterval(waitForGoogleApi);
 
                             // initiale Google API
-                            gapi.load('auth2', function () {
-                                var GoogleAuthInstance = gapi.auth2.init({
+                            window.gapi.load('auth2', function () {
+                                var GoogleAuthInstance = window.gapi.auth2.init({
                                     client_id: clientId
                                 });
 
@@ -458,13 +456,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          */
         $getClientId: function () {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_getClientId',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        onError  : reject
-                    }
-                )
+                QUIAjax.get('package_quiqqer_authgoogle_ajax_getClientId', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    onError  : reject
+                });
             });
         }
     });

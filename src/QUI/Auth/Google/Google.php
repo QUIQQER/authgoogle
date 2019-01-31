@@ -44,25 +44,25 @@ class Google
         $profileData = self::getProfileData($accessToken);
 
         if (self::existsQuiqqerAccount($accessToken)) {
-            throw new Exception(array(
+            throw new Exception([
                 'quiqqer/authgoogle',
                 'exception.google.account_already_connected',
-                array(
+                [
                     'email' => $profileData['email']
-                )
-            ));
+                ]
+            ]);
         }
 
         self::validateAccessToken($accessToken);
 
         QUI::getDataBase()->insert(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
-            array(
+            [
                 'userId'       => $User->getId(),
                 'googleUserId' => $profileData['sub'],
                 'email'        => $profileData['email'],
                 'name'         => $profileData['name']
-            )
+            ]
         );
     }
 
@@ -81,9 +81,9 @@ class Google
 
         QUI::getDataBase()->delete(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
-            array(
+            [
                 'userId' => (int)$userId,
-            )
+            ]
         );
     }
 
@@ -104,10 +104,10 @@ class Google
             || !isset($payload['aud'])
             || $payload['aud'] != self::getClientId()
         ) {
-            throw new Exception(array(
+            throw new Exception([
                 'quiqqer/authgoogle',
                 'exception.google.invalid.token'
-            ));
+            ]);
         }
     }
 
@@ -130,12 +130,12 @@ class Google
      */
     public static function getConnectedAccountByQuiqqerUserId($userId)
     {
-        $result = QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch([
             'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
-            'where' => array(
+            'where' => [
                 'userId' => (int)$userId
-            )
-        ));
+            ]
+        ]);
 
         if (empty($result)) {
             return false;
@@ -156,12 +156,12 @@ class Google
 
         $profile = self::getProfileData($idToken);
 
-        $result = QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch([
             'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
-            'where' => array(
+            'where' => [
                 'googleUserId' => $profile['sub']
-            )
-        ));
+            ]
+        ]);
 
         if (empty($result)) {
             return false;
@@ -180,13 +180,13 @@ class Google
     {
         $profile = self::getProfileData($token);
 
-        $result = QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch([
             'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
-            'where' => array(
+            'where' => [
                 'googleUserId' => $profile['sub']
-            ),
+            ],
             'limit' => 1
-        ));
+        ]);
 
         return !empty($result);
     }
@@ -204,19 +204,19 @@ class Google
         }
 
         try {
-            self::$Api = new GoogleApi(array(
+            self::$Api = new GoogleApi([
                 'client_id' => self::getClientId(),
 //                'client_secret' => self::getClientKey()
-            ));
+            ]);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class . ' :: getApi() -> ' . $Exception->getMessage()
+                self::class.' :: getApi() -> '.$Exception->getMessage()
             );
 
-            throw new Exception(array(
+            throw new Exception([
                 'quiqqer/authgoogle',
                 'exception.google.api.error'
-            ));
+            ]);
         }
 
         return self::$Api;

@@ -23,5 +23,5 @@ QUI::$Ajax->registerFunction(
 
         return Google::getConnectedAccountByQuiqqerUserId($userId);
     },
-    array('userId')
+    ['userId']
 );

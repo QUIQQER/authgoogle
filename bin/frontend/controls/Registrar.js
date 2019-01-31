@@ -22,7 +22,9 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 ], function (QUIControl, QUIPopup, QUIConfirm, QUILoader, QUILogin, Google, QUIAjax, QUILocale) {
     "use strict";
 
-    var lg = 'quiqqer/authgoogle';
+    var lg            = 'quiqqer/authgoogle';
+    var registerCount = 0; // register count
+
     return new Class({
 
         Extends: QUIControl,
@@ -70,6 +72,14 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             var self = this;
 
             this.$Elm = this.getElm();
+            //
+            // this.$Elm.addEvent('click', function (event) {
+            //     var FakeRegisterBtn = self.$Elm.getElement(
+            //         '.quiqqer-auth-google-registration-btn'
+            //     );
+            //
+            //     FakeRegisterBtn.fireEvent('click', [event]);
+            // });
 
             var RegistrarForm = this.$Elm.getElement('.quiqqer-authgoogle-registrar-form');
 
@@ -101,10 +111,10 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     FakeRegisterBtn.disabled = true;
                     self.Loader.show();
 
-                    self.$init().then(function() {
+                    self.$init().then(function () {
                         self.Loader.hide();
                         self.$openRegistrationPopup();
-                    }, function() {
+                    }, function () {
                         self.Loader.hide();
                     });
                 }
@@ -124,8 +134,10 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 }
             });
 
+            registerCount = 0;
+
             if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                this.$init().catch(function() {
+                this.$init().catch(function () {
                     // nothing
                 });
             } else {
@@ -147,7 +159,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 return Promise.resolve();
             }
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 Promise.all([
                     Google.getRegistrationButton(),
                     Google.isSignedIn()
@@ -170,7 +182,9 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     });
 
                     resolve();
-                }, function () {
+                }, function (err) {
+                    console.warn(err);
+
                     self.$showGeneralError();
                     reject();
                 });
@@ -238,6 +252,30 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.Loader.show();
 
+            if (this.$registerTimer) {
+                clearTimeout(this.$registerTimer);
+            }
+
+            return new Promise(function (resolve, reject) {
+                self.$registerTimer = (function () {
+                    self.$executeRegister().then(resolve, reject);
+                }).delay(200);
+            });
+        },
+
+        /**
+         * Execute registration process
+         *
+         * @return {Promise}
+         */
+        $executeRegister: function () {
+            var self = this;
+
+            var onError = function () {
+                self.Loader.hide();
+                self.$showGeneralError();
+            };
+
             return Google.getToken().then(function (token) {
                 self.$token = token;
 
@@ -247,16 +285,22 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     if (connected) {
                         //self.$clearButtons();
                         self.$showLoginInfo();
-
                         return;
                     }
 
+                    if (registerCount >= 1) {
+                        return;
+                    }
+
+                    (function () {
+                        registerCount = 0;
+                    }).delay(2000);
+
+                    registerCount++;
+
                     self.$TokenInput.value = token;
                     self.$SubmitBtn.click(); // simulate form submit by button click to trigger form submit event
-                }, function () {
-                    self.Loader.hide();
-                    self.$showGeneralError();
-                });
+                }, onError);
             });
         },
 
@@ -361,13 +405,10 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
          */
         $getRegistrarUserId: function () {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get(
-                    'package_quiqqer_authgoogle_ajax_getRegistrarUserId',
-                    resolve, {
-                        'package': 'quiqqer/authgoogle',
-                        onError  : reject
-                    }
-                );
+                QUIAjax.get('package_quiqqer_authgoogle_ajax_getRegistrarUserId', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    onError  : reject
+                });
             });
         }
     });
