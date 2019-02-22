@@ -21,6 +21,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
     "use strict";
 
     var lg = 'quiqqer/authgoogle';
+
     return new Class({
 
         Extends: QUIControl,
@@ -66,7 +67,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-auth-google-login',
                 'html' : '<div class="quiqqer-auth-google-login-info"></div>' +
-                '<div class="quiqqer-auth-google-login-btns"></div>'
+                    '<div class="quiqqer-auth-google-login-btns"></div>'
             });
 
             this.$InfoElm = this.$Elm.getElement(
@@ -96,6 +97,11 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 '.quiqqer-auth-google-login-btn'
             );
 
+            this.getElm().getParent('.quiqqer-google-login').set({
+                'data-quiid': this.getId(),
+                'data-qui'  : this.getType()
+            });
+
             this.$FakeLoginBtn.addEvents({
                 click: function (event) {
                     event.stop();
@@ -103,11 +109,11 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                     self.$FakeLoginBtn.disabled = true;
                     self.Loader.show();
-                    
-                    self.$showLoginBtn().then(function() {
+
+                    self.$showLoginBtn().then(function () {
                         self.Loader.hide();
                         self.$openLoginPopup();
-                    }, function() {
+                    }, function () {
                         self.Loader.hide();
                     });
                 }
@@ -135,6 +141,18 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     self.$signedIn = false;
                 }
             });
+        },
+
+        /**
+         * Execute a click at the google login
+         */
+        click: function () {
+            if (this.$LoginBtn) {
+                this.$LoginBtn.click();
+                return;
+            }
+
+            this.$FakeLoginBtn.click();
         },
 
         /**
@@ -336,7 +354,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $showLoginBtn: function () {
             var self = this;
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 Google.getLoginButton().then(function (LoginBtn) {
                     self.$LoginBtn = LoginBtn;
 
