@@ -26,7 +26,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function __construct()
     {
-        $this->setAttribute('icon-css-class', 'facebook-registrar');
+        $this->setAttribute('icon-css-class', 'google-registrar');
     }
 
     /**
