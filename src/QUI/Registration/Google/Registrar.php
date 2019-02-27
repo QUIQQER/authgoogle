@@ -22,6 +22,14 @@ use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 class Registrar extends FrontendUsers\AbstractRegistrar
 {
     /**
+     * Registrar constructor.
+     */
+    public function __construct()
+    {
+        $this->setAttribute('icon-css-class', 'facebook-registrar');
+    }
+
+    /**
      * @param QUI\Interfaces\Users\User $User
      * @return void
      */
