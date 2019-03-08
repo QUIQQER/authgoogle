@@ -122,7 +122,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.create().inject(this.$Input, 'after');
 
             if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                this.$showLoginBtn();
+                this.$showLoginBtn().catch(function () {
+                    self.Loader.hide();
+                });
                 //this.$authenticate();
             } else {
                 this.$FakeLoginBtn.disabled = false;
@@ -371,9 +373,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     });
 
                     resolve();
-                }, function () {
+                }, function (err) {
+                    console.error(err);
                     self.$showGeneralError();
-                    reject();
+                    reject(err);
                 });
             });
         },
