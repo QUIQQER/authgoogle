@@ -324,6 +324,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     buttons           : false,
                     backgroundClosable: false,
                     titleCloseButton  : true,
+                    maxHeight         : 400,
+                    maxWidth          : 600,
                     events            : {
                         onOpen : function (Popup) {
                             var Content = Popup.getContent();
@@ -331,15 +333,13 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                             Content.set(
                                 'html',
                                 '<p>' +
-                                QUILocale.get(lg,
-                                    'controls.frontend.registrar.already_connected', {
-                                        email: ProfileData.email
-                                    }) +
+                                QUILocale.get(lg, 'controls.frontend.registrar.already_connected', {
+                                    email: ProfileData.email
+                                }) +
                                 '</p>' +
                                 '<div class="google-login">' +
                                 '<p>' +
-                                QUILocale.get(lg,
-                                    'controls.frontend.registrar.already_connected.login.label') +
+                                QUILocale.get(lg, 'controls.frontend.registrar.already_connected.login.label') +
                                 '</p>' +
                                 '</div>'
                             );
@@ -347,9 +347,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                             // Login
                             new QUILogin({
                                 authenticators: ['QUI\\Auth\\Google\\Auth']
-                            }).inject(
-                                Content.getElement('.google-login')
-                            );
+                            }).inject(Content.getElement('.google-login'));
                         },
                         onClose: function () {
                             self.Loader.show();
