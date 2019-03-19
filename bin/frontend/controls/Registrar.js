@@ -324,32 +324,40 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     buttons           : false,
                     backgroundClosable: false,
                     titleCloseButton  : true,
+                    maxHeight         : 400,
+                    maxWidth          : 600,
                     events            : {
                         onOpen : function (Popup) {
+                            Popup.Loader.show();
+
                             var Content = Popup.getContent();
 
                             Content.set(
                                 'html',
                                 '<p>' +
-                                QUILocale.get(lg,
-                                    'controls.frontend.registrar.already_connected', {
-                                        email: ProfileData.email
-                                    }) +
+                                QUILocale.get(lg, 'controls.frontend.registrar.already_connected', {
+                                    email: ProfileData.email
+                                }) +
                                 '</p>' +
                                 '<div class="google-login">' +
                                 '<p>' +
-                                QUILocale.get(lg,
-                                    'controls.frontend.registrar.already_connected.login.label') +
+                                QUILocale.get(lg, 'controls.frontend.registrar.already_connected.login.label') +
                                 '</p>' +
                                 '</div>'
                             );
 
-                            // Login
-                            new QUILogin({
-                                authenticators: ['QUI\\Auth\\Google\\Auth']
-                            }).inject(
-                                Content.getElement('.google-login')
-                            );
+                            require([
+                                'package/quiqqer/frontend-users/bin/frontend/controls/login/Login'
+                            ], function (FrontendUsersLogin) {
+                                new FrontendUsersLogin({
+                                    header        : false,
+                                    authenticators: ['QUI\\Auth\\Google\\Auth'],
+                                    mail          : false,
+                                    passwordReset : false
+                                }).inject(Content.getElement('.google-login'));
+
+                                Popup.Loader.hide();
+                            });
                         },
                         onClose: function () {
                             self.Loader.show();
