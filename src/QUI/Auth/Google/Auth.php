@@ -8,10 +8,8 @@ namespace QUI\Auth\Google;
 
 use QUI;
 use QUI\Auth\Google\Exception as GoogleException;
-use QUI\Auth\Google\Exception as GoogleException;
 use QUI\Users\AbstractAuthenticator;
 use QUI\Users\User;
-use QUI\Auth\Google\Exception as GoogleException;
 
 /**
  * Class Auth
