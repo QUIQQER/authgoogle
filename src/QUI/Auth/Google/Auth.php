@@ -7,6 +7,8 @@
 namespace QUI\Auth\Google;
 
 use QUI;
+use QUI\Auth\Google\Exception as GoogleException;
+use QUI\Auth\Google\Exception as GoogleException;
 use QUI\Users\AbstractAuthenticator;
 use QUI\Users\User;
 use QUI\Auth\Google\Exception as GoogleException;
@@ -101,10 +103,33 @@ class Auth extends AbstractAuthenticator
         $connectionProfile = Google::getConnectedAccountByGoogleIdToken($token);
 
         if (empty($connectionProfile)) {
-            throw new GoogleException([
-                'quiqqer/authgoogle',
-                'exception.auth.no.account.connected'
-            ], 1001);
+            /**
+             * Check if a user with the Facebook e-mail address already exists and if so
+             * automatically connect it to the QUIQQER account.
+             */
+            $userData = Google::getProfileData($token);
+            $Users    = QUI::getUsers();
+
+            if (!empty($userData['email']) && $Users->emailExists($userData['email'])) {
+                try {
+                    $User = $Users->getUserByMail($userData['email']);
+
+                    Google::connectQuiqqerAccount($User->getId(), $token, false);
+                    $connectionProfile = Google::getConnectedAccountByGoogleIdToken($token);
+                } catch (\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+
+                    throw new GoogleException([
+                        'quiqqer/authgoogle',
+                        'exception.auth.no.account.connected'
+                    ], 1001);
+                }
+            } else {
+                throw new GoogleException([
+                    'quiqqer/authgoogle',
+                    'exception.auth.no.account.connected'
+                ], 1001);
+            }
         }
 
         // if there is no user set, Google is used as primary login
