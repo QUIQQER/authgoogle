@@ -381,5 +381,11 @@
             <en><![CDATA[Registration via Google account]]></en>
         </locale>
 
+        <!-- region Control: GdprConfirm -->
+        <locale name="controls.register.gdpr.confirm.content">
+            <de><![CDATA[Um die Google-Anmeldung zu nutzen, müssen alle Cookies akzeptiert werden. Bitte klicke auf 'Ok' wodurch die Seite neu geladen wird. Anschließend müssen alle Kategorien im erscheinenden Cookie Hinweis akzeptiert werden.]]></de>
+            <en><![CDATA[To use the Google registration, all cookies must be accepted. Please click on 'Ok' which will reload the page. Afterwards all categories must be accepted in the appearing cookie hint.]]></en>
+        </locale>
+        <!-- endregion -->
     </groups>
 </locales>

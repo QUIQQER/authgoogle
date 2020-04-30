@@ -6,11 +6,18 @@
     "homepage": "https:\/\/www.quiqqer.com",
     "authors": [
         {
-            "name": "Patrick M\u00fcller",
+            "name": "Patrick Müller",
             "email": "p.mueller@pcsg.de",
             "homepage": "http:\/\/www.pcsg.de",
             "role": "Developer"
+        },
+        {
+            "name": "Jan Wennrich",
+            "email": "info@pcsg.de",
+            "homepage": "https:\/\/www.pcsg.de",
+            "role": "Developer"
         }
+
     ],
     "support": {
         "email": "support@pcsg.de",
@@ -20,6 +27,9 @@
         "quiqqer\/quiqqer": ">=1.1|dev-master|dev-dev",
         "google\/apiclient": "^2.1",
         "quiqqer\/frontend-users": "^1.1|dev-master|dev-dev"
+    },
+    "suggest": {
+        "quiqqer/gdpr": "Blocks Google Cookies until the user consented to the correct cookie categories (GDPR-compliance)."
     },
     "autoload": {
         "psr-4": {

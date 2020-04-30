@@ -26,7 +26,14 @@ class Control extends QUI\Control
 
         $this->addCSSFile(dirname(__FILE__) . '/Control.css');
         $this->addCSSClass('quiqqer-authgoogle-registrar');
-        $this->setJavaScriptControl('package/quiqqer/authgoogle/bin/frontend/controls/Registrar');
+
+        $control = 'package/quiqqer/authgoogle/bin/frontend/controls/Registrar';
+
+        if (QUI::getPackageManager()->isInstalled('quiqqer/gdpr')) {
+            $control = 'package/quiqqer/authgoogle/bin/frontend/controls/GdprRegistrar';
+        }
+
+        $this->setJavaScriptControl($control);
     }
 
     /**
