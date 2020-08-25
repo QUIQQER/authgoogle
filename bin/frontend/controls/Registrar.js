@@ -299,6 +299,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     registerCount++;
 
                     self.$TokenInput.value = token;
+
+                    self.$SubmitBtn.type = 'submit';
                     self.$SubmitBtn.click(); // simulate form submit by button click to trigger form submit event
                 }, onError);
             });
