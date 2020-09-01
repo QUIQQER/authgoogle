@@ -381,5 +381,19 @@
             <en><![CDATA[Registration via Google account]]></en>
         </locale>
 
+        <!-- GDPR consent -->
+        <locale name="gdpr_consent.popup.title">
+            <de><![CDATA[Verbindung zu Google genehmigen]]></de>
+            <en><![CDATA[Allow connection to Google]]></en>
+        </locale>
+        <locale name="gdpr_consent.popup.info">
+            <de><![CDATA[Mit einem Klick auf "Verbindung zu Google genehmigen" erklären Sie sich damit einverstanden, dass eine Verbindung zu Google hergestellt wird und Google möglicherweise personenbezogene Informationen sammelt, auswertet und/oder an Drittanbieter übermittelt so wie Cookies setzt, die für diese Zwecke nötig sind. Diese Zustimmung gilt auch für zukünftige Besuche auf dieser Website.]]></de>
+            <en><![CDATA[By clicking on "Allow connection to Google", you agree to be connected to Google and that Google may collect, analyze and/or transfer personal information to third parties as well as set cookies that are necessary for these purposes. This consent also applies to future visits to this website.]]></en>
+        </locale>
+        <locale name="gdpr_consent.popup.btn.text">
+            <de><![CDATA[Verbindung zu Google genehmigen]]></de>
+            <en><![CDATA[Allow connection to Google]]></en>
+        </locale>
+
     </groups>
 </locales>

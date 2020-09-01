@@ -106,16 +106,24 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             FakeRegisterBtn.addEvents({
                 click: function (event) {
                     event.stop();
-                    localStorage.setItem('quiqqer_auth_google_autoconnect', true);
 
                     FakeRegisterBtn.disabled = true;
                     self.Loader.show();
 
-                    self.$init().then(function () {
-                        self.Loader.hide();
-                        self.$openRegistrationPopup();
+                    Google.getGDPRConsent().then(function () {
+                        return self.$init(true);
                     }, function () {
+                        FakeRegisterBtn.disabled = false;
                         self.Loader.hide();
+                    }).then(function () {
+                        self.Loader.hide();
+                    }).catch(function() {
+                        self.Loader.hide();
+                        self.$showGeneralError();
+
+                        FakeRegisterBtn.set('html', QUILocale.get(lg,
+                            'controls.frontend.registrar.general_error'
+                        ));
                     });
                 }
             });
@@ -136,22 +144,25 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             registerCount = 0;
 
-            if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                this.$init().catch(function () {
-                    // nothing
-                });
-            } else {
+            //if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
+            //    this.$init().catch(function () {
+            //        // nothing
+            //    });
+            //} else {
                 FakeRegisterBtn.disabled = false;
-            }
+            //}
         },
 
         /**
          * Initialize registration via Google account
          *
+         * @param {Boolean} [autoregister]
          * @return {Promise}
          */
-        $init: function () {
+        $init: function (autoregister) {
             var self = this;
+
+            autoregister = autoregister || false;
 
             this.$clearInfo();
 
@@ -181,65 +192,17 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                         }
                     });
 
+                    if (autoregister) {
+                        self.$register();
+                    }
+
                     resolve();
                 }, function (err) {
-                    console.warn(err);
-
+                    self.Loader.hide();
                     self.$showGeneralError();
                     reject();
                 });
             });
-        },
-
-        /**
-         * Opens Popup with a separate Google Registration button
-         *
-         * This is only needed if the user first has to "agree" to the connection
-         * to Google by clicking the original Registration button
-         */
-        $openRegistrationPopup: function () {
-            var self = this;
-
-            new QUIConfirm({
-                'class'  : 'quiqqer-auth-google-registration-popup',
-                icon     : 'fa fa-google',
-                title    : QUILocale.get(lg, 'controls.frontend.registrar.popup.title'),
-                maxHeight: 200,
-                maxWidth : 400,
-                buttons  : false,
-                events   : {
-                    onOpen: function (Popup) {
-                        var Content = Popup.getContent();
-
-                        Content.set('html', '');
-                        Popup.Loader.show();
-
-                        Google.getRegistrationButton().then(function (RegistrationBtn) {
-                            Popup.Loader.hide();
-
-                            RegistrationBtn.inject(Content);
-
-                            RegistrationBtn.setAttribute(
-                                'text',
-                                QUILocale.get(lg, 'controls.frontend.registrar.popup.btn.text')
-                            );
-
-                            RegistrationBtn.addEvent('onClick', function () {
-                                self.$registrationBtnClicked = true;
-
-                                if (self.$signedIn) {
-                                    self.$register();
-                                }
-
-                                Popup.close();
-                            });
-                        }, function () {
-                            Popup.close();
-                            self.$showGeneralError();
-                        });
-                    }
-                }
-            }).open();
         },
 
         /**

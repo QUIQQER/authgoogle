@@ -13,13 +13,16 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
     'qui/QUI',
     'qui/classes/DOM',
     'qui/controls/buttons/Button',
+    'qui/controls/windows/Confirm',
 
     'Ajax',
     'Locale',
+    'Mustache',
 
+    'text!package/quiqqer/authgoogle/bin/classes/GDPRConsent.html',
     'css!package/quiqqer/authgoogle/bin/classes/Google.css'
 
-], function (QUI, QDOM, QUIButton, QUIAjax, QUILocale) {
+], function (QUI, QDOM, QUIButton, QUIConfirm, QUIAjax, QUILocale, Mustache, templateGDPRConsent) {
     "use strict";
 
     var lg         = 'quiqqer/authgoogle';
@@ -356,6 +359,55 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     idToken  : idToken,
                     onError  : reject
                 });
+            });
+        },
+
+        /**
+         * Opens popup with GDPR-compliant confirmation for a Google connection
+         *
+         * This is only needed if the user first has to "agree" to the connection
+         * to Google by clicking the original Registration button
+         *
+         * @return {Promise}
+         */
+        getGDPRConsent: function () {
+            if (typeof localStorage !== 'undefined' && localStorage.getItem('quiqqer_auth_google_autoconnect')) {
+                return Promise.resolve();
+            }
+
+            return new Promise(function (resolve, reject) {
+                new QUIConfirm({
+                    'class'  : 'quiqqer-auth-google-registration-popup',
+                    icon     : 'fa fa-google',
+                    title    : QUILocale.get(lg, 'gdpr_consent.popup.title'),
+                    maxHeight: 350,
+                    maxWidth : 600,
+                    buttons  : false,
+                    events   : {
+                        onOpen  : function (Popup) {
+                            var Content = Popup.getContent();
+
+                            Content.set('html', Mustache.render(templateGDPRConsent, {
+                                connectInfo: QUILocale.get(lg, 'gdpr_consent.popup.info')
+                            }));
+
+                            new QUIButton({
+                                text  : QUILocale.get(lg, 'gdpr_consent.popup.btn.text'),
+                                events: {
+                                    onClick: function () {
+                                        localStorage.setItem('quiqqer_auth_google_autoconnect', true);
+
+                                        resolve();
+                                        Popup.close();
+                                    }
+                                }
+                            }).inject(
+                                Content.getElement('.quiqqer-auth-google-consent-btn')
+                            );
+                        },
+                        onCancel: reject
+                    }
+                }).open();
             });
         },
 
