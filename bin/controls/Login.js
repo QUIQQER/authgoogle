@@ -105,30 +105,34 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             this.$FakeLoginBtn.addEvents({
                 click: function (event) {
                     event.stop();
-                    localStorage.setItem('quiqqer_auth_google_autoconnect', true);
 
                     self.$FakeLoginBtn.disabled = true;
                     self.Loader.show();
 
-                    self.$showLoginBtn().then(function () {
-                        self.Loader.hide();
-                        self.$openLoginPopup();
+                    Google.getGDPRConsent().then(function () {
+                        return self.$authenticate();
                     }, function () {
+                        self.$FakeLoginBtn.disabled = false;
                         self.Loader.hide();
+                    }).then(function () {
+                        self.Loader.hide();
+                    }).catch(function () {
+                        self.Loader.hide();
+                        self.$showGeneralError();
                     });
                 }
             });
 
             this.create().inject(this.$Input, 'after');
 
-            if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                this.$showLoginBtn().catch(function () {
-                    self.Loader.hide();
-                });
-                //this.$authenticate();
-            } else {
-                this.$FakeLoginBtn.disabled = false;
-            }
+            //if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
+            //    this.$showLoginBtn().catch(function () {
+            //        self.Loader.hide();
+            //    });
+            //    //this.$authenticate();
+            //} else {
+            this.$FakeLoginBtn.disabled = false;
+            //}
 
             Google.addEvents({
                 onLogin : function () {
@@ -230,56 +234,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
-         * Opens Popup with a separate Google Login button
-         *
-         * This is only needed if the user first has to "agree" to the connection
-         * to Google by clicking the original Login button
-         */
-        $openLoginPopup: function () {
-            var self = this;
-
-            new QUIConfirm({
-                'class'  : 'quiqqer-auth-google-login-popup',
-                icon     : 'fa fa-google',
-                title    : 'Google Login',
-                maxHeight: 200,
-                maxWidth : 350,
-                buttons  : false,
-                events   : {
-                    onOpen: function (Popup) {
-                        var Content = Popup.getContent();
-
-                        Content.set('html', '');
-
-                        Popup.Loader.show();
-
-                        Google.getLoginButton().then(function (LoginBtn) {
-                            Popup.Loader.hide();
-
-                            LoginBtn.inject(Content);
-
-                            LoginBtn.setAttribute(
-                                'text',
-                                QUILocale.get(lg, 'controls.login.popup.btn.text')
-                            );
-
-                            LoginBtn.addEvent('onClick', function () {
-                                self.$init            = false;
-                                self.$loginBtnClicked = true;
-
-                                self.$authenticate();
-                                Popup.close();
-                            });
-                        }, function () {
-                            Popup.close();
-                            self.$showGeneralError();
-                        });
-                    }
-                }
-            }).open();
-        },
-
-        /**
          * Show general error message on button and disable login btn
          */
         $showGeneralError: function () {
@@ -290,7 +244,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             }
 
             if (this.$LoginBtn) {
-                this.$LoginBtn.setAttribute('title', QUILocale.get(lg,
+                this.$LoginBtn.setAttribute('text', QUILocale.get(lg,
                     'controls.login.general_error'
                 ));
 
