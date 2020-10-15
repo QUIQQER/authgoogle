@@ -242,7 +242,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                                     QUILocale.get(lg, 'controls.register.status.unknown') +
                                     '</p>' +
                                     '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
-                                    'Google Anmeldung öffnen' +
+                                    QUILocale.get(lg, 'controls.frontend.registrar.registration_button') +
                                     '</button>'
                                 );
 
