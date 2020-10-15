@@ -91,6 +91,15 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
+         * Are all google auth scripts loaded?
+         *
+         * @return {Boolean}
+         */
+        isLoaded: function () {
+            return this.$loaded;
+        },
+
+        /**
          * Get Registration Button
          *
          * @return {Promise}
@@ -134,25 +143,27 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
             var self = this;
 
-            return new Promise(function (resolve, reject) {
-                GoogleAuth.signIn({
-                    prompt: 'select_account'
-                }).then(function () {
-                    if (!GoogleAuth.isSignedIn.get()) {
+            return this.$load().then(function () {
+                return new Promise(function (resolve, reject) {
+                    GoogleAuth.signIn({
+                        prompt: 'select_account'
+                    }).then(function () {
+                        if (!GoogleAuth.isSignedIn.get()) {
+                            reject("Google Login failed.");
+                            return;
+                        }
+
+                        self.$GoogleUser = GoogleAuth.currentUser.get();
+                        self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
+                        self.$token      = self.$AuthData.id_token;
+                        self.$loggedIn   = true;
+
+                        self.fireEvent('login', [self.$AuthData, self]);
+
+                        resolve();
+                    }, function () {
                         reject("Google Login failed.");
-                        return;
-                    }
-
-                    self.$GoogleUser = GoogleAuth.currentUser.get();
-                    self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
-                    self.$token      = self.$AuthData.id_token;
-                    self.$loggedIn   = true;
-
-                    self.fireEvent('login', [self.$AuthData, self]);
-
-                    resolve();
-                }, function () {
-                    reject("Google Login failed.");
+                    });
                 });
             });
         },

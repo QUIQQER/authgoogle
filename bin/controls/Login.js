@@ -3,10 +3,12 @@
  *
  * @module package/quiqqer/authgoogle/bin/controls/Login
  * @author www.pcsg.de (Patrick Müller)
+ * @author www.pcsg.de (Henning Leutz)
  */
 define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'qui/controls/Control',
+    'qui/controls/windows/Popup',
     'qui/controls/loader/Loader',
     'qui/controls/windows/Confirm',
 
@@ -17,7 +19,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'css!package/quiqqer/authgoogle/bin/controls/Login.css'
 
-], function (QUIControl, QUILoader, QUIConfirm, Google, QUIAjax, QUILocale) {
+], function (QUIControl, QUIPopup, QUILoader, QUIConfirm, Google, QUIAjax, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/authgoogle';
@@ -89,10 +91,11 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $onImport: function () {
             var self = this;
 
-            this.$Input        = this.getElm();
-            this.$Input.type   = 'hidden';
-            this.$Form         = this.$Input.getParent('form');
-            this.$autoLogin    = this.$Input.get('data-autologin') === "1";
+            this.$Input      = this.getElm();
+            this.$Input.type = 'hidden';
+            this.$Form       = this.$Input.getParent('form');
+            this.$autoLogin  = this.$Input.get('data-autologin') === "1";
+
             this.$FakeLoginBtn = this.$Elm.getParent().getElement(
                 '.quiqqer-auth-google-login-btn'
             );
@@ -110,13 +113,16 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     self.Loader.show();
 
                     Google.getGDPRConsent().then(function () {
+                        return self.$openGoogleLoginWindowHelper();
+                    }).then(function () {
                         return self.$authenticate();
-                    }, function () {
+                    }).then(function () {
                         self.$FakeLoginBtn.disabled = false;
                         self.Loader.hide();
-                    }).then(function () {
-                        self.Loader.hide();
-                    }).catch(function () {
+                    }).catch(function (err) {
+                        console.error(err);
+
+                        self.$FakeLoginBtn.disabled = false;
                         self.Loader.hide();
                         self.$showGeneralError();
                     });
@@ -180,6 +186,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 self.$signedIn = result[1];
 
                 if (!self.$signedIn) {
+                    Google.login().then(function () {
+                        self.$authenticate();
+                    });
                     return;
                 }
 
@@ -250,6 +259,78 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                 this.$LoginBtn.disable();
             }
+        },
+
+        /**
+         *
+         * @return {Promise}
+         */
+        $openGoogleLoginWindowHelper: function () {
+            var self = this;
+
+            if (!Google.isLoaded()) {
+                return new Promise(function (resolve) {
+                    Google.$load().then(function () {
+                        if (Google.isLoggedIn()) {
+                            return resolve();
+                        }
+
+                        self.$openGoogleLoginWindowHelper().then(resolve);
+                    });
+                });
+            }
+
+            if (Google.isLoggedIn()) {
+                return Promise.resolve();
+            }
+
+            return new Promise(function (resolve, reject) {
+                new QUIPopup({
+                    maxWidth : 500,
+                    maxHeight: 300,
+                    buttons  : false,
+                    events   : {
+                        onOpen: function (Win) {
+                            Win.Loader.show();
+                            Win.getContent().setStyles({
+                                'alignItems'    : 'center',
+                                'display'       : 'flex',
+                                'flexDirection' : 'column',
+                                'justifyContent': 'center'
+                            });
+
+                            Google.$load().then(function () {
+                                Win.getContent().set(
+                                    'html',
+                                    '<p>' +
+                                    QUILocale.get(lg, 'controls.register.status.unknown') +
+                                    '</p>' +
+                                    '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
+                                    QUILocale.get(lg, 'controls.frontend.registrar.registration_button') +
+                                    '</button>'
+                                );
+
+                                Win.getContent().getElement('button').addEvent('click', function () {
+                                    Win.Loader.show();
+
+                                    Google.login().then(function () {
+                                        self.$signedIn = false;
+                                        resolve();
+                                        Win.close();
+                                    }).catch(function (err) {
+                                        console.error(err);
+                                        Win.Loader.hide();
+                                    });
+                                });
+
+                                Win.Loader.hide();
+                            });
+                        },
+
+                        onCancel: reject
+                    }
+                }).open();
+            });
         },
 
         /**
