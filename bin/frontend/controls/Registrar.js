@@ -3,6 +3,7 @@
  *
  * @module package/quiqqer/authgoogle/bin/frontend/controls/Registrar
  * @author www.pcsg.de (Patrick Müller)
+ * @author www.pcsg.de (Henning Leutz)
  */
 define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
@@ -111,13 +112,13 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.Loader.show();
 
                     Google.getGDPRConsent().then(function () {
+                        return self.$openGoogleLoginWindowHelper();
+                    }).then(function () {
                         return self.$init(true);
-                    }, function () {
-                        FakeRegisterBtn.disabled = false;
-                        self.Loader.hide();
                     }).then(function () {
                         self.Loader.hide();
-                    }).catch(function() {
+                    }).catch(function () {
+                        FakeRegisterBtn.disabled = false;
                         self.Loader.hide();
                         self.$showGeneralError();
 
@@ -149,7 +150,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             //        // nothing
             //    });
             //} else {
-                FakeRegisterBtn.disabled = false;
+            FakeRegisterBtn.disabled = false;
             //}
         },
 
@@ -198,10 +199,72 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
                     resolve();
                 }, function (err) {
+                    console.error(err);
+
                     self.Loader.hide();
                     self.$showGeneralError();
                     reject();
                 });
+            });
+        },
+
+        /**
+         * Helper if google sdk is not loaded
+         *
+         * @return {Promise}
+         */
+        $openGoogleLoginWindowHelper: function () {
+            if (Google.isLoggedIn()) {
+                return Promise.resolve();
+            }
+
+            var self = this;
+
+            return new Promise(function (resolve, reject) {
+                new QUIPopup({
+                    maxWidth : 500,
+                    maxHeight: 300,
+                    buttons  : false,
+                    events   : {
+                        onOpen: function (Win) {
+                            Win.Loader.show();
+                            Win.getContent().setStyles({
+                                'alignItems'    : 'center',
+                                'display'       : 'flex',
+                                'flexDirection' : 'column',
+                                'justifyContent': 'center'
+                            });
+
+                            Google.$load().then(function () {
+                                Win.getContent().set(
+                                    'html',
+                                    '<p>' +
+                                    QUILocale.get(lg, 'controls.register.status.unknown') +
+                                    '</p>' +
+                                    '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
+                                    'Google Anmeldung öffnen' +
+                                    '</button>'
+                                );
+
+                                Win.getContent().getElement('button').addEvent('click', function () {
+                                    Win.Loader.show();
+
+                                    Google.login().then(function () {
+                                        self.$signedIn = false;
+                                        resolve();
+                                        Win.close();
+                                    }).catch(function () {
+                                        Win.Loader.hide();
+                                    });
+                                });
+
+                                Win.Loader.hide();
+                            });
+                        },
+
+                        onCancel: reject
+                    }
+                }).open();
             });
         },
 
