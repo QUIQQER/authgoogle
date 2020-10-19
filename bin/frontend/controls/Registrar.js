@@ -9,7 +9,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'qui/controls/Control',
     'qui/controls/windows/Popup',
-    'qui/controls/windows/Confirm',
     'qui/controls/loader/Loader',
 
     'controls/users/Login',
@@ -20,7 +19,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'css!package/quiqqer/authgoogle/bin/frontend/controls/Registrar.css'
 
-], function (QUIControl, QUIPopup, QUIConfirm, QUILoader, QUILogin, Google, QUIAjax, QUILocale) {
+], function (QUIControl, QUIPopup, QUILoader, QUILogin, Google, QUIAjax, QUILocale) {
     "use strict";
 
     var lg            = 'quiqqer/authgoogle';
@@ -113,7 +112,12 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
                     Google.getGDPRConsent().then(function () {
                         return self.$openGoogleLoginWindowHelper();
-                    }).then(function () {
+                    }).then(function (submit) {
+                        if (!submit) {
+                            FakeRegisterBtn.disabled = false;
+                            return;
+                        }
+
                         return self.$init(true);
                     }).then(function () {
                         self.Loader.hide();
@@ -215,13 +219,15 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
          */
         $openGoogleLoginWindowHelper: function () {
             if (Google.isLoggedIn()) {
-                return Promise.resolve();
+                return Promise.resolve(true);
             }
 
             var self = this;
 
-            return new Promise(function (resolve, reject) {
+            return new Promise(function (resolve) {
                 new QUIPopup({
+                    icon     : 'fa fa-google',
+                    title    : QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.title'),
                     maxWidth : 500,
                     maxHeight: 300,
                     buttons  : false,
@@ -242,7 +248,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                                     QUILocale.get(lg, 'controls.register.status.unknown') +
                                     '</p>' +
                                     '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
-                                    QUILocale.get(lg, 'controls.frontend.registrar.registration_button') +
+                                    QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.btn') +
                                     '</button>'
                                 );
 
@@ -251,7 +257,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
                                     Google.login().then(function () {
                                         self.$signedIn = false;
-                                        resolve();
+                                        resolve(true);
                                         Win.close();
                                     }).catch(function () {
                                         Win.Loader.hide();
@@ -259,10 +265,21 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                                 });
 
                                 Win.Loader.hide();
+                            }, function () {
+                                Win.setContent(
+                                    '<p>' + QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.error') + '</p>'
+                                );
+
+                                Win.Loader.hide();
+
+                                resolve(false);
                             });
                         },
 
-                        onCancel: reject
+                        onCancel: function () {
+                            self.Loader.hide();
+                            resolve(false);
+                        }
                     }
                 }).open();
             });

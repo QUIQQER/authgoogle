@@ -127,6 +127,14 @@
             <de><![CDATA[Jetzt mit Google registrieren]]></de>
             <en><![CDATA[Register now with Google]]></en>
         </locale>
+        <locale name="controls.frontend.registrar.sign_in.popup.btn">
+            <de><![CDATA[Jetzt bei Google einloggen]]></de>
+            <en><![CDATA[Sign in at Google now]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.sign_in.popup.title">
+            <de><![CDATA[Bei Google einloggen]]></de>
+            <en><![CDATA[Sign in at Google]]></en>
+        </locale>
         <locale name="message.registrar.registration_success_manual">
             <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
             <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
@@ -146,6 +154,14 @@
         <locale name="controls.frontend.registrar.already_authenticated" html="true">
             <de><![CDATA[Sie sind z.Z. eingeloggt. Bitte loggen Sie sich aus, um mit Google ein Benutzerkonto zu registrieren.]]></de>
             <en><![CDATA[You are currently logged in. Please log out to registrer an account via Google.]]></en>
+        </locale>
+        <locale name="controls.frontend.registrar.sign_in.popup.error">
+            <de><![CDATA[Die Registrierung mit Google kann zur Zeit leider nicht durchgeführt werden. Dies kann z.B. daran liegen, dass Sie im Incognito-Modus arbeiten und/oder Drittanbieter-Cookies blockiert sind. Bitte verlassen Sie in diesem Fall den Incognito-Modus oder erlauben Sie die Verwendung von Drittanbieter-Cookies und versuchen es erneut.]]></de>
+            <en><![CDATA[The registration with Google can not be done at the moment. This may be because you are working in incognito mode and/or third-party cookies are blocked. In this case, please leave the incognito mode or allow the use of third-party cookies and try again.]]></en>
+        </locale>
+        <locale name="controls.frontend.login.sign_in.popup.error">
+            <de><![CDATA[Der Login mit Google kann zur Zeit leider nicht durchgeführt werden. Dies kann z.B. daran liegen, dass Sie im Incognito-Modus arbeiten und/oder Drittanbieter-Cookies blockiert sind. Bitte verlassen Sie in diesem Fall den Incognito-Modus oder erlauben Sie die Verwendung von Drittanbieter-Cookies und versuchen es erneut.]]></de>
+            <en><![CDATA[The sign in with Google can not be done at the moment. This may be because you are working in incognito mode and/or third-party cookies are blocked. In this case, please leave the incognito mode or allow the use of third-party cookies and try again.]]></en>
         </locale>
 
     </groups>
