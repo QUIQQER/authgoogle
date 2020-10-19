@@ -186,9 +186,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 self.$signedIn = result[1];
 
                 if (!self.$signedIn) {
-                    Google.login().then(function () {
-                        self.$authenticate();
-                    });
+                    //Google.login().then(function () {
+                    //    self.$authenticate();
+                    //});
                     return;
                 }
 
@@ -268,24 +268,28 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         $openGoogleLoginWindowHelper: function () {
             var self = this;
 
-            if (!Google.isLoaded()) {
-                return new Promise(function (resolve) {
-                    Google.$load().then(function () {
-                        if (Google.isLoggedIn()) {
-                            return resolve();
-                        }
-
-                        self.$openGoogleLoginWindowHelper().then(resolve);
-                    });
-                });
-            }
+            //if (!Google.isLoaded()) {
+            //    return new Promise(function (resolve) {
+            //        Google.$load().then(function () {
+            //            if (Google.isLoggedIn()) {
+            //                return resolve();
+            //            }
+            //
+            //            self.$openGoogleLoginWindowHelper().then(resolve);
+            //        }, function () {
+            //            resolve(false);
+            //        });
+            //    });
+            //}
 
             if (Google.isLoggedIn()) {
-                return Promise.resolve();
+                return Promise.resolve(true);
             }
 
             return new Promise(function (resolve, reject) {
                 new QUIPopup({
+                    icon     : 'fa fa-sign-in',
+                    title    : QUILocale.get(lg, 'controls.frontend.registrar.login_popup.title'),
                     maxWidth : 500,
                     maxHeight: 300,
                     buttons  : false,
@@ -306,7 +310,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                     QUILocale.get(lg, 'controls.register.status.unknown') +
                                     '</p>' +
                                     '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
-                                    QUILocale.get(lg, 'controls.frontend.registrar.registration_button') +
+                                    QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.btn') +
                                     '</button>'
                                 );
 
@@ -324,6 +328,14 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                 });
 
                                 Win.Loader.hide();
+                            }, function () {
+                                Win.setContent(
+                                    '<p>' + QUILocale.get(lg, 'controls.frontend.login.sign_in.popup.error') + '</p>'
+                                );
+
+                                Win.Loader.hide();
+
+                                resolve(false);
                             });
                         },
 

@@ -51,6 +51,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             this.$GoogleUser    = false; // currently logged in Google user
             this.$scriptsLoaded = false;
             this.$waitForApi    = false;
+            this.$initFailed    = false;
         },
 
         /**
@@ -428,6 +429,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         $load: function () {
+            if (this.$initFailed) {
+                return Promise.reject('Google API initialization failed.');
+            }
+
             if (this.$loaded) {
                 return Promise.resolve();
             }
@@ -457,6 +462,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             self.$scriptsLoaded = true;
                         } catch (e) {
                             reject('Google API initialization failed.');
+                            return;
                         }
                     }
 
@@ -493,7 +499,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                                         resolve();
                                     });
-                                }, reject);
+                                }, function () {
+                                    self.$initFailed = true;
+                                    reject();
+                                });
                             });
                         }, 200);
 
