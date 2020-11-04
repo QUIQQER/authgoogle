@@ -409,7 +409,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                     onClick: function () {
                                         localStorage.setItem('quiqqer_auth_google_autoconnect', true);
 
-                                        resolve();
+                                        resolve(true);
                                         Popup.close();
                                     }
                                 }
@@ -417,7 +417,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                 Content.getElement('.quiqqer-auth-google-consent-btn')
                             );
                         },
-                        onCancel: reject
+                        onCancel: function () {
+                            resolve(false);
+                        }
                     }
                 }).open();
             });

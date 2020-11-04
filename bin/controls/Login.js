@@ -112,7 +112,11 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     self.$FakeLoginBtn.disabled = true;
                     self.Loader.show();
 
-                    Google.getGDPRConsent().then(function () {
+                    Google.getGDPRConsent().then(function (consentGiven) {
+                        if (!consentGiven) {
+                            return Promise.resolve(false);
+                        }
+
                         return self.$openGoogleLoginWindowHelper();
                     }).then(function () {
                         return self.$authenticate();
@@ -307,9 +311,10 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                 Win.getContent().set(
                                     'html',
                                     '<p>' +
-                                    QUILocale.get(lg, 'controls.register.status.unknown') +
+                                    QUILocale.get(lg, 'controls.register.status.login_required') +
                                     '</p>' +
                                     '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
+                                    '<span class="fa fa-google"></span> ' +
                                     QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.btn') +
                                     '</button>'
                                 );
