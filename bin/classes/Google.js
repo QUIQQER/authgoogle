@@ -51,6 +51,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             this.$GoogleUser    = false; // currently logged in Google user
             this.$scriptsLoaded = false;
             this.$waitForApi    = false;
+            this.$initFailed    = false;
         },
 
         /**
@@ -88,6 +89,15 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     resolve(LoginBtn);
                 }, reject);
             }.bind(this));
+        },
+
+        /**
+         * Are all google auth scripts loaded?
+         *
+         * @return {Boolean}
+         */
+        isLoaded: function () {
+            return this.$loaded;
         },
 
         /**
@@ -134,25 +144,27 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
             var self = this;
 
-            return new Promise(function (resolve, reject) {
-                GoogleAuth.signIn({
-                    prompt: 'select_account'
-                }).then(function () {
-                    if (!GoogleAuth.isSignedIn.get()) {
+            return this.$load().then(function () {
+                return new Promise(function (resolve, reject) {
+                    GoogleAuth.signIn({
+                        prompt: 'select_account'
+                    }).then(function () {
+                        if (!GoogleAuth.isSignedIn.get()) {
+                            reject("Google Login failed.");
+                            return;
+                        }
+
+                        self.$GoogleUser = GoogleAuth.currentUser.get();
+                        self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
+                        self.$token      = self.$AuthData.id_token;
+                        self.$loggedIn   = true;
+
+                        self.fireEvent('login', [self.$AuthData, self]);
+
+                        resolve();
+                    }, function () {
                         reject("Google Login failed.");
-                        return;
-                    }
-
-                    self.$GoogleUser = GoogleAuth.currentUser.get();
-                    self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
-                    self.$token      = self.$AuthData.id_token;
-                    self.$loggedIn   = true;
-
-                    self.fireEvent('login', [self.$AuthData, self]);
-
-                    resolve();
-                }, function () {
-                    reject("Google Login failed.");
+                    });
                 });
             });
         },
@@ -417,6 +429,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         $load: function () {
+            if (this.$initFailed) {
+                return Promise.reject('Google API initialization failed.');
+            }
+
             if (this.$loaded) {
                 return Promise.resolve();
             }
@@ -446,6 +462,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             self.$scriptsLoaded = true;
                         } catch (e) {
                             reject('Google API initialization failed.');
+                            return;
                         }
                     }
 
@@ -482,7 +499,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                                         resolve();
                                     });
-                                }, reject);
+                                }, function () {
+                                    self.$initFailed = true;
+                                    reject();
+                                });
                             });
                         }, 200);
 
