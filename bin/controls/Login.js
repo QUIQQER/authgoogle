@@ -118,7 +118,11 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                         }
 
                         return self.$openGoogleLoginWindowHelper();
-                    }).then(function () {
+                    }).then(function (continueProcess) {
+                        if (!continueProcess) {
+                            return Promise.resolve();
+                        }
+
                         return self.$authenticate();
                     }).then(function () {
                         self.$FakeLoginBtn.disabled = false;
@@ -324,7 +328,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                                     Google.login().then(function () {
                                         self.$signedIn = false;
-                                        resolve();
+                                        resolve(true);
                                         Win.close();
                                     }).catch(function (err) {
                                         console.error(err);
@@ -344,7 +348,9 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                             });
                         },
 
-                        onCancel: reject
+                        onCancel: function() {
+                            resolve(false);
+                        }
                     }
                 }).open();
             });

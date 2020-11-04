@@ -384,7 +384,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          */
         getGDPRConsent: function () {
             if (typeof localStorage !== 'undefined' && localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                return Promise.resolve();
+                return Promise.resolve(true);
             }
 
             return new Promise(function (resolve, reject) {
