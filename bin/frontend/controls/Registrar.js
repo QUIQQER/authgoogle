@@ -110,7 +110,11 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     FakeRegisterBtn.disabled = true;
                     self.Loader.show();
 
-                    Google.getGDPRConsent().then(function () {
+                    Google.getGDPRConsent().then(function (consentGiven) {
+                        if (!consentGiven) {
+                            return Promise.resolve(false);
+                        }
+
                         return self.$openGoogleLoginWindowHelper();
                     }).then(function (submit) {
                         if (!submit) {
