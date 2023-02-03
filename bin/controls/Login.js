@@ -10,7 +10,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
     'qui/controls/Control',
     'qui/controls/windows/Popup',
     'qui/controls/loader/Loader',
-    'qui/controls/windows/Confirm',
 
     'package/quiqqer/authgoogle/bin/Google',
 
@@ -19,7 +18,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'css!package/quiqqer/authgoogle/bin/controls/Login.css'
 
-], function (QUIControl, QUIPopup, QUILoader, QUIConfirm, Google, QUIAjax, QUILocale) {
+], function (QUIControl, QUIPopup, QUILoader, Google, QUIAjax, QUILocale) {
     "use strict";
 
     var lg = 'quiqqer/authgoogle';
@@ -33,7 +32,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
             '$onImport',
             '$authenticate',
             '$showSettings',
-            '$showLoginBtn',
             '$getLoginUserId',
             '$showMsg',
             '$clearMsg',
@@ -112,19 +110,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     self.$FakeLoginBtn.disabled = true;
                     self.Loader.show();
 
-                    Google.getGDPRConsent().then(function (consentGiven) {
-                        if (!consentGiven) {
-                            return Promise.resolve(false);
-                        }
-
-                        return self.$openGoogleLoginWindowHelper();
-                    }).then(function (continueProcess) {
-                        if (!continueProcess) {
-                            return Promise.resolve();
-                        }
-
-                        return self.$authenticate();
-                    }).then(function () {
+                    self.$authenticate().then(function () {
                         self.$FakeLoginBtn.disabled = false;
                         self.Loader.hide();
                     }).catch(function (err) {
@@ -139,28 +125,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             this.create().inject(this.$Input, 'after');
 
-            //if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-            //    this.$showLoginBtn().catch(function () {
-            //        self.Loader.hide();
-            //    });
-            //    //this.$authenticate();
-            //} else {
             this.$FakeLoginBtn.disabled = false;
-            //}
-
-            Google.addEvents({
-                onLogin : function () {
-                    self.$signedIn = true;
-
-                    if (self.$loginBtnClicked) {
-                        self.$loginBtnClicked = false;
-                        self.$authenticate();
-                    }
-                },
-                onLogout: function () {
-                    self.$signedIn = false;
-                }
-            });
         },
 
         /**
@@ -181,72 +146,64 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * @return {Promise}
          */
         $authenticate: function () {
-            var self = this;
-
             this.$clearMsg();
 
             return Promise.all([
-                self.$getLoginUserId(),
-                Google.isSignedIn()
-            ]).then(function (result) {
-                var loginUserId = result[0];
+                this.$getLoginUserId(),
+                Google.authenticate()
+            ]).then((result) => {
+                const loginUserId = result[0];
+                const token       = result[1];
 
-                self.$signedIn = result[1];
-
-                if (!self.$signedIn) {
-                    //Google.login().then(function () {
-                    //    self.$authenticate();
-                    //});
+                if (!token) {
                     return;
                 }
 
-                Google.getToken().then(function (token) {
-                    self.$token = token;
+                this.$token = token;
 
-                    Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
-                        if (!connected && loginUserId) {
-                            self.$showSettings(loginUserId, status);
-                            self.Loader.hide();
+                Google.isAccountConnectedToQuiqqer(token).then((connected) => {
+                    if (!connected && loginUserId) {
+                        this.$showSettings(loginUserId);
+                        this.Loader.hide();
+                        return;
+                    }
+
+                    // if there is no previous user id in the user session
+                    // Google auth is used as a primary authenticator
+                    if (!loginUserId) {
+                        this.$Input.value = token;
+                        this.$Form.fireEvent('submit', [this.$Form]);
+
+                        return;
+                    }
+
+                    // check if login user is google user
+                    this.$isLoginUserGoogleUser(token).then((isLoginUser) => {
+                        this.Loader.hide();
+
+                        if (!isLoginUser) {
+                            this.Loader.show();
+
+                            this.$loginAttemptsCheck().then((maxLoginsExceeded) => {
+                                this.Loader.hide();
+
+                                if (maxLoginsExceeded) {
+                                    window.location = window.location;
+                                    return;
+                                }
+
+                                this.$showMsg(QUILocale.get(lg, 'controls.login.wrong.google.user'));
+                                Google.getLogoutButton().inject(this.$BtnElm);
+                            });
                             return;
                         }
 
-                        // if there is no previous user id in the user session
-                        // Google auth is used as a primary authenticator
-                        if (!loginUserId) {
-                            self.$Input.value = token;
-                            self.$Form.fireEvent('submit', [self.$Form]);
-
-                            return;
-                        }
-
-                        // check if login user is google user
-                        self.$isLoginUserGoogleUser(token).then(function (isLoginUser) {
-                            self.Loader.hide();
-
-                            if (!isLoginUser) {
-                                self.Loader.show();
-
-                                self.$loginAttemptsCheck().then(function (maxLoginsExceeded) {
-                                    self.Loader.hide();
-
-                                    if (maxLoginsExceeded) {
-                                        window.location = window.location;
-                                        return;
-                                    }
-
-                                    self.$showMsg(QUILocale.get(lg, 'controls.login.wrong.google.user'));
-                                    Google.getLogoutButton().inject(self.$BtnElm);
-                                });
-                                return;
-                            }
-
-                            self.$Input.value = token;
-                            self.$Form.fireEvent('submit', [self.$Form]);
-                        });
+                        this.$Input.value = token;
+                        this.$Form.fireEvent('submit', [this.$Form]);
                     });
                 });
-            }, function () {
-                self.$showGeneralError();
+            }).catch(() => {
+                this.$showGeneralError();
             });
         },
 
@@ -267,93 +224,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
                 this.$LoginBtn.disable();
             }
-        },
-
-        /**
-         *
-         * @return {Promise}
-         */
-        $openGoogleLoginWindowHelper: function () {
-            var self = this;
-
-            //if (!Google.isLoaded()) {
-            //    return new Promise(function (resolve) {
-            //        Google.$load().then(function () {
-            //            if (Google.isLoggedIn()) {
-            //                return resolve();
-            //            }
-            //
-            //            self.$openGoogleLoginWindowHelper().then(resolve);
-            //        }, function () {
-            //            resolve(false);
-            //        });
-            //    });
-            //}
-
-            if (Google.isLoggedIn()) {
-                return Promise.resolve(true);
-            }
-
-            return new Promise(function (resolve, reject) {
-                new QUIPopup({
-                    icon     : 'fa fa-sign-in',
-                    title    : QUILocale.get(lg, 'controls.frontend.registrar.login_popup.title'),
-                    maxWidth : 500,
-                    maxHeight: 300,
-                    buttons  : false,
-                    events   : {
-                        onOpen: function (Win) {
-                            Win.Loader.show();
-                            Win.getContent().setStyles({
-                                'alignItems'    : 'center',
-                                'display'       : 'flex',
-                                'flexDirection' : 'column',
-                                'justifyContent': 'center'
-                            });
-
-                            Google.$load().then(function () {
-                                Win.getContent().set(
-                                    'html',
-                                    '<p>' +
-                                    QUILocale.get(lg, 'controls.register.status.login_required') +
-                                    '</p>' +
-                                    '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
-                                    '<span class="fa fa-google"></span> ' +
-                                    QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.btn') +
-                                    '</button>'
-                                );
-
-                                Win.getContent().getElement('button').addEvent('click', function () {
-                                    Win.Loader.show();
-
-                                    Google.login().then(function () {
-                                        self.$signedIn = false;
-                                        resolve(true);
-                                        Win.close();
-                                    }).catch(function (err) {
-                                        console.error(err);
-                                        Win.Loader.hide();
-                                    });
-                                });
-
-                                Win.Loader.hide();
-                            }, function () {
-                                Win.setContent(
-                                    '<p>' + QUILocale.get(lg, 'controls.frontend.login.sign_in.popup.error') + '</p>'
-                                );
-
-                                Win.Loader.hide();
-
-                                resolve(false);
-                            });
-                        },
-
-                        onCancel: function() {
-                            resolve(false);
-                        }
-                    }
-                }).open();
-            });
         },
 
         /**
@@ -381,61 +251,11 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                             self.$authenticate();
                             Control.destroy();
                         },
-                        onLoaded          : function () {
-                            switch (status) {
-                                case 'connected':
-                                    if (!emailProvided) {
-                                        Settings.setInfoText(
-                                            QUILocale.get(lg, 'controls.login.register.status.not_authorized')
-                                        );
-
-                                        return;
-                                    }
-
-                                    Settings.setInfoText(
-                                        QUILocale.get(lg, 'controls.login.register.status.connected')
-                                    );
-                                    break;
-                            }
-                        },
                         onAuthWithoutEmail: function () {
                             emailProvided = false;
                         }
                     }
                 }).inject(self.$InfoElm);
-            });
-        },
-
-        /**
-         * Show login button
-         *
-         * @return {Promise}
-         */
-        $showLoginBtn: function () {
-            var self = this;
-
-            return new Promise(function (resolve, reject) {
-                Google.getLoginButton().then(function (LoginBtn) {
-                    self.$LoginBtn = LoginBtn;
-
-                    if (self.$FakeLoginBtn) {
-                        self.$FakeLoginBtn.destroy();
-                        self.$FakeLoginBtn = null;
-                    }
-
-                    self.$LoginBtn.inject(self.$BtnElm);
-
-                    self.$LoginBtn.addEvent('onClick', function () {
-                        self.$loginBtnClicked = true;
-                        self.$authenticate();
-                    });
-
-                    resolve();
-                }, function (err) {
-                    console.error(err);
-                    self.$showGeneralError();
-                    reject(err);
-                });
             });
         },
 

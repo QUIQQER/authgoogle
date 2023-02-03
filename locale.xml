@@ -269,6 +269,23 @@
 
     <groups name="quiqqer/authgoogle" datatype="js">
 
+        <locale name="classes.Google.auth.popup.title">
+            <de><![CDATA[Authentifizierung mit Google]]></de>
+            <en><![CDATA[Authentication with Google]]></en>
+        </locale>
+        <locale name="classes.Google.auth.error.opt_out_or_no_session">
+            <de><![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden, da Sie diese in Ihrem Google-Konto deaktiviert haben oder auf Ihr Google-Konto z.Z. nicht zugegriffen werden kann (z.B. weil sich Ihr Browser im Inkognito-Modus befindet). Bitte verwenden Sie ein andere Authentifizierungsmethode.]]></de>
+            <en><![CDATA[Authentication with Google cannot be used because you have disabled it in your Google account or there is no access to your google account (e.g. because your browser is in incognito mode).]]></en>
+        </locale>
+        <locale name="classes.Google.auth.error.browser_not_supported">
+            <de><![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden, da diese in Ihrem Browser nicht unterstützt wird. Bitte verwenden Sie ein andere Authentifizierungsmethode.]]></de>
+            <en><![CDATA[You cannot use Google authentication because it is not supported in your browser. Please use another authentication method.]]></en>
+        </locale>
+        <locale name="classes.Google.auth.error.unknown_reason">
+            <de><![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden. Bitte verwenden Sie ein andere Authentifizierungsmethode.]]></de>
+            <en><![CDATA[The authentication with Google cannot be used. Please use another authentication method.]]></en>
+        </locale>
+        
         <!-- Control: Settings -->
         <locale name="controls.settings.table.btn.add">
             <de><![CDATA[Google-Konto verknüpfen]]></de>
