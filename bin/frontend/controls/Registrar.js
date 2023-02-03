@@ -70,14 +70,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
          */
         $onImport: function () {
             this.$Elm = this.getElm();
-            //
-            // this.$Elm.addEvent('click', function (event) {
-            //     var FakeRegisterBtn = self.$Elm.getElement(
-            //         '.quiqqer-auth-google-registration-btn'
-            //     );
-            //
-            //     FakeRegisterBtn.fireEvent('click', [event]);
-            // });
 
             var RegistrarForm = this.$Elm.getElement('.quiqqer-authgoogle-registrar-form');
 
@@ -153,7 +145,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.Loader.hide();
 
                     self.$RegisterBtn.inject(self.$BtnElm);
-
                     self.$RegisterBtn.addEvent('onClick', self.$register);
 
                     if (autoregister) {

@@ -193,7 +193,6 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                                 }
 
                                 this.$showMsg(QUILocale.get(lg, 'controls.login.wrong.google.user'));
-                                Google.getLogoutButton().inject(this.$BtnElm);
                             });
                             return;
                         }

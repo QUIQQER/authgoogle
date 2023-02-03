@@ -376,8 +376,8 @@
             <en><![CDATA[It is necessary to link your Google Account to your user account to authenticate. To do this, please click <b>Link now</b>.]]></en>
         </locale>
         <locale name="controls.login.wrong.google.user">
-            <de><![CDATA[Das Google-Konto, bei welchem Sie z.Z. eingeloggt sind, ist nicht mit dem Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte loggen Sie sich bei Google aus und loggen sich erneut mit dem Google-Konto ein, welches zu diesem Benutzerkonto gehört oder welches sie mit dem Benutzerkonto verknüpfen möchten.]]></de>
-            <en><![CDATA[The Google Account you are currently logged in with is not linked to the user ccount you are trying wo authenticate for. Please log in with the Google Account that is linked to the user account or a Google Account that is currently not linked to any other user account.]]></en>
+            <de><![CDATA[Das Google-Konto, welches ausgewählt wurde, ist nicht mit dem Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte wählen Sie das Google-Konto, welches zu diesem Benutzerkonto gehört oder welches sie mit dem Benutzerkonto verknüpfen möchten.]]></de>
+            <en><![CDATA[The Google Account you selected is not linked to the user ccount you are trying wo authenticate for. Please select the Google Account that is linked to the user account or a Google Account that is currently not linked to any other user account.]]></en>
         </locale>
         <locale name="controls.login.no.quiqqer.account">
             <de><![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
