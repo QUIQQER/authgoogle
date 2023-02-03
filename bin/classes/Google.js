@@ -17,12 +17,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
     'Ajax',
     'Locale',
-    'Mustache',
 
-    'text!package/quiqqer/authgoogle/bin/classes/GDPRConsent.html',
     'css!package/quiqqer/authgoogle/bin/classes/Google.css'
 
-], function (QUI, QDOM, QUIButton, QUIConfirm, QUIAjax, QUILocale, Mustache, templateGDPRConsent) {
+], function (QUI, QDOM, QUIButton, QUIConfirm, QUIAjax, QUILocale) {
     "use strict";
 
     var lg         = 'quiqqer/authgoogle';
@@ -52,6 +50,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             this.$scriptsLoaded = false;
             this.$waitForApi    = false;
             this.$initFailed    = false;
+
+            this.$clientId = null;
         },
 
         /**
@@ -130,6 +130,128 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     resolve(RegistrationBtn);
                 }, reject);
             }.bind(this));
+        },
+
+        /**
+         * Start authentication process.
+         *
+         * @return {Promise<String>} - Return idToken from Google
+         */
+        authenticate: function () {
+            return this.$load().then(() => {
+                return this.$getClientId();
+            }).then((clientId) => {
+                return new Promise((resolve, reject) => {
+                    let GoogleAuthInfoPopup;
+
+                    // initiale Google API
+                    google.accounts.id.initialize({
+                        client_id: clientId,
+                        //auto_select          : true,
+                        prompt_parent_id     : 'google-auth',
+                        cancel_on_tap_outside: false,
+                        callback             : (CallbackResponse) => {
+                            GoogleAuthInfoPopup.close();
+                            resolve(CallbackResponse.credential);
+                        }
+                    });
+
+                    GoogleAuthInfoPopup = new QUIConfirm({
+                        maxHeight: 500,
+                        maxWidth : 500,
+
+                        autoclose         : false,
+                        backgroundClosable: false,
+
+                        title   : QUILocale.get(lg, 'classes.Google.auth.popup.title'),
+                        texticon: 'fa fa-google',
+                        icon    : 'fa fa-google',
+
+                        cancel_button: false,
+                        ok_button    : false,
+                        events       : {
+                            onOpen : (Win) => {
+                                const Content = Win.getContent();
+
+                                Content.set('html', '<div id="google-auth"></div>');
+
+                                Content.setStyles({
+                                    'alignItems'    : 'center',
+                                    'display'       : 'flex',
+                                    'flexDirection' : 'column',
+                                    'justifyContent': 'center'
+                                });
+
+                                Win.Loader.show();
+
+                                let authFailed = false;
+
+                                google.accounts.id.prompt((notification) => {
+                                    if ("l" in notification) {
+                                        switch (notification.l) {
+                                            // If "One Tap" has previously been clicked away by the user ->
+                                            // Show Google button instead
+                                            case 'suppressed_by_user':
+                                                google.accounts.id.renderButton(Content, {theme: "filled_blue"});
+                                                break;
+
+                                            case 'opt_out_or_no_session':
+                                                Content.set(
+                                                    'html',
+                                                    QUILocale.get(lg, 'classes.Google.auth.error.opt_out_or_no_session')
+                                                );
+
+                                                authFailed = true;
+                                                break;
+
+                                            case 'browser_not_supported':
+                                                Content.set(
+                                                    'html',
+                                                    QUILocale.get(lg, 'classes.Google.auth.error.browser_not_supported')
+                                                );
+
+                                                authFailed = true;
+                                                break;
+
+                                            case 'secure_http_required':
+                                            case 'missing_client_id':
+                                            case 'invalid_client':
+                                            case 'unregistered_origin':
+                                            case 'unknown_reason':
+                                                Content.set(
+                                                    'html',
+                                                    QUILocale.get(lg, 'classes.Google.auth.error.unknown_reason')
+                                                );
+
+                                                authFailed = true;
+                                                break;
+                                        }
+                                    }
+
+                                    if ("m" in notification) {
+                                        switch (notification.m) {
+                                            case 'user_cancel':
+                                                Win.close();
+                                                break;
+                                        }
+                                    }
+
+                                    Win.Loader.hide();
+
+                                    if (authFailed) {
+                                        reject();
+                                    }
+                                });
+                            },
+                            onClose: () => {
+                                resolve(false);
+                            }
+                        }
+                    });
+
+                    GoogleAuthInfoPopup.open();
+                });
+            });
         },
 
         /**
@@ -273,10 +395,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         isSignedIn: function () {
-            var self = this;
+            //return Promise.resolve(false); // @todo ggf. weg oder anders umsetzen
 
-            return new Promise(function (resolve, reject) {
-                self.$load().then(function () {
+            return new Promise((resolve, reject) => {
+                this.$load().then(() => {
                     resolve(GoogleAuth.isSignedIn.get());
                 }, reject);
             });
@@ -287,23 +409,12 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          *
          * @return {Promise}
          */
-        getProfileInfo: function () {
-            var self = this;
-
-            return this.$load().then(function () {
-                return new Promise(function (resolve, reject) {
-                    if (!self.$GoogleUser) {
-                        reject("Google User is not signed in.");
-                        return;
-                    }
-
-                    var Profile = self.$GoogleUser.getBasicProfile();
-
-                    resolve({
-                        id   : Profile.getId(),
-                        name : Profile.getName(),
-                        email: Profile.getEmail()
-                    });
+        getProfileInfo: function (token) {
+            return new Promise((resolve, reject) => {
+                QUIAjax.post('package_quiqqer_authgoogle_ajax_getDataByToken', resolve, {
+                    'package': 'quiqqer/authgoogle',
+                    idToken  : token,
+                    onError  : reject
                 });
             });
         },
@@ -375,57 +486,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
-         * Opens popup with GDPR-compliant confirmation for a Google connection
-         *
-         * This is only needed if the user first has to "agree" to the connection
-         * to Google by clicking the original Registration button
-         *
-         * @return {Promise}
-         */
-        getGDPRConsent: function () {
-            if (typeof localStorage !== 'undefined' && localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-                return Promise.resolve(true);
-            }
-
-            return new Promise(function (resolve, reject) {
-                new QUIConfirm({
-                    'class'  : 'quiqqer-auth-google-registration-popup',
-                    icon     : 'fa fa-google',
-                    title    : QUILocale.get(lg, 'gdpr_consent.popup.title'),
-                    maxHeight: 350,
-                    maxWidth : 600,
-                    buttons  : false,
-                    events   : {
-                        onOpen  : function (Popup) {
-                            var Content = Popup.getContent();
-
-                            Content.set('html', Mustache.render(templateGDPRConsent, {
-                                connectInfo: QUILocale.get(lg, 'gdpr_consent.popup.info')
-                            }));
-
-                            new QUIButton({
-                                text  : QUILocale.get(lg, 'gdpr_consent.popup.btn.text'),
-                                events: {
-                                    onClick: function () {
-                                        localStorage.setItem('quiqqer_auth_google_autoconnect', true);
-
-                                        resolve(true);
-                                        Popup.close();
-                                    }
-                                }
-                            }).inject(
-                                Content.getElement('.quiqqer-auth-google-consent-btn')
-                            );
-                        },
-                        onCancel: function () {
-                            resolve(false);
-                        }
-                    }
-                }).open();
-            });
-        },
-
-        /**
          * Load Google JavaScript SDK
          *
          * @return {Promise}
@@ -439,12 +499,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 return Promise.resolve();
             }
 
-            var self = this;
-
-            return new Promise(function (resolve, reject) {
-                self.$getClientId().then(function (clientId) {
+            return new Promise((resolve, reject) => {
+                this.$getClientId().then((clientId) => {
                     if (!clientId) {
-                        QUI.getMessageHandler().then(function (MH) {
+                        QUI.getMessageHandler().then((MH) => {
                             MH.addAttention(
                                 QUILocale.get(lg, 'classes.google.warn.no.clientId')
                             );
@@ -453,65 +511,37 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         return;
                     }
 
-                    if (!self.$scriptsLoaded) {
+                    if (!this.$scriptsLoaded) {
                         try {
                             new Element('script', {
-                                src  : 'https://apis.google.com/js/platform.js',
+                                src  : 'https://accounts.google.com/gsi/client',
                                 async: 'async',
                                 defer: 'defer'
                             }).inject(document.head);
 
-                            self.$scriptsLoaded = true;
+                            this.$scriptsLoaded = true;
                         } catch (e) {
                             reject('Google API initialization failed.');
                             return;
                         }
                     }
 
-                    if (!self.$waitForApi) {
-                        var waitForGoogleApi = setInterval(function () {
-                            if (typeof gapi === 'undefined') {
+                    if (!this.$waitForApi) {
+                        const waitForGoogleApi = setInterval(() => {
+                            if (typeof google === 'undefined') {
                                 return;
                             }
 
                             clearInterval(waitForGoogleApi);
+                            this.$loaded = true;
 
-                            // initiale Google API
-                            window.gapi.load('auth2', function () {
-                                var GoogleAuthInstance = window.gapi.auth2.init({
-                                    client_id: clientId
-                                });
-
-                                GoogleAuthInstance.then(function () {
-                                    GoogleAuth   = GoogleAuthInstance;
-                                    self.$loaded = true;
-
-                                    self.isSignedIn().then(function (isSignedIn) {
-                                        if (!isSignedIn) {
-                                            resolve();
-                                            return;
-                                        }
-
-                                        self.$GoogleUser = GoogleAuth.currentUser.get();
-                                        self.$AuthData   = self.$GoogleUser.getAuthResponse(true);
-                                        self.$token      = self.$AuthData.id_token;
-
-                                        self.$loggedIn = true;
-                                        self.fireEvent('login', [self.$AuthData, self]);
-
-                                        resolve();
-                                    });
-                                }, function () {
-                                    self.$initFailed = true;
-                                    reject();
-                                });
-                            });
+                            resolve();
                         }, 200);
 
-                        self.$waitForApi = true;
+                        this.$waitForApi = true;
                     } else {
-                        var waitForGoogleLoad = setInterval(function () {
-                            if (!self.$loaded) {
+                        const waitForGoogleLoad = setInterval(() => {
+                            if (!this.$loaded) {
                                 return;
                             }
 
@@ -529,8 +559,15 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise}
          */
         $getClientId: function () {
-            return new Promise(function (resolve, reject) {
-                QUIAjax.get('package_quiqqer_authgoogle_ajax_getClientId', resolve, {
+            if (this.$clientId) {
+                return Promise.resolve(this.$clientId);
+            }
+
+            return new Promise((resolve, reject) => {
+                QUIAjax.get('package_quiqqer_authgoogle_ajax_getClientId', (clientId) => {
+                    this.$clientId = clientId;
+                    resolve(clientId);
+                }, {
                     'package': 'quiqqer/authgoogle',
                     onError  : reject
                 });

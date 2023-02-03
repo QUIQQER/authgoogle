@@ -11,7 +11,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
     'qui/controls/windows/Popup',
     'qui/controls/loader/Loader',
 
-    'controls/users/Login',
+    'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
     'package/quiqqer/authgoogle/bin/Google',
 
     'Ajax',
@@ -22,8 +22,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 ], function (QUIControl, QUIPopup, QUILoader, QUILogin, Google, QUIAjax, QUILocale) {
     "use strict";
 
-    var lg            = 'quiqqer/authgoogle';
-    var registerCount = 0; // register count
+    const lg          = 'quiqqer/authgoogle';
+    let registerCount = 0; // register count
 
     return new Class({
 
@@ -69,8 +69,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
          * Event: onImport
          */
         $onImport: function () {
-            var self = this;
-
             this.$Elm = this.getElm();
             //
             // this.$Elm.addEvent('click', function (event) {
@@ -101,34 +99,22 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 event.stop();
             });
 
-            var FakeRegisterBtn = this.$Elm.getElement('.quiqqer-auth-google-registration-btn');
+            const FakeRegisterBtn = this.$Elm.getElement('.quiqqer-auth-google-registration-btn');
 
             FakeRegisterBtn.addEvents({
-                click: function (event) {
+                click: (event) => {
                     event.stop();
 
                     FakeRegisterBtn.disabled = true;
-                    self.Loader.show();
+                    this.Loader.show();
 
-                    Google.getGDPRConsent().then(function (consentGiven) {
-                        if (!consentGiven) {
-                            return Promise.resolve(false);
-                        }
-
-                        return self.$openGoogleLoginWindowHelper();
-                    }).then(function (submit) {
-                        if (!submit) {
-                            FakeRegisterBtn.disabled = false;
-                            return;
-                        }
-
-                        return self.$init(true);
-                    }).then(function () {
-                        self.Loader.hide();
-                    }).catch(function () {
+                    this.$init(true).then(() => {
+                        this.Loader.hide();
+                    }).catch(() => {
                         FakeRegisterBtn.disabled = false;
-                        self.Loader.hide();
-                        self.$showGeneralError();
+
+                        this.Loader.hide();
+                        this.$showGeneralError();
 
                         FakeRegisterBtn.set('html', QUILocale.get(lg,
                             'controls.frontend.registrar.general_error'
@@ -137,29 +123,9 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 }
             });
 
-            Google.addEvents({
-                onLogin : function () {
-                    self.$signedIn = true;
-
-                    if (self.$registrationBtnClicked) {
-                        self.$registrationBtnClicked = false;
-                        self.$register();
-                    }
-                },
-                onLogout: function () {
-                    self.$signedIn = false;
-                }
-            });
-
             registerCount = 0;
 
-            //if (localStorage.getItem('quiqqer_auth_google_autoconnect')) {
-            //    this.$init().catch(function () {
-            //        // nothing
-            //    });
-            //} else {
             FakeRegisterBtn.disabled = false;
-            //}
         },
 
         /**
@@ -180,26 +146,15 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
             }
 
             return new Promise(function (resolve, reject) {
-                Promise.all([
-                    Google.getRegistrationButton(),
-                    Google.isSignedIn()
-                ]).then(function (result) {
-                    self.$RegisterBtn = result[0];
-                    self.$signedIn    = result[1];
+                Google.getRegistrationButton().then(function (result) {
+                    self.$RegisterBtn = result;
 
                     self.$clearButtons();
                     self.Loader.hide();
 
                     self.$RegisterBtn.inject(self.$BtnElm);
 
-                    self.$RegisterBtn.addEvent('onClick', function () {
-                        self.$registrationBtnClicked = true;
-
-                        if (self.$signedIn) {
-                            self.$registrationBtnClicked = false;
-                            self.$register();
-                        }
-                    });
+                    self.$RegisterBtn.addEvent('onClick', self.$register);
 
                     if (autoregister) {
                         self.$register();
@@ -213,79 +168,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     self.$showGeneralError();
                     reject();
                 });
-            });
-        },
-
-        /**
-         * Helper if google sdk is not loaded
-         *
-         * @return {Promise}
-         */
-        $openGoogleLoginWindowHelper: function () {
-            if (Google.isLoggedIn()) {
-                return Promise.resolve(true);
-            }
-
-            var self = this;
-
-            return new Promise(function (resolve) {
-                new QUIPopup({
-                    icon     : 'fa fa-google',
-                    title    : QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.title'),
-                    maxWidth : 500,
-                    maxHeight: 300,
-                    buttons  : false,
-                    events   : {
-                        onOpen: function (Win) {
-                            Win.Loader.show();
-                            Win.getContent().setStyles({
-                                'alignItems'    : 'center',
-                                'display'       : 'flex',
-                                'flexDirection' : 'column',
-                                'justifyContent': 'center'
-                            });
-
-                            Google.$load().then(function () {
-                                Win.getContent().set(
-                                    'html',
-                                    '<p>' +
-                                    QUILocale.get(lg, 'controls.register.status.unknown') +
-                                    '</p>' +
-                                    '<button class="qui-button quiqqer-auth-google-registration-btn qui-utils-noselect">' +
-                                    QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.btn') +
-                                    '</button>'
-                                );
-
-                                Win.getContent().getElement('button').addEvent('click', function () {
-                                    Win.Loader.show();
-
-                                    Google.login().then(function () {
-                                        self.$signedIn = false;
-                                        resolve(true);
-                                        Win.close();
-                                    }).catch(function () {
-                                        Win.Loader.hide();
-                                    });
-                                });
-
-                                Win.Loader.hide();
-                            }, function () {
-                                Win.setContent(
-                                    '<p>' + QUILocale.get(lg, 'controls.frontend.registrar.sign_in.popup.error') + '</p>'
-                                );
-
-                                Win.Loader.hide();
-
-                                resolve(false);
-                            });
-                        },
-
-                        onCancel: function () {
-                            self.Loader.hide();
-                            resolve(false);
-                        }
-                    }
-                }).open();
             });
         },
 
@@ -323,8 +205,13 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                 self.$showGeneralError();
             };
 
-            return Google.getToken().then(function (token) {
+            return Google.authenticate().then((token) => {
                 self.$token = token;
+
+                if (!token) {
+                    this.Loader.hide();
+                    return;
+                }
 
                 Google.isAccountConnectedToQuiqqer(token).then(function (connected) {
                     self.Loader.hide();
@@ -364,9 +251,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
             this.Loader.show();
 
-            Google.getProfileInfo().then(function (ProfileData) {
-                self.Loader.hide();
-
+            Google.getProfileInfo(this.$token).then(function (ProfileData) {
                 new QUIPopup({
                     icon              : 'fa fa-sign-in',
                     title             : QUILocale.get(lg, 'controls.frontend.registrar.login_popup.title'),
@@ -377,9 +262,7 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                     maxWidth          : 600,
                     events            : {
                         onOpen : function (Popup) {
-                            Popup.Loader.show();
-
-                            var Content = Popup.getContent();
+                            const Content = Popup.getContent();
 
                             Content.set(
                                 'html',
@@ -389,24 +272,15 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                                 }) +
                                 '</p>' +
                                 '<div class="google-login">' +
-                                '<p>' +
-                                QUILocale.get(lg, 'controls.frontend.registrar.already_connected.login.label') +
-                                '</p>' +
                                 '</div>'
                             );
 
-                            require([
-                                'package/quiqqer/frontend-users/bin/frontend/controls/login/Login'
-                            ], function (FrontendUsersLogin) {
-                                new FrontendUsersLogin({
-                                    header        : false,
-                                    authenticators: ['QUI\\Auth\\Google\\Auth'],
-                                    mail          : false,
-                                    passwordReset : false
-                                }).inject(Content.getElement('.google-login'));
-
-                                Popup.Loader.hide();
-                            });
+                            // Login
+                            new QUILogin({
+                                authenticators: ['QUI\\Auth\\Google\\Auth'],
+                                mail          : false,
+                                passwordReset : false
+                            }).inject(Content.getElement('.google-login'));
                         },
                         onClose: function () {
                             self.Loader.show();
@@ -417,6 +291,8 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
                         }
                     }
                 }).open();
+            }).catch((e) => {
+                console.log(e);
             });
         },
 
