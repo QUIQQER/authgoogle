@@ -1,7 +1,5 @@
 <?php
 
-use QUI\Auth\Google\Google;
-
 /**
  * Connect QUIQQER account with Google account
  *
@@ -11,6 +9,9 @@ use QUI\Auth\Google\Google;
  *
  * @throws QUI\Permissions\Exception
  */
+
+use QUI\Auth\Google\Google;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_connectAccount',
     function ($userId, $idToken) {
@@ -33,7 +34,7 @@ QUI::$Ajax->registerFunction(
             return false;
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                'AJAX :: package_quiqqer_authgoogle_ajax_connectAccount -> '.$Exception->getMessage()
+                'AJAX :: package_quiqqer_authgoogle_ajax_connectAccount -> ' . $Exception->getMessage()
             );
 
             QUI::getMessagesHandler()->addError(
@@ -51,9 +52,9 @@ QUI::$Ajax->registerFunction(
                 'quiqqer/authgoogle',
                 'message.ajax.connectAccount.success',
                 [
-                    'account'   => $accountData['name'].' ('.$accountData['email'].')',
+                    'account' => $accountData['name'] . ' (' . $accountData['email'] . ')',
                     'qUserName' => QUI::getUsers()->get($accountData['userId'])->getUsername(),
-                    'qUserId'   => $accountData['userId']
+                    'qUserId' => $accountData['userId']
                 ]
             )
         );

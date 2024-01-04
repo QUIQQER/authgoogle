@@ -1,7 +1,5 @@
 <?php
 
-use QUI\Auth\Google\Google;
-
 /**
  * Disconnect QUIQQER account from Google account
  *
@@ -10,6 +8,9 @@ use QUI\Auth\Google\Google;
  *
  * @throws QUI\Permissions\Exception
  */
+
+use QUI\Auth\Google\Google;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_disconnectAccount',
     function ($userId) {
@@ -31,7 +32,7 @@ QUI::$Ajax->registerFunction(
             return false;
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                'AJAX :: package_quiqqer_authgoogle_ajax_disconnectAccount -> '.$Exception->getMessage()
+                'AJAX :: package_quiqqer_authgoogle_ajax_disconnectAccount -> ' . $Exception->getMessage()
             );
 
             QUI::getMessagesHandler()->addError(
@@ -50,7 +51,7 @@ QUI::$Ajax->registerFunction(
                 'message.ajax.disconnectAccount.success',
                 [
                     'qUserName' => QUI::getUsers()->get($userId)->getUsername(),
-                    'qUserId'   => $userId
+                    'qUserId' => $userId
                 ]
             )
         );
