@@ -5,6 +5,7 @@
  *
  * @return int|false - user id or false if no login user set
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_getLoginUserId',
     function () {

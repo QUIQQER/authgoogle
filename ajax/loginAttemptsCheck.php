@@ -6,12 +6,13 @@
  *
  * @return bool - true = session destroyed; false = session still active
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_loginAttemptsCheck',
     function () {
-        $Session         = QUI::getSession();
+        $Session = QUI::getSession();
         $loginErrorCount = $Session->get('google_login_errors');
-        $maxLoginErrors  = QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('authSettings', 'maxLoginErrors');
+        $maxLoginErrors = QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('authSettings', 'maxLoginErrors');
 
         if (empty($loginErrorCount)) {
             $loginErrorCount = 0;

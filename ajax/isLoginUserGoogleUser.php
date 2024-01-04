@@ -1,13 +1,14 @@
 <?php
 
-use QUI\Auth\Google\Google;
-
 /**
  * Check if the user that logs in via Google is the login User
  *
  * @param string $idToken - Google API ID Token
  * @return bool
  */
+
+use QUI\Auth\Google\Google;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_isLoginUserGoogleUser',
     function ($idToken) {
