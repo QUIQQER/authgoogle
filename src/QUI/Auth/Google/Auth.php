@@ -10,6 +10,7 @@ use QUI;
 use QUI\Auth\Google\Exception as GoogleException;
 use QUI\Users\AbstractAuthenticator;
 use QUI\Users\User;
+
 use function is_string;
 
 /**
@@ -79,7 +80,8 @@ class Auth extends AbstractAuthenticator
      */
     public function auth($authData)
     {
-        if (!is_array($authData)
+        if (
+            !is_array($authData)
             || !isset($authData['token'])
         ) {
             throw new GoogleException([
@@ -107,7 +109,7 @@ class Auth extends AbstractAuthenticator
              * automatically connect it to the QUIQQER account.
              */
             $userData = Google::getProfileData($token);
-            $Users    = QUI::getUsers();
+            $Users = QUI::getUsers();
 
             if (!empty($userData['email']) && $Users->emailExists($userData['email'])) {
                 try {

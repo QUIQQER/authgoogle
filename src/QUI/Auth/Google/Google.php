@@ -2,9 +2,8 @@
 
 namespace QUI\Auth\Google;
 
-use QUI;
-use QUI\Utils\Security\Orthos;
 use Google_Client as GoogleApi;
+use QUI;
 
 /**
  * Class Google
@@ -40,7 +39,7 @@ class Google
             self::checkEditPermission($uid);
         }
 
-        $User        = QUI::getUsers()->get($uid);
+        $User = QUI::getUsers()->get($uid);
         $profileData = self::getProfileData($accessToken);
 
         if (self::existsQuiqqerAccount($accessToken)) {
@@ -58,10 +57,10 @@ class Google
         QUI::getDataBase()->insert(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
             [
-                'userId'       => $User->getId(),
+                'userId' => $User->getId(),
                 'googleUserId' => $profileData['sub'],
-                'email'        => $profileData['email'],
-                'name'         => $profileData['name']
+                'email' => $profileData['email'],
+                'name' => $profileData['name']
             ]
         );
     }
@@ -100,7 +99,8 @@ class Google
     {
         $payload = self::getApi()->verifyIdToken($accessToken);
 
-        if (empty($payload)
+        if (
+            empty($payload)
             || !isset($payload['aud'])
             || $payload['aud'] != self::getClientId()
         ) {
@@ -131,7 +131,7 @@ class Google
     public static function getConnectedAccountByQuiqqerUserId($userId)
     {
         $result = QUI::getDataBase()->fetch([
-            'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
+            'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
             'where' => [
                 'userId' => (int)$userId
             ]
@@ -157,7 +157,7 @@ class Google
         $profile = self::getProfileData($idToken);
 
         $result = QUI::getDataBase()->fetch([
-            'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
+            'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
             'where' => [
                 'googleUserId' => $profile['sub']
             ]
@@ -181,7 +181,7 @@ class Google
         $profile = self::getProfileData($token);
 
         $result = QUI::getDataBase()->fetch([
-            'from'  => QUI::getDBTableName(self::TBL_ACCOUNTS),
+            'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
             'where' => [
                 'googleUserId' => $profile['sub']
             ],
@@ -210,7 +210,7 @@ class Google
             ]);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: getApi() -> '.$Exception->getMessage()
+                self::class . ' :: getApi() -> ' . $Exception->getMessage()
             );
 
             throw new Exception([
@@ -257,7 +257,8 @@ class Google
             return;
         }
 
-        if ((int)QUI::getSession()->get('uid') !== (int)$userId
+        if (
+            (int)QUI::getSession()->get('uid') !== (int)$userId
             || !$userId
         ) {
             throw new QUI\Permissions\Exception(

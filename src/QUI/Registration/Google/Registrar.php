@@ -7,10 +7,10 @@
 namespace QUI\Registration\Google;
 
 use QUI;
-use QUI\FrontendUsers;
-use QUI\FrontendUsers\InvalidFormField;
 use QUI\Auth\Google\Google;
+use QUI\FrontendUsers;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
+use QUI\FrontendUsers\InvalidFormField;
 
 /**
  * Class Email\Registrar
@@ -36,15 +36,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
         $SystemUser = QUI::getUsers()->getSystemUser();
-        $token      = $this->getAttribute('token');
+        $token = $this->getAttribute('token');
 
         // set user data
         $profileData = Google::getProfileData($token);
 
         $User->setAttributes([
-            'email'     => $profileData['email'],
+            'email' => $profileData['email'],
             'firstname' => empty($profileData['given_name']) ? null : $profileData['given_name'],
-            'lastname'  => empty($profileData['family_name']) ? null : $profileData['family_name'],
+            'lastname' => empty($profileData['family_name']) ? null : $profileData['family_name'],
         ]);
 
         $User->setAttribute(FrontendUsersHandler::USER_ATTR_EMAIL_VERIFIED, boolval($profileData['email_verified']));
@@ -110,7 +110,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function validate()
     {
-        $lg       = 'quiqqer/authgoogle';
+        $lg = 'quiqqer/authgoogle';
         $lgPrefix = 'exception.registrar.';
 
         $token = $this->getAttribute('token');
@@ -118,7 +118,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (empty($token)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'token_invalid'
+                $lgPrefix . 'token_invalid'
             ]);
         }
 
@@ -127,7 +127,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         } catch (\Exception $Exception) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'token_invalid'
+                $lgPrefix . 'token_invalid'
             ]);
         }
 
@@ -136,25 +136,27 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (empty($email)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'email_address_empty'
+                $lgPrefix . 'email_address_empty'
             ]);
         }
 
         if (QUI::getUsers()->usernameExists($email)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'email_already_exists'
+                $lgPrefix . 'email_already_exists'
             ]);
         }
 
-        $settings    = $this->getRegistrationSettings();
+        $settings = $this->getRegistrationSettings();
         $profileData = Google::getProfileData($token);
 
-        if (!(int)$settings['allowUnverifiedEmailAddresses']
-            && !(int)$profileData['email_verified']) {
+        if (
+            !(int)$settings['allowUnverifiedEmailAddresses']
+            && !(int)$profileData['email_verified']
+        ) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'email_not_verified'
+                $lgPrefix . 'email_not_verified'
             ]);
         }
     }
