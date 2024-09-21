@@ -15,7 +15,7 @@ class Events
      * @param User $User
      * @return void
      */
-    public static function onUserDelete(User $User)
+    public static function onUserDelete(User $User): void
     {
         Google::disconnectAccount($User->getId(), false);
     }

@@ -35,17 +35,17 @@ class Login extends Control
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         try {
             $Engine = QUI::getTemplateManager()->getEngine();
             $Conf = QUI::getPackage('quiqqer/authgoogle')->getConfig();
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             return '';
         }
 
         $Engine->assign([
-            'autoLogin' => boolval($Conf->get('authSettings', 'autoLogin')) ? "1" : "0"
+            'autoLogin' => $Conf->get('authSettings', 'autoLogin') ? "1" : "0"
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Login.html');

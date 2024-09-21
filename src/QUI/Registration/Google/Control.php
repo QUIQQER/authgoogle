@@ -32,7 +32,7 @@ class Control extends QUI\Control
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 

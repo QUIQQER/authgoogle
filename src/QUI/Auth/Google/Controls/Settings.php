@@ -6,7 +6,6 @@
 
 namespace QUI\Auth\Google\Controls;
 
-use QUI;
 use QUI\Control;
 
 /**
@@ -21,7 +20,7 @@ class Settings extends Control
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         return '<div class="quiqqer-auth-google-settings"     
                   data-qui="package/quiqqer/authgoogle/bin/controls/Settings">
