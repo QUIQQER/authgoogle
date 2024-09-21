@@ -9,6 +9,7 @@ namespace QUI\Auth\Google;
 use QUI;
 use QUI\Auth\Google\Exception as GoogleException;
 use QUI\Control;
+use QUI\Database\Exception;
 use QUI\Locale;
 use QUI\Users\AbstractAuthenticator;
 
@@ -75,9 +76,10 @@ class Auth extends AbstractAuthenticator
      *
      * @param array|integer|string $authParams
      *
-     * @throws QUI\Auth\Google\Exception
+     * @throws Exception
+     * @throws QUI\Permissions\Exception|\QUI\Auth\Google\Exception
      */
-    public function auth(array|int|string $authParams): void
+    public function auth(array|int|string $authParams)
     {
         if (
             !is_array($authParams)
