@@ -79,7 +79,7 @@ class Auth extends AbstractAuthenticator
      * @throws Exception
      * @throws QUI\Permissions\Exception|\QUI\Auth\Google\Exception
      */
-    public function auth(array|int|string $authParams)
+    public function auth(string|array|int $authParams)
     {
         if (
             !is_array($authParams)
