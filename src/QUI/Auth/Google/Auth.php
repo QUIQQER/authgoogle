@@ -8,8 +8,10 @@ namespace QUI\Auth\Google;
 
 use QUI;
 use QUI\Auth\Google\Exception as GoogleException;
+use QUI\Control;
+use QUI\Database\Exception;
+use QUI\Locale;
 use QUI\Users\AbstractAuthenticator;
-use QUI\Users\User;
 
 use function is_string;
 
@@ -24,32 +26,30 @@ class Auth extends AbstractAuthenticator
 {
     /**
      * User that is to be authenticated
-     *
-     * @var User
      */
-    protected $User = null;
+    protected QUI\Interfaces\Users\User|null $User = null;
 
     /**
      * Auth Constructor.
      *
      * @param string|array|integer $user - name of the user, or user id
      */
-    public function __construct($user = '')
+    public function __construct(mixed $user = '')
     {
         if (!empty($user) && is_string($user)) {
             try {
                 $this->User = QUI::getUsers()->getUserByName($user);
-            } catch (\Exception $Exception) {
+            } catch (\Exception) {
                 $this->User = QUI::getUsers()->getNobody();
             }
         }
     }
 
     /**
-     * @param null|\QUI\Locale $Locale
+     * @param null|Locale $Locale
      * @return string
      */
-    public function getTitle($Locale = null)
+    public function getTitle($Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -59,10 +59,10 @@ class Auth extends AbstractAuthenticator
     }
 
     /**
-     * @param null|\QUI\Locale $Locale
+     * @param null|Locale $Locale
      * @return string
      */
-    public function getDescription($Locale = null)
+    public function getDescription($Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -74,15 +74,16 @@ class Auth extends AbstractAuthenticator
     /**
      * Authenticate the user
      *
-     * @param string|array|integer $authData
+     * @param array|integer|string $authParams
      *
-     * @throws QUI\Auth\Google\Exception
+     * @throws Exception
+     * @throws QUI\Permissions\Exception|\QUI\Auth\Google\Exception
      */
-    public function auth($authData)
+    public function auth(string|array|int $authParams)
     {
         if (
-            !is_array($authData)
-            || !isset($authData['token'])
+            !is_array($authParams)
+            || !isset($authParams['token'])
         ) {
             throw new GoogleException([
                 'quiqqer/authgoogle',
@@ -90,11 +91,11 @@ class Auth extends AbstractAuthenticator
             ], 401);
         }
 
-        $token = $authData['token'];
+        $token = $authParams['token'];
 
         try {
             Google::validateAccessToken($token);
-        } catch (GoogleException $Exception) {
+        } catch (GoogleException) {
             throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.data'
@@ -139,7 +140,7 @@ class Auth extends AbstractAuthenticator
         if (is_null($this->User)) {
             try {
                 $this->User = QUI::getUsers()->get($connectionProfile['userId']);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
                 throw new GoogleException([
                     'quiqqer/authgoogle',
                     'exception.auth.no.account.connected'
@@ -158,9 +159,9 @@ class Auth extends AbstractAuthenticator
     /**
      * Return the user object
      *
-     * @return \QUI\Interfaces\Users\User
+     * @return QUI\Interfaces\Users\User
      */
-    public function getUser()
+    public function getUser(): QUI\Interfaces\Users\User
     {
         return $this->User;
     }
@@ -168,33 +169,33 @@ class Auth extends AbstractAuthenticator
     /**
      * Return the quiqqer user id
      *
-     * @return integer|boolean
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->User->getId();
     }
 
     /**
-     * @return \QUI\Control
+     * @return Control|null
      */
-    public static function getLoginControl()
+    public static function getLoginControl(): ?Control
     {
         return new QUI\Auth\Google\Controls\Login();
     }
 
     /**
-     * @return \QUI\Control
+     * @return Control|null
      */
-    public static function getSettingsControl()
+    public static function getSettingsControl(): ?Control
     {
         return new QUI\Auth\Google\Controls\Settings();
     }
 
     /**
-     * @return \QUI\Control
+     * @return Control|null
      */
-    public static function getPasswordResetControl()
+    public static function getPasswordResetControl(): ?Control
     {
         return null;
     }

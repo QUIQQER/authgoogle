@@ -4,6 +4,8 @@ namespace QUI\Auth\Google;
 
 use Google_Client as GoogleApi;
 use QUI;
+use QUI\ExceptionStack;
+use QUI\Permissions\Exception;
 
 /**
  * Class Google
@@ -21,20 +23,26 @@ class Google
      *
      * @var GoogleApi
      */
-    protected static $Api = null;
+    protected static ?GoogleApi $Api = null;
 
     /**
      * Connect a QUIQQER account with a Google account
      *
-     * @param int $uid
+     * @param int|string $uid
      * @param string $accessToken
      * @param bool $checkPermission (optional) - check permission to edit quiqqer account [default: true]
      * @return void
      *
-     * @throws QUI\Auth\Google\Exception
+     * @throws QUI\Database\Exception
+     * @throws QUI\Exception
+     * @throws ExceptionStack
+     * @throws Exception
      */
-    public static function connectQuiqqerAccount($uid, $accessToken, $checkPermission = true)
-    {
+    public static function connectQuiqqerAccount(
+        int|string $uid,
+        string $accessToken,
+        bool $checkPermission = true
+    ): void {
         if ($checkPermission !== false) {
             self::checkEditPermission($uid);
         }
@@ -68,11 +76,14 @@ class Google
     /**
      * Disconnect Google account from QUIQQER account
      *
-     * @param int $userId - QUIQQER User ID
+     * @param int|string $userId - QUIQQER User ID
      * @param bool $checkPermission (optional) [default: true]
      * @return void
+     *
+     * @throws Exception
+     * @throws QUI\Database\Exception
      */
-    public static function disconnectAccount($userId, $checkPermission = true)
+    public static function disconnectAccount(int|string $userId, bool $checkPermission = true): void
     {
         if ($checkPermission !== false) {
             self::checkEditPermission($userId);
@@ -80,9 +91,7 @@ class Google
 
         QUI::getDataBase()->delete(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
-            [
-                'userId' => (int)$userId,
-            ]
+            ['userId' => $userId]
         );
     }
 
@@ -93,9 +102,9 @@ class Google
      * @param string $accessToken
      * @return void
      *
-     * @throws QUI\Auth\Google\Exception
+     * @throws QUI\Auth\Google\Exception|Exception
      */
-    public static function validateAccessToken($accessToken)
+    public static function validateAccessToken(string $accessToken): void
     {
         $payload = self::getApi()->verifyIdToken($accessToken);
 
@@ -116,8 +125,9 @@ class Google
      *
      * @param string $accessToken - access token
      * @return array
+     * @throws Exception
      */
-    public static function getProfileData($accessToken)
+    public static function getProfileData(string $accessToken): array
     {
         return self::getApi()->verifyIdToken($accessToken);
     }
@@ -125,15 +135,15 @@ class Google
     /**
      * Get details of a connected Google account
      *
-     * @param int $userId - QUIQQER User ID
+     * @param int|string $userId - QUIQQER User ID
      * @return array|false - details as array or false if no account connected to given QUIQQER User account ID
      */
-    public static function getConnectedAccountByQuiqqerUserId($userId)
+    public static function getConnectedAccountByQuiqqerUserId(int|string $userId): bool|array
     {
         $result = QUI::getDataBase()->fetch([
             'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
             'where' => [
-                'userId' => (int)$userId
+                'userId' => $userId
             ]
         ]);
 
@@ -149,8 +159,11 @@ class Google
      *
      * @param string $idToken - Google API id_token
      * @return array|false - details as array or false if no account connected to given Google userID
+     *
+     * @throws Exception
+     * @throws QUI\Database\Exception|\QUI\Auth\Google\Exception
      */
-    public static function getConnectedAccountByGoogleIdToken($idToken)
+    public static function getConnectedAccountByGoogleIdToken(string $idToken): bool|array
     {
         self::validateAccessToken($idToken);
 
@@ -175,8 +188,11 @@ class Google
      *
      * @param string $token - Google API access token
      * @return bool
+     *
+     * @throws Exception
+     * @throws QUI\Database\Exception
      */
-    public static function existsQuiqqerAccount($token)
+    public static function existsQuiqqerAccount(string $token): bool
     {
         $profile = self::getProfileData($token);
 
@@ -197,7 +213,7 @@ class Google
      * @return GoogleApi
      * @throws Exception
      */
-    protected static function getApi()
+    protected static function getApi(): ?GoogleApi
     {
         if (!is_null(self::$Api)) {
             return self::$Api;
@@ -227,7 +243,7 @@ class Google
      *
      * @return string
      */
-    public static function getClientId()
+    public static function getClientId(): string
     {
         return QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('apiSettings', 'clientId');
     }
@@ -237,7 +253,7 @@ class Google
      *
      * @return string
      */
-    protected static function getClientKey()
+    protected static function getClientKey(): string
     {
         return QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('apiSettings', 'clientKey');
     }
@@ -246,12 +262,12 @@ class Google
      * Checks if the session user is allowed to edit the Google account connection to
      * the given QUIQQER user account ID
      *
-     * @param int $userId - QUIQQER User ID
+     * @param int|string $userId - QUIQQER User ID
      * @return void
      *
-     * @throws QUI\Permissions\Exception
+     * @throws Exception
      */
-    protected static function checkEditPermission($userId)
+    protected static function checkEditPermission(int|string $userId): void
     {
         if (QUI::getUserBySession()->getId() === QUI::getUsers()->getSystemUser()->getId()) {
             return;
