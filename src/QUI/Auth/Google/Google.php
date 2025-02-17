@@ -39,7 +39,7 @@ class Google
      * @throws Exception
      */
     public static function connectQuiqqerAccount(
-        int|string $uid,
+        int | string $uid,
         string $accessToken,
         bool $checkPermission = true
     ): void {
@@ -83,7 +83,7 @@ class Google
      * @throws Exception
      * @throws QUI\Database\Exception
      */
-    public static function disconnectAccount(int|string $userId, bool $checkPermission = true): void
+    public static function disconnectAccount(int | string $userId, bool $checkPermission = true): void
     {
         if ($checkPermission !== false) {
             self::checkEditPermission($userId);
@@ -138,7 +138,7 @@ class Google
      * @param int|string $userId - QUIQQER User ID
      * @return array|false - details as array or false if no account connected to given QUIQQER User account ID
      */
-    public static function getConnectedAccountByQuiqqerUserId(int|string $userId): bool|array
+    public static function getConnectedAccountByQuiqqerUserId(int | string $userId): bool | array
     {
         $result = QUI::getDataBase()->fetch([
             'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
@@ -163,7 +163,7 @@ class Google
      * @throws Exception
      * @throws QUI\Database\Exception|\QUI\Auth\Google\Exception
      */
-    public static function getConnectedAccountByGoogleIdToken(string $idToken): bool|array
+    public static function getConnectedAccountByGoogleIdToken(string $idToken): bool | array
     {
         self::validateAccessToken($idToken);
 
@@ -267,7 +267,7 @@ class Google
      *
      * @throws Exception
      */
-    protected static function checkEditPermission(int|string $userId): void
+    protected static function checkEditPermission(int | string $userId): void
     {
         if (QUI::getUserBySession()->getId() === QUI::getUsers()->getSystemUser()->getId()) {
             return;
