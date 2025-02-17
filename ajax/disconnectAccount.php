@@ -18,18 +18,6 @@ QUI::$Ajax->registerFunction(
 
         try {
             Google::disconnectAccount($userId);
-        } catch (QUI\Auth\Google\Exception $Exception) {
-            QUI::getMessagesHandler()->addError(
-                QUI::getLocale()->get(
-                    'quiqqer/authgoogle',
-                    'message.ajax.disconnectAccount.error',
-                    [
-                        'error' => $Exception->getMessage()
-                    ]
-                )
-            );
-
-            return false;
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
                 'AJAX :: package_quiqqer_authgoogle_ajax_disconnectAccount -> ' . $Exception->getMessage()
