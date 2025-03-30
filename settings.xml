@@ -88,15 +88,6 @@
                             <locale group="quiqqer/authgoogle" var="settings.authSettings.title" />
                         </title>
 
-                        <!--<input conf="authSettings.autoLogin" type="checkbox">-->
-                            <!--<text>-->
-                                <!--<locale group="quiqqer/authgoogle" var="settings.authSettings.autoLogin.title" />-->
-                            <!--</text>-->
-                            <!--<description>-->
-                                <!--<locale group="quiqqer/authgoogle" var="settings.authSettings.autoLogin.description" />-->
-                            <!--</description>-->
-                        <!--</input>-->
-
                         <input conf="authSettings.maxLoginErrors" type="text">
                             <text>
                                 <locale group="quiqqer/authgoogle" var="settings.authSettings.maxLoginErrors.title" />

@@ -81,10 +81,7 @@ class Auth extends AbstractAuthenticator
      */
     public function auth(string | array | int $authParams): void
     {
-        if (
-            !is_array($authParams)
-            || !isset($authParams['token'])
-        ) {
+        if (!is_array($authParams) || !isset($authParams['token'])) {
             throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.data'
@@ -95,7 +92,7 @@ class Auth extends AbstractAuthenticator
 
         try {
             Google::validateAccessToken($token);
-        } catch (GoogleException) {
+        } catch (Exception) {
             throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.data'
@@ -179,7 +176,7 @@ class Auth extends AbstractAuthenticator
      */
     public static function getSettingsControl(): ?Control
     {
-        return new QUI\Auth\Google\Controls\Settings();
+        return null;
     }
 
     /**

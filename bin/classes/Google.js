@@ -2,7 +2,6 @@
  * Main controller for Google JavaScript API
  *
  * @module package/quiqqer/authgoogle/bin/classes/Google
- * @author www.pcsg.de (Patrick Müller)
  *
  * @event onLoaded [this] - Fires if everything has loaded
  * @event onLogin [authResponse, this] - Fires if the user successfully authenticates with Google
@@ -47,11 +46,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             this.parent(options);
 
             this.$loaded = false;
-            this.$loggedIn = false;
-
             this.$token = false;
             this.$clientId = null;
-            this.$authData = false;
         },
 
         isFedCMSupported: function () {
@@ -171,13 +167,14 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             return this.isAccountConnectedToQuiqqer(this.$token);
                         }).then((isConnected) => {
                             let Registration = null;
-                            const registration = Btn.getElm().getParent(
+                            const registrationNode = Btn.getElm().getParent(
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
                             );
 
-                            if (registration) {
-                                Registration = QUI.Controls.getById(registration.get('data-quiid'));
+                            if (registrationNode) {
+                                Registration = QUI.Controls.getById(registrationNode.get('data-quiid'));
                             }
+
 
                             // test if user already exists
                             // if yes: login
@@ -185,9 +182,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                 form.setAttribute('data-authenticator', 'QUI\\Auth\\Google\\Auth');
 
                                 return new Promise((resolve) => {
-                                    require([
-                                        'package/quiqqer/frontend-users/bin/frontend/controls/login/Login'
-                                    ], (login) => {
+                                    require(['package/quiqqer/frontend-users/bin/frontend/controls/login/Login'], (login) => {
                                         new login({
                                             onSuccess: () => {
                                                 console.log('login was successfully');
@@ -195,9 +190,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                                 if (Registration) {
                                                     Registration.fireEvent('register', [Registration]);
                                                     QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [Registration]);
+                                                    return true;
                                                 }
 
                                                 resolve();
+                                                return false;
                                             }
                                         }).$authBySocial(form);
                                     });
@@ -307,7 +304,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         client_id: this.$clientId,
                         callback: (response) => {
                             this.$token = response.credential;
-                            this.$AuthData = response.authResponse;
 
                             resolve();
                         },

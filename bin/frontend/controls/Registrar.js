@@ -2,26 +2,15 @@
  * QUIQQER account registration via Google Account
  *
  * @module package/quiqqer/authgoogle/bin/frontend/controls/Registrar
- * @author www.pcsg.de (Patrick Müller)
- * @author www.pcsg.de (Henning Leutz)
  */
 define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 
     'qui/controls/Control',
-    'qui/controls/windows/Popup',
-    'qui/controls/loader/Loader',
     'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
-    'package/quiqqer/authgoogle/bin/Google',
-    'Ajax',
-    'Locale',
+    'package/quiqqer/authgoogle/bin/Google'
 
-    'css!package/quiqqer/authgoogle/bin/frontend/controls/Registrar.css'
-
-], function (QUIControl, QUIPopup, QUILoader, QUILogin, Google, QUIAjax, QUILocale) {
+], function (QUIControl, QUILogin, Google) {
     "use strict";
-
-    const lg = 'quiqqer/authgoogle';
-    let registerCount = 0; // register count
 
     return new Class({
 
@@ -31,10 +20,6 @@ define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
         Binds: [
             '$onImport'
         ],
-
-        options: {
-            uid: false  // QUIQQER User ID
-        },
 
         initialize: function (options) {
             this.parent(options);
