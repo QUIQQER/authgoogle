@@ -27,7 +27,7 @@ class Auth extends AbstractAuthenticator
     /**
      * User that is to be authenticated
      */
-    protected QUI\Interfaces\Users\User|null $User = null;
+    protected QUI\Interfaces\Users\User | null $User = null;
 
     /**
      * Auth Constructor.
@@ -49,7 +49,7 @@ class Auth extends AbstractAuthenticator
      * @param null|Locale $Locale
      * @return string
      */
-    public function getTitle($Locale = null): string
+    public function getTitle(null | QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -62,7 +62,7 @@ class Auth extends AbstractAuthenticator
      * @param null|Locale $Locale
      * @return string
      */
-    public function getDescription($Locale = null): string
+    public function getDescription(null | QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -79,7 +79,7 @@ class Auth extends AbstractAuthenticator
      * @throws Exception
      * @throws QUI\Permissions\Exception|\QUI\Auth\Google\Exception
      */
-    public function auth(string|array|int $authParams)
+    public function auth(string | array | int $authParams): void
     {
         if (
             !is_array($authParams)
@@ -116,7 +116,7 @@ class Auth extends AbstractAuthenticator
                 try {
                     $User = $Users->getUserByMail($userData['email']);
 
-                    Google::connectQuiqqerAccount($User->getId(), $token, false);
+                    Google::connectQuiqqerAccount($User->getUUID(), $token, false);
                     $connectionProfile = Google::getConnectedAccountByGoogleIdToken($token);
                 } catch (\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
@@ -148,7 +148,7 @@ class Auth extends AbstractAuthenticator
             }
         }
 
-        if ((int)$connectionProfile['userId'] !== (int)$this->User->getId()) {
+        if ($connectionProfile['userId'] !== $this->User->getUUID()) {
             throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.account.for.user'
@@ -164,16 +164,6 @@ class Auth extends AbstractAuthenticator
     public function getUser(): QUI\Interfaces\Users\User
     {
         return $this->User;
-    }
-
-    /**
-     * Return the quiqqer user id
-     *
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->User->getId();
     }
 
     /**

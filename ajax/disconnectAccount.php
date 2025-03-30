@@ -14,8 +14,6 @@ use QUI\Auth\Google\Google;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_authgoogle_ajax_disconnectAccount',
     function ($userId) {
-        $userId = (int)$userId;
-
         try {
             Google::disconnectAccount($userId);
         } catch (\Exception $Exception) {

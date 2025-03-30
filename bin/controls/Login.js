@@ -8,25 +8,22 @@
 define('package/quiqqer/authgoogle/bin/controls/Login', [
 
     'qui/controls/Control',
-    'qui/controls/windows/Popup',
     'qui/controls/loader/Loader',
-
     'package/quiqqer/authgoogle/bin/Google',
-
     'Ajax',
     'Locale',
 
     'css!package/quiqqer/authgoogle/bin/controls/Login.css'
 
-], function (QUIControl, QUIPopup, QUILoader, Google, QUIAjax, QUILocale) {
+], function (QUIControl, QUILoader, Google, QUIAjax, QUILocale) {
     "use strict";
 
-    var lg = 'quiqqer/authgoogle';
+    const lg = 'quiqqer/authgoogle';
 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/authgoogle/bin/controls/Login',
+        Type: 'package/quiqqer/authgoogle/bin/controls/Login',
 
         Binds: [
             '$onImport',
@@ -49,15 +46,15 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 onImport: this.$onImport
             });
 
-            this.Loader           = new QUILoader();
-            this.$InfoElm         = null;
-            this.$BtnElm          = null;
-            this.$signedIn        = false;
+            this.Loader = new QUILoader();
+            this.$InfoElm = null;
+            this.$BtnElm = null;
+            this.$signedIn = false;
             this.$loginBtnClicked = false;
-            this.$init            = true;
-            this.$autoLogin       = false;
-            this.$FakeLoginBtn    = null;
-            this.$LoginBtn        = null;
+            this.$init = true;
+            this.$autoLogin = false;
+            this.$FakeLoginBtn = null;
+            this.$LoginBtn = null;
         },
 
         /**
@@ -66,7 +63,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         create: function () {
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-auth-google-login',
-                'html' : '<div class="quiqqer-auth-google-login-info"></div>' +
+                'html': '<div class="quiqqer-auth-google-login-info"></div>' +
                     '<div class="quiqqer-auth-google-login-btns"></div>'
             });
 
@@ -87,12 +84,12 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * Event: onImport
          */
         $onImport: function () {
-            var self = this;
+            const self = this;
 
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
-            this.$Form       = this.$Input.getParent('form');
-            this.$autoLogin  = this.$Input.get('data-autologin') === "1";
+            this.$Form = this.$Input.getParent('form');
+            this.$autoLogin = this.$Input.get('data-autologin') === "1";
 
             this.$FakeLoginBtn = this.$Elm.getParent().getElement(
                 '.quiqqer-auth-google-login-btn'
@@ -100,7 +97,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
 
             this.getElm().getParent('.quiqqer-google-login').set({
                 'data-quiid': this.getId(),
-                'data-qui'  : this.getType()
+                'data-qui': this.getType()
             });
 
             this.$FakeLoginBtn.addEvents({
@@ -129,7 +126,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
         },
 
         /**
-         * Execute a click at the google login
+         * Execute a click at the Google login
          */
         click: function () {
             if (this.$LoginBtn) {
@@ -153,7 +150,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 Google.authenticate()
             ]).then((result) => {
                 const loginUserId = result[0];
-                const token       = result[1];
+                const token = result[1];
 
                 if (!token) {
                     return;
@@ -232,19 +229,19 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
          * @param {string} status - Google Login status
          */
         $showSettings: function (uid, status) {
-            var self = this;
+            const self = this;
 
             this.Loader.show();
             this.$clearMsg();
 
-            var emailProvided = true;
+            let emailProvided = true;
 
             require([
                 'package/quiqqer/authgoogle/bin/controls/Settings'
             ], function (SettingsControl) {
                 self.Loader.hide();
-                var Settings = new SettingsControl({
-                    uid   : uid,
+                const Settings = new SettingsControl({
+                    uid: uid,
                     events: {
                         onAccountConnected: function (Account, Control) {
                             self.$authenticate();
@@ -270,8 +267,8 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     'package_quiqqer_authgoogle_ajax_isLoginUserGoogleUser',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
-                        idToken  : idToken,
-                        onError  : reject
+                        idToken: idToken,
+                        onError: reject
                     }
                 );
             });
@@ -288,7 +285,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     'package_quiqqer_authgoogle_ajax_getLoginUserId',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
-                        onError  : reject
+                        onError: reject
                     }
                 );
             });
@@ -305,7 +302,7 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                     'package_quiqqer_authgoogle_ajax_loginAttemptsCheck',
                     resolve, {
                         'package': 'quiqqer/authgoogle',
-                        onError  : reject
+                        onError: reject
                     }
                 );
             });

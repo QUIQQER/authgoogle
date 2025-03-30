@@ -21,9 +21,14 @@ class Google
     /**
      * Google API Object
      *
-     * @var GoogleApi
+     * @var null|GoogleApi
      */
     protected static ?GoogleApi $Api = null;
+
+    public static function table(): string
+    {
+        return QUI::getDBTableName(self::TBL_ACCOUNTS);
+    }
 
     /**
      * Connect a QUIQQER account with a Google account
@@ -54,9 +59,7 @@ class Google
             throw new Exception([
                 'quiqqer/authgoogle',
                 'exception.google.account_already_connected',
-                [
-                    'email' => $profileData['email']
-                ]
+                ['email' => $profileData['email']]
             ]);
         }
 
@@ -65,11 +68,16 @@ class Google
         QUI::getDataBase()->insert(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
             [
-                'userId' => $User->getId(),
+                'userId' => $User->getUUID(),
                 'googleUserId' => $profileData['sub'],
                 'email' => $profileData['email'],
                 'name' => $profileData['name']
             ]
+        );
+
+        $User->enableAuthenticator(
+            Auth::class,
+            QUI::getUsers()->getSystemUser()
         );
     }
 
@@ -89,9 +97,21 @@ class Google
             self::checkEditPermission($userId);
         }
 
+        try {
+            $User = QUI::getUsers()->get($userId);
+            $userId = $User->getUUID();
+            $userUuid = $User->getUUID();
+        } catch (QUI\Exception) {
+        }
+
         QUI::getDataBase()->delete(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
             ['userId' => $userId]
+        );
+
+        QUI::getDataBase()->delete(
+            QUI::getDBTableName(self::TBL_ACCOUNTS),
+            ['userId' => $userUuid]
         );
     }
 
@@ -102,7 +122,7 @@ class Google
      * @param string $accessToken
      * @return void
      *
-     * @throws QUI\Auth\Google\Exception|Exception
+     * @throws Exception
      */
     public static function validateAccessToken(string $accessToken): void
     {
@@ -204,13 +224,42 @@ class Google
             'limit' => 1
         ]);
 
-        return !empty($result);
+        if (empty($result)) {
+            return false;
+        }
+
+        $userId = $result[0]['userId'];
+
+        if (empty($userId)) {
+            return false;
+        }
+
+        try {
+            $user = QUI::getUsers()->get($userId);
+        } catch (QUI\Exception) {
+            return false;
+        }
+
+        try {
+            $user->getAuthenticator(Auth::class);
+            return true;
+        } catch (QUI\Exception) {
+        }
+
+        try {
+            // add authenticator
+            $user->enableAuthenticator(Auth::class, QUI::getUsers()->getSystemUser());
+        } catch (QUI\Exception) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Get Google API Instance
      *
-     * @return GoogleApi
+     * @return GoogleApi|null
      * @throws Exception
      */
     protected static function getApi(): ?GoogleApi
@@ -269,14 +318,11 @@ class Google
      */
     protected static function checkEditPermission(int | string $userId): void
     {
-        if (QUI::getUserBySession()->getId() === QUI::getUsers()->getSystemUser()->getId()) {
+        if (QUI::getUserBySession()->getUUID() === QUI::getUsers()->getSystemUser()->getUUID()) {
             return;
         }
 
-        if (
-            (int)QUI::getSession()->get('uid') !== (int)$userId
-            || !$userId
-        ) {
+        if (QUI::getSession()->get('uid') !== $userId || !$userId) {
             throw new QUI\Permissions\Exception(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',

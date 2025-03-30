@@ -34,7 +34,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/authgoogle/bin/controls/Settings',
+        Type: 'package/quiqqer/authgoogle/bin/controls/Settings',
 
         Binds: [
             '$onInject',
@@ -55,7 +55,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                 onInject: this.$onInject
             });
 
-            this.Loader   = new QUILoader();
+            this.Loader = new QUILoader();
             this.$InfoElm = null;
             this.$BtnsElm = null;
         },
@@ -66,7 +66,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
         create: function () {
             this.$Elm = new Element('div', {
                 'class': 'quiqqer-auth-google-register',
-                html   : '<div class="quiqqer-auth-google-settings-info"></div>' +
+                html: '<div class="quiqqer-auth-google-settings-info"></div>' +
                     '<div class="quiqqer-auth-google-settings-btns"></div>'
             });
 
@@ -87,7 +87,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
          * Event: onInject
          */
         $onInject: function () {
-            var self   = this;
+            var self = this;
             var userId = this.getAttribute('uid');
 
             this.Loader.show();
@@ -132,7 +132,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                     });
                 }, {
                     'package': 'quiqqer/authgoogle',
-                    userId   : userId
+                    userId: userId
                 }
             );
 
@@ -165,10 +165,10 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
             var userId = this.getAttribute('uid');
 
             new QUIButton({
-                'class'  : 'quiqqer-auth-google-settings-btn',
+                'class': 'quiqqer-auth-google-settings-btn',
                 textimage: 'fa fa-unlink',
-                text     : QUILocale.get(lg, 'controls.settings.showAccountInfo.btn.disconnect'),
-                events   : {
+                text: QUILocale.get(lg, 'controls.settings.showAccountInfo.btn.disconnect'),
+                events: {
                     onClick: function (Btn) {
                         self.Loader.show();
 
@@ -214,7 +214,7 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
                     QUILocale.get(
                         lg,
                         'controls.settings.addAccount.info.connected', {
-                            'name' : Profile.name,
+                            'name': Profile.name,
                             'email': Profile.email
                         }
                     )
@@ -222,10 +222,10 @@ define('package/quiqqer/authgoogle/bin/controls/Settings', [
 
                 // "Connect account" Button
                 new QUIButton({
-                    'class'  : 'quiqqer-auth-google-settings-btn',
+                    'class': 'quiqqer-auth-google-settings-btn',
                     textimage: 'fa fa-link',
-                    text     : QUILocale.get(lg, 'controls.settings.addAccount.btn.connect'),
-                    events   : {
+                    text: QUILocale.get(lg, 'controls.settings.addAccount.btn.connect'),
+                    events: {
                         onClick: function () {
                             self.Loader.show();
 
