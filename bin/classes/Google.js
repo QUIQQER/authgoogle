@@ -127,7 +127,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
-         * Get Login AND Registration Button
+         * Get Login AND Registration Button.
          * Button do both
          *
          * @return {Promise}

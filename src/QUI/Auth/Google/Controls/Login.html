@@ -3,9 +3,15 @@
 </noscript>
 
 <div class="quiqqer-auth-google-login">
-    <input type="hidden"
-           name="token"
-           class="quiqqer-auth-google-login-token"
-           data-qui="package/quiqqer/authgoogle/bin/controls/Login"
-    />
+    <button
+            disabled
+            class="quiqqer-auth-google-registration-btn quiqqer-frontend-social-button"
+    >
+        <span class="qui-button-text-image fa fa-google"></span>
+        <span class="qui-button-text">
+            {locale group="quiqqer/authgoogle" var="controls.frontend.registrar.registration_button"}
+        </span>
+    </button>
+
+    <input type="hidden" name="token" class="quiqqer-auth-google-login-token"/>
 </div>

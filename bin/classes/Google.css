@@ -24,3 +24,8 @@
     margin: auto;
     padding: 0 10px;
 }
+
+.quiqqer-auth-google-registration-btn:hover {
+    background-color: #a62819 !important;
+    border-color: #a62819 !important;
+}

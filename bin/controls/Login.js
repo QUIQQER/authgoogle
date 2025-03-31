@@ -46,7 +46,15 @@ define('package/quiqqer/authgoogle/bin/controls/Login', [
                 container = container.getParent('.quiqqer-auth-google-login');
             }
 
-            Google.getButton().inject(container);
+            const button = container.querySelector('button');
+            const googleButton = Google.getButton();
+            const node = googleButton.create();
+
+            if (button) {
+                button.replaceWith(node);
+            } else {
+                googleButton.inject(container);
+            }
         }
     });
 });

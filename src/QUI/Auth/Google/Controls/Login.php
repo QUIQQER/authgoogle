@@ -27,8 +27,15 @@ class Login extends Control
     {
         parent::__construct($attributes);
 
+        $this->setJavaScriptControl('package/quiqqer/authgoogle/bin/controls/Login');
         $this->addCSSClass('quiqqer-google-login');
         $this->setAttribute('icon', 'fa fa-google');
+
+        $cssFile = OPT_DIR . 'quiqqer/authgoogle/bin/classes/Google.css';
+
+        if (file_exists($cssFile)) {
+            $this->addCSSFile($cssFile);
+        }
     }
 
     /**
