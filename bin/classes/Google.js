@@ -167,12 +167,20 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             return this.isAccountConnectedToQuiqqer(this.$token);
                         }).then((isConnected) => {
                             let Registration = null;
+                            let Login = null;
+
                             const registrationNode = Btn.getElm().getParent(
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
                             );
 
                             if (registrationNode) {
                                 Registration = QUI.Controls.getById(registrationNode.get('data-quiid'));
+                            }
+
+                            const loginNode = Btn.getElm().getParent('[data-qui="controls/users/Login"]');
+
+                            if (loginNode) {
+                                Login = QUI.Controls.getById(loginNode.get('data-quiid'));
                             }
 
 
@@ -190,6 +198,12 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                                 if (Registration) {
                                                     Registration.fireEvent('register', [Registration]);
                                                     QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [Registration]);
+                                                    return true;
+                                                }
+
+                                                if (Login) {
+                                                    Login.auth(form);
+                                                    resolve();
                                                     return true;
                                                 }
 
@@ -233,8 +247,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 const fedCMSupported = this.isFedCMSupported();
                 const oneTapSupported = this.isOneTapSupported();
 
-                console.log({fedCMSupported: fedCMSupported});
-                console.log({oneTapSupported: oneTapSupported});
+                //console.log({fedCMSupported: fedCMSupported});
+                //console.log({oneTapSupported: oneTapSupported});
 
                 try {
                     if (fedCMSupported) {
@@ -248,9 +262,24 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 }
 
                 if (!this.$token) {
-                    // oauth?
-                    // maybe own popup
-                    //window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=${this.$clientId}&redirect_uri=${window.location.toString()}&response_type=token&scope=email profile&prompt=consent`;
+                    return new Promise((resolve) => {
+                        const redirectUri = window.location.origin + URL_OPT_DIR + 'quiqqer/authgoogle/bin/oauth_callback.php';
+
+                        const popup = window.open(
+                            `https://accounts.google.com/o/oauth2/auth?client_id=${this.$clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token id_token&scope=email profile&prompt=consent`,
+                            'google_oauth',
+                            'width=500,height=600'
+                        );
+
+                        window.addEventListener('message', (event) => {
+                            if (event.origin === window.location.origin && (event.data.googleToken || event.data.googleIdToken)) {
+                                //this.$token = event.data.googleToken;       // Access Token (für Google APIs)
+                                this.$token = event.data.googleIdToken;   // ID Token (JWT, für Userinfo/Backend)
+                                popup.close();
+                                resolve(this.$token);
+                            }
+                        });
+                    });
                 }
 
                 return this.$token;
