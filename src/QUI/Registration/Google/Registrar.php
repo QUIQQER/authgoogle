@@ -62,7 +62,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         ]);
 
         $User->setAttribute(FrontendUsersHandler::USER_ATTR_EMAIL_VERIFIED, boolval($profileData['email_verified']));
-
         $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         $User->save($SystemUser);
 

@@ -147,9 +147,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                         // start process
                         this.authenticate().then(() => {
-                            // set token to the form
-                            const form = Btn.getElm().getParent('form');
-
                             if (form) {
                                 let token = form.querySelector('input[name="token"]');
 
