@@ -9,13 +9,9 @@
  */
 define('package/quiqqer/authgoogle/bin/classes/Google', [
 
-    'qui/QUI',
-    'qui/classes/DOM',
-    'qui/controls/buttons/Button',
-    'qui/controls/windows/Confirm',
+    'qui/QUI', 'qui/classes/DOM', 'qui/controls/buttons/Button', 'qui/controls/windows/Confirm',
 
-    'Ajax',
-    'Locale',
+    'Ajax', 'Locale',
 
     'css!package/quiqqer/authgoogle/bin/classes/Google.css'
 
@@ -30,13 +26,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
     return new Class({
 
-        Extends: QDOM,
-        Type: 'package/quiqqer/authgoogle/bin/classes/Google',
+        Extends: QDOM, Type: 'package/quiqqer/authgoogle/bin/classes/Google',
 
-        Binds: [
-            'login',
-            'logout'
-        ],
+        Binds: ['login', 'logout'],
 
         options: {
             text: null
@@ -52,13 +44,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
         isFedCMSupported: function () {
             try {
-                return (
-                    typeof window !== 'undefined' &&
-                    'IdentityCredential' in window &&
-                    'navigator' in window &&
-                    'credentials' in navigator &&
-                    !!navigator.credentials.get
-                );
+                return (typeof window !== 'undefined' && 'IdentityCredential' in window && 'navigator' in window && 'credentials' in navigator && !!navigator.credentials.get);
             } catch {
                 return false;
             }
@@ -111,8 +97,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     this.$clientId = clientId;
                     resolve(clientId);
                 }, {
-                    'package': 'quiqqer/authgoogle',
-                    onError: reject
+                    'package': 'quiqqer/authgoogle', onError: reject
                 });
             });
         },
@@ -166,9 +151,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             let Registration = null;
                             let Login = null;
 
-                            const registrationNode = Btn.getElm().getParent(
-                                '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
-                            );
+                            const registrationNode = Btn.getElm().getParent('[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]');
 
                             if (registrationNode) {
                                 Registration = QUI.Controls.getById(registrationNode.get('data-quiid'));
@@ -219,6 +202,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                         }).then(() => {
                             Btn.enable();
                             Btn.setAttribute('textimage', 'fa fa-google');
+                        }).catch(() => {
+                            Btn.enable();
+                            Btn.setAttribute('textimage', 'fa fa-google');
                         });
                     }
                 }
@@ -231,10 +217,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise} - Return idToken from Google
          */
         authenticate: function () {
-            return Promise.all([
-                this.loadGoogleScript(),
-                this.getClientId()
-            ]).then(async () => {
+            return Promise.all([this.loadGoogleScript(), this.getClientId()]).then(async () => {
                 // no need to authenticate
                 // no double authentication
                 if (this.$token) {
@@ -259,23 +242,31 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 }
 
                 if (!this.$token) {
-                    return new Promise((resolve) => {
+                    return new Promise((resolve, reject) => {
                         const redirectUri = window.location.origin + URL_OPT_DIR + 'quiqqer/authgoogle/bin/oauth_callback.php';
 
-                        const popup = window.open(
-                            `https://accounts.google.com/o/oauth2/auth?client_id=${this.$clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token id_token&scope=email profile&prompt=consent`,
-                            'google_oauth',
-                            'width=500,height=600'
-                        );
+                        const popup = window.open(`https://accounts.google.com/o/oauth2/auth?client_id=${this.$clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token id_token&scope=email profile&prompt=consent`, 'google_oauth', 'width=500,height=600');
 
-                        window.addEventListener('message', (event) => {
+                        // Listen for the message event
+                        const messageListener = (event) => {
                             if (event.origin === window.location.origin && (event.data.googleToken || event.data.googleIdToken)) {
-                                //this.$token = event.data.googleToken;       // Access Token (für Google APIs)
-                                this.$token = event.data.googleIdToken;   // ID Token (JWT, für Userinfo/Backend)
+                                this.$token = event.data.googleIdToken;
                                 popup.close();
+                                window.removeEventListener('message', messageListener);
+                                clearInterval(popupChecker);
                                 resolve(this.$token);
                             }
-                        });
+                        };
+                        window.addEventListener('message', messageListener);
+
+                        // Polling to check if popup was closed
+                        const popupChecker = setInterval(() => {
+                            if (popup.closed) {
+                                window.removeEventListener('message', messageListener);
+                                clearInterval(popupChecker);
+                                reject(new Error('Popup geschlossen, ohne Login.'));
+                            }
+                        }, 500);
                     });
                 }
 
@@ -295,8 +286,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                 const credential = await navigator.credentials.get({
                     identity: {
-                        context: 'signin',
-                        providers: [{
+                        context: 'signin', providers: [{
                             configURL: 'https://accounts.google.com/gsi/fedcm.json',
                             clientId: this.$clientId,
                             mode: 'passive',
@@ -327,14 +317,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             return new Promise((resolve, reject) => {
                 try {
                     window.google.accounts.id.initialize({
-                        client_id: this.$clientId,
-                        callback: (response) => {
+                        client_id: this.$clientId, callback: (response) => {
                             this.$token = response.credential;
 
                             resolve();
-                        },
-                        auto_select: true,
-                        cancel_on_tap_outside: false,
+                        }, auto_select: true, cancel_on_tap_outside: false,
                     });
 
                     window.google.accounts.id.prompt((notification) => {
@@ -406,9 +393,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         getProfileInfo: function (token) {
             return new Promise((resolve, reject) => {
                 QUIAjax.post('package_quiqqer_authgoogle_ajax_getDataByToken', resolve, {
-                    'package': 'quiqqer/authgoogle',
-                    idToken: token,
-                    onError: reject
+                    'package': 'quiqqer/authgoogle', idToken: token, onError: reject
                 });
             });
         },
@@ -423,10 +408,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         connectQuiqqerAccount: function (userId, idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_authgoogle_ajax_connectAccount', resolve, {
-                    'package': 'quiqqer/authgoogle',
-                    userId: userId,
-                    idToken: idToken,
-                    onError: reject
+                    'package': 'quiqqer/authgoogle', userId: userId, idToken: idToken, onError: reject
                 });
             });
         },
@@ -440,9 +422,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         disconnectQuiqqerAccount: function (userId) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_authgoogle_ajax_disconnectAccount', resolve, {
-                    'package': 'quiqqer/authgoogle',
-                    userId: userId,
-                    onError: reject
+                    'package': 'quiqqer/authgoogle', userId: userId, onError: reject
                 });
             });
         },
@@ -456,9 +436,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         getAccountByQuiqqerUserId: function (userId) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_authgoogle_ajax_getAccountByQuiqqerUserId', resolve, {
-                    'package': 'quiqqer/authgoogle',
-                    userId: userId,
-                    onError: reject
+                    'package': 'quiqqer/authgoogle', userId: userId, onError: reject
                 });
             });
         },
@@ -472,9 +450,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         isAccountConnectedToQuiqqer: function (idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_authgoogle_ajax_isGoogleAccountConnected', resolve, {
-                    'package': 'quiqqer/authgoogle',
-                    idToken: idToken,
-                    onError: reject
+                    'package': 'quiqqer/authgoogle', idToken: idToken, onError: reject
                 });
             });
         }
