@@ -9,13 +9,18 @@
  */
 define('package/quiqqer/authgoogle/bin/classes/Google', [
 
-    'qui/QUI', 'qui/classes/DOM', 'qui/controls/buttons/Button', 'qui/controls/windows/Confirm',
+    'qui/QUI',
+    'qui/classes/DOM',
+    'qui/controls/buttons/Button',
+    'qui/controls/windows/Confirm',
+    'package/quiqqer/frontend-users/bin/Registration',
 
-    'Ajax', 'Locale',
+    'Ajax',
+    'Locale',
 
     'css!package/quiqqer/authgoogle/bin/classes/Google.css'
 
-], function (QUI, QDOM, QUIButton, QUIConfirm, QUIAjax, QUILocale) {
+], function (QUI, QDOM, QUIButton, QUIConfirm, registration, QUIAjax, QUILocale) {
     "use strict";
 
     const lg = 'quiqqer/authgoogle';
@@ -97,7 +102,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     this.$clientId = clientId;
                     resolve(clientId);
                 }, {
-                    'package': 'quiqqer/authgoogle', onError: reject
+                    'package': 'quiqqer/authgoogle',
+                    onError: reject
                 });
             });
         },
@@ -199,6 +205,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             if (Registration) {
                                 return Registration.$sendForm(form);
                             }
+
+                            return registration.register(
+                                'QUI\\Registration\\Google\\Registrar',
+                                {token: this.$token}
+                            );
                         }).then(() => {
                             Btn.enable();
                             Btn.setAttribute('textimage', 'fa fa-google');
@@ -217,7 +228,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
          * @return {Promise} - Return idToken from Google
          */
         authenticate: function () {
-            return Promise.all([this.loadGoogleScript(), this.getClientId()]).then(async () => {
+            return Promise.all([
+                this.loadGoogleScript(),
+                this.getClientId()
+            ]).then(async () => {
                 // no need to authenticate
                 // no double authentication
                 if (this.$token) {
