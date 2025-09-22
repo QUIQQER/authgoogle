@@ -92,7 +92,7 @@ class Auth extends AbstractAuthenticator
 
         try {
             Google::validateAccessToken($token);
-        } catch (Exception) {
+        } catch (QUI\Exception) {
             throw new GoogleException([
                 'quiqqer/authgoogle',
                 'exception.auth.wrong.data'

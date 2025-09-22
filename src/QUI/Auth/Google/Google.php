@@ -101,7 +101,9 @@ class Google
             $User = QUI::getUsers()->get($userId);
             $userId = $User->getUUID();
             $userUuid = $User->getUUID();
-        } catch (QUI\Exception) {
+        } catch (QUI\Exception $e) {
+            QUI\System\Log::writeException($e);
+            return;
         }
 
         QUI::getDataBase()->delete(
