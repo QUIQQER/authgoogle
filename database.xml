@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database>
-
     <global>
         <table name="quiqqer_auth_google">
-            <field type="BIGINT(20) NOT NULL PRIMARY KEY">userId</field>
+            <field type="VARCHAR(50) NOT NULL PRIMARY KEY">userId</field>
             <field type="VARCHAR(50) NOT NULL">googleUserId</field> <!-- has to be VARHCAR because Google IDs are too big for INT -->
             <field type="MEDIUMTEXT NOT NULL">email</field>
             <field type="VARCHAR(255) NOT NULL">name</field>
+
+            <index>userId</index>
         </table>
     </global>
-
 </database>

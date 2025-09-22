@@ -12,10 +12,6 @@
                 <!--</conf>-->
             </section>
             <section name="authSettings">
-                <conf name="autoLogin">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>0</defaultvalue>
-                </conf>
                 <conf name="maxLoginErrors">
                     <type><![CDATA[integer]]></type>
                     <defaultvalue>3</defaultvalue>
@@ -87,15 +83,6 @@
                         <title>
                             <locale group="quiqqer/authgoogle" var="settings.authSettings.title" />
                         </title>
-
-                        <!--<input conf="authSettings.autoLogin" type="checkbox">-->
-                            <!--<text>-->
-                                <!--<locale group="quiqqer/authgoogle" var="settings.authSettings.autoLogin.title" />-->
-                            <!--</text>-->
-                            <!--<description>-->
-                                <!--<locale group="quiqqer/authgoogle" var="settings.authSettings.autoLogin.description" />-->
-                            <!--</description>-->
-                        <!--</input>-->
 
                         <input conf="authSettings.maxLoginErrors" type="text">
                             <text>

@@ -46,6 +46,12 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $SystemUser = QUI::getUsers()->getSystemUser();
         $token = $this->getAttribute('token');
 
+        // test if user is connected
+        // we don't want to override a connected user
+        if (Google::existsQuiqqerAccount($token)) {
+            return;
+        }
+
         // set user data
         $profileData = Google::getProfileData($token);
 
@@ -56,12 +62,11 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         ]);
 
         $User->setAttribute(FrontendUsersHandler::USER_ATTR_EMAIL_VERIFIED, boolval($profileData['email_verified']));
-
         $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         $User->save($SystemUser);
 
         // connect Google account with QUIQQER account
-        Google::connectQuiqqerAccount($User->getId(), $token, false);
+        Google::connectQuiqqerAccount($User->getUUID(), $token, false);
     }
 
     /**
@@ -149,10 +154,13 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         if (QUI::getUsers()->usernameExists($email)) {
-            throw new FrontendUsers\Exception([
-                $lg,
-                $lgPrefix . 'email_already_exists'
-            ]);
+            // check if google connection ist already there, then we don't need to throw an error
+            if (!Google::existsQuiqqerAccount($token)) {
+                throw new FrontendUsers\Exception([
+                    $lg,
+                    $lgPrefix . 'email_already_exists'
+                ]);
+            }
         }
 
         $settings = $this->getRegistrationSettings();
