@@ -28,10 +28,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
     let isFedCMAuthenticating = false;
     let setHasAttemptedAutoLogin = false;
 
-
     return new Class({
 
-        Extends: QDOM, Type: 'package/quiqqer/authgoogle/bin/classes/Google',
+        Extends: QDOM,
+        Type: 'package/quiqqer/authgoogle/bin/classes/Google',
 
         Binds: ['login', 'logout'],
 
@@ -49,7 +49,11 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
         isFedCMSupported: function () {
             try {
-                return (typeof window !== 'undefined' && 'IdentityCredential' in window && 'navigator' in window && 'credentials' in navigator && !!navigator.credentials.get);
+                return (typeof window !== 'undefined'
+                    && 'IdentityCredential' in window
+                    && 'navigator' in window
+                    && 'credentials' in navigator
+                    && !!navigator.credentials.get);
             } catch {
                 return false;
             }
@@ -365,28 +369,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         },
 
         /**
-         * Is the user already logged in, in google
-         *
-         * @return {boolean}
-         */
-        isLoggedIn: function () {
-            return this.$loggedIn;
-        },
-
-        /**
-         * Get auth data of currently connected Google account
-         *
-         * @return {Promise}
-         */
-        getAuthData: function () {
-            return new Promise((resolve, reject) => {
-                this.loadGoogleScript().then(() => {
-                    resolve(this.$AuthData);
-                }, reject);
-            });
-        },
-
-        /**
          * Get Google id_token for currently connected Google account
          *
          * @return {Promise}
@@ -407,7 +389,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         getProfileInfo: function (token) {
             return new Promise((resolve, reject) => {
                 QUIAjax.post('package_quiqqer_authgoogle_ajax_getDataByToken', resolve, {
-                    'package': 'quiqqer/authgoogle', idToken: token, onError: reject
+                    'package': 'quiqqer/authgoogle',
+                    idToken: token,
+                    onError: reject
                 });
             });
         },
@@ -422,7 +406,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         connectQuiqqerAccount: function (userId, idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_authgoogle_ajax_connectAccount', resolve, {
-                    'package': 'quiqqer/authgoogle', userId: userId, idToken: idToken, onError: reject
+                    'package': 'quiqqer/authgoogle',
+                    userId: userId,
+                    idToken: idToken,
+                    onError: reject
                 });
             });
         },
@@ -436,7 +423,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         disconnectQuiqqerAccount: function (userId) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_authgoogle_ajax_disconnectAccount', resolve, {
-                    'package': 'quiqqer/authgoogle', userId: userId, onError: reject
+                    'package': 'quiqqer/authgoogle',
+                    userId: userId,
+                    onError: reject
                 });
             });
         },
@@ -450,7 +439,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         getAccountByQuiqqerUserId: function (userId) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_authgoogle_ajax_getAccountByQuiqqerUserId', resolve, {
-                    'package': 'quiqqer/authgoogle', userId: userId, onError: reject
+                    'package': 'quiqqer/authgoogle',
+                    userId: userId,
+                    onError: reject
                 });
             });
         },
@@ -464,7 +455,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
         isAccountConnectedToQuiqqer: function (idToken) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_authgoogle_ajax_isGoogleAccountConnected', resolve, {
-                    'package': 'quiqqer/authgoogle', idToken: idToken, onError: reject
+                    'package': 'quiqqer/authgoogle',
+                    idToken: idToken,
+                    onError: reject
                 });
             });
         }
