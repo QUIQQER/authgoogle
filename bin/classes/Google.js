@@ -179,30 +179,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             if (isConnected) {
                                 form.setAttribute('data-authenticator', 'QUI\\Auth\\Google\\Auth');
 
-                                return new Promise((resolve) => {
-                                    require(['package/quiqqer/frontend-users/bin/frontend/controls/login/Login'], (login) => {
-                                        new login({
-                                            onSuccess: () => {
-                                                console.log('login was successfully');
-
-                                                if (Registration) {
-                                                    Registration.fireEvent('register', [Registration]);
-                                                    QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [Registration]);
-                                                    return true;
-                                                }
-
-                                                if (Login) {
-                                                    Login.auth(form);
-                                                    resolve();
-                                                    return true;
-                                                }
-
-                                                resolve();
-                                                return false;
-                                            }
-                                        }).$authBySocial(form);
-                                    });
-                                });
+                                if (Login) {
+                                    return Login.auth(form);
+                                }
                             }
 
                             // if not: registration
