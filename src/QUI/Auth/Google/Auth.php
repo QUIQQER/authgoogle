@@ -174,7 +174,7 @@ class Auth extends AbstractAuthenticator
     /**
      * @return Control|null
      */
-    public static function getSettingsControl(): ?Control
+    public function getSettingsControl(): ?Control
     {
         return null;
     }
@@ -182,8 +182,13 @@ class Auth extends AbstractAuthenticator
     /**
      * @return Control|null
      */
-    public static function getPasswordResetControl(): ?Control
+    public function getPasswordResetControl(): ?Control
     {
         return null;
+    }
+
+    public function getIcon(): string
+    {
+        return 'fa fa-google';
     }
 }
