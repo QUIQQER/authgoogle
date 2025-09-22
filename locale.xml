@@ -42,31 +42,38 @@
             <en><![CDATA[Client-ID]]></en>
         </locale>
         <locale name="settings.apiSettings.clientId.description" html="true">
-            <de><![CDATA[OAuth-2.0 Client-ID des Google API Projekts, über welches die API-Kommunikation zur Authentifizierung stattfindet. Siehe <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></de>
-            <en><![CDATA[OAuth-2.0 Client-ID of the Google API project via which the API communication for authentication takes place. See <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></en>
+            <de>
+                <![CDATA[OAuth-2.0 Client-ID des Google API Projekts, über welches die API-Kommunikation zur Authentifizierung stattfindet. Siehe <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></de>
+            <en>
+                <![CDATA[OAuth-2.0 Client-ID of the Google API project via which the API communication for authentication takes place. See <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></en>
         </locale>
         <locale name="settings.apiSettings.appSecret.title">
             <de><![CDATA[Clientschlüssel]]></de>
             <en><![CDATA[Client key]]></en>
         </locale>
         <locale name="settings.apiSettings.appSecret.description" html="true">
-            <de><![CDATA[OAuth-2.0 Clientschlüssel des Google API Projekts, über welches die API-Kommunikation zur Authentifizierung stattfindet. Siehe <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></de>
-            <en><![CDATA[OAuth-2.0 Client key of the Google API project via which the API communication for authentication takes place. See <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></en>
+            <de>
+                <![CDATA[OAuth-2.0 Clientschlüssel des Google API Projekts, über welches die API-Kommunikation zur Authentifizierung stattfindet. Siehe <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></de>
+            <en>
+                <![CDATA[OAuth-2.0 Client key of the Google API project via which the API communication for authentication takes place. See <a href="https://console.developers.google.com/apis" target="_blank">https://console.developers.google.com/apis</a>.]]></en>
         </locale>
         <locale name="settings.authSettings.maxLoginErrors.title">
             <de><![CDATA[Maximale Login-Versuche]]></de>
             <en><![CDATA[Maximum no. of login attempts]]></en>
         </locale>
         <locale name="settings.authSettings.maxLoginErrors.description">
-            <de><![CDATA[Maximale Versuche, die ein Benutzer hat, sich beim Login-Prozess mit einem gültigen (d.h.: zu seinem QUIQQER-Benutzerkonto gehörigen) Google-Konto anzumelden, bevor ein automatischer Logout stattfindet und der Authentifizierungs-Prozess von vorne gestartet wird.]]></de>
-            <en><![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></en>
+            <de>
+                <![CDATA[Maximale Versuche, die ein Benutzer hat, sich beim Login-Prozess mit einem gültigen (d.h.: zu seinem QUIQQER-Benutzerkonto gehörigen) Google-Konto anzumelden, bevor ein automatischer Logout stattfindet und der Authentifizierungsprozess von vorne gestartet wird.]]></de>
+            <en>
+                <![CDATA[Maximal number of attempts for logging in with a valid (meaning: linked to a QUIQQER Account) Google Account before the user session is terminated and the authentication process starts over.]]></en>
         </locale>
         <locale name="settings.authSettings.autoLogin.title">
             <de><![CDATA[Automatischer Login]]></de>
             <en><![CDATA[Auto Sign In]]></en>
         </locale>
         <locale name="settings.authSettings.autoLogin.description">
-            <de><![CDATA[Loggt den Benutzer automatisch ein, falls er schon mit einem (verknüpften) Google-Konto angemeldet ist]]></de>
+            <de>
+                <![CDATA[Loggt den Benutzer automatisch ein, falls er schon mit einem (verknüpften) Google-Konto angemeldet ist]]></de>
             <en><![CDATA[Automatically logs the user in if he is signed in with a (connected) Google account]]></en>
         </locale>
         <locale name="settings.registration.title">
@@ -78,7 +85,8 @@
             <en><![CDATA[Allow unverified Google accounts]]></en>
         </locale>
         <locale name="settings.registration.allowUnverifiedEmailAddresses.description">
-            <de><![CDATA[Google-Konten zur Registrierung zulassen, deren E-Mail-Adresse noch nicht bestätigt wurde]]></de>
+            <de>
+                <![CDATA[Google-Konten zur Registrierung zulassen, deren E-Mail-Adresse noch nicht bestätigt wurde]]></de>
             <en><![CDATA[Allow Google accounts to register whose email address has not yet been verified]]></en>
         </locale>
 
@@ -106,8 +114,10 @@
             <en><![CDATA[Authorize QUIQQER]]></en>
         </locale>
         <locale name="classes.google.warn.no.clientId">
-            <de><![CDATA[Die Google Authentifikation kann nicht verwendet werden, da noch keine oder eine fehlerhafte Client-ID in den Einstellungen festgelegt ist. Bitte legen Sie eine korrekte Client-ID in den Einstellung ("Google Authentifikation") fest.]]></de>
-            <en><![CDATA[Google cannot be used because there is no or a wrong Client-ID set in the settings. Please set a correct Client-ID in the settings ("Google authentication").]]></en>
+            <de>
+                <![CDATA[Die Google Authentifikation kann nicht verwendet werden, da noch keine oder eine fehlerhafte Client-ID in den Einstellungen festgelegt ist. Bitte legen Sie eine korrekte Client-ID in den Einstellung ("Google Authentifikation") fest.]]></de>
+            <en>
+                <![CDATA[Google cannot be used because there is no or a wrong Client-ID set in the settings. Please set a correct Client-ID in the settings ("Google authentication").]]></en>
         </locale>
 
         <!-- Registrar -->
@@ -120,24 +130,28 @@
             <en><![CDATA[Registration via linking a QUIQQER account with a Google account.]]></en>
         </locale>
         <locale name="registrar.javascript_required">
-            <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Für die Registrierung mit Ihrem Google-Konto aktivieren Sie bitte JavaScript.]]></de>
-            <en><![CDATA[JavaScript is disabled in your browser. To register with your Google Account, please enable JavaScript.]]></en>
+            <de>
+                <![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Für die Registrierung mit Ihrem Google-Konto aktivieren Sie bitte JavaScript.]]></de>
+            <en>
+                <![CDATA[JavaScript is disabled in your browser. To register with your Google Account, please enable JavaScript.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.registration_button">
-            <de><![CDATA[Jetzt mit Google registrieren]]></de>
-            <en><![CDATA[Register now with Google]]></en>
+            <de><![CDATA[Weiter mit Google]]></de>
+            <en><![CDATA[Continue with Google]]></en>
         </locale>
         <locale name="controls.frontend.registrar.sign_in.popup.btn">
-            <de><![CDATA[Jetzt bei Google einloggen]]></de>
-            <en><![CDATA[Sign in at Google now]]></en>
+            <de><![CDATA[Weiter mit Google]]></de>
+            <en><![CDATA[Continue with Google]]></en>
         </locale>
         <locale name="controls.frontend.registrar.sign_in.popup.title">
-            <de><![CDATA[Bei Google einloggen]]></de>
-            <en><![CDATA[Sign in at Google]]></en>
+            <de><![CDATA[Weiter mit Google]]></de>
+            <en><![CDATA[Continue with Google]]></en>
         </locale>
         <locale name="message.registrar.registration_success_manual">
-            <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
-            <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
+            <de>
+                <![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
+            <en>
+                <![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
         </locale>
         <locale name="message.registrar.registration_success_auto">
             <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
@@ -148,20 +162,27 @@
             <en><![CDATA[Your user account has been activated successfully.]]></en>
         </locale>
         <locale name="message.registrar.registration_pending">
-            <de><![CDATA[Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren. Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail an Ihre Google Mail-Adresse zugesandt wurde.]]></de>
-            <en><![CDATA[The registration was successful! Before you can log in, you must activate your user account. Please click on the activation link, which was sent to you by e-mail to your Google Mail address.]]></en>
+            <de>
+                <![CDATA[Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren. Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail an Ihre Google Mail-Adresse zugesandt wurde.]]></de>
+            <en>
+                <![CDATA[The registration was successful! Before you can log in, you must activate your user account. Please click on the activation link, which was sent to you by e-mail to your Google Mail address.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.already_authenticated" html="true">
-            <de><![CDATA[Sie sind z.Z. eingeloggt. Bitte loggen Sie sich aus, um mit Google ein Benutzerkonto zu registrieren.]]></de>
+            <de>
+                <![CDATA[Sie sind z.Z. eingeloggt. Bitte loggen Sie sich aus, um mit Google ein Benutzerkonto zu registrieren.]]></de>
             <en><![CDATA[You are currently logged in. Please log out to registrer an account via Google.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.sign_in.popup.error">
-            <de><![CDATA[Die Registrierung mit Google kann zur Zeit leider nicht durchgeführt werden. Dies kann z.B. daran liegen, dass Sie im Incognito-Modus arbeiten und/oder Drittanbieter-Cookies blockiert sind. Bitte verlassen Sie in diesem Fall den Incognito-Modus oder erlauben Sie die Verwendung von Drittanbieter-Cookies und versuchen es erneut.]]></de>
-            <en><![CDATA[The registration with Google can not be done at the moment. This may be because you are working in incognito mode and/or third-party cookies are blocked. In this case, please leave the incognito mode or allow the use of third-party cookies and try again.]]></en>
+            <de>
+                <![CDATA[Die Registrierung mit Google kann zurzeit leider nicht durchgeführt werden. Dies kann z.B. daran liegen, dass Sie im Incognito-Modus arbeiten und/oder Drittanbieter-Cookies blockiert sind. Bitte verlassen Sie in diesem Fall den Incognito-Modus oder erlauben Sie die Verwendung von Drittanbieter-Cookies und versuchen es erneut.]]></de>
+            <en>
+                <![CDATA[The registration with Google can not be done at the moment. This may be because you are working in incognito mode and/or third-party cookies are blocked. In this case, please leave the incognito mode or allow the use of third-party cookies and try again.]]></en>
         </locale>
         <locale name="controls.frontend.login.sign_in.popup.error">
-            <de><![CDATA[Der Login mit Google kann zur Zeit leider nicht durchgeführt werden. Dies kann z.B. daran liegen, dass Sie im Incognito-Modus arbeiten und/oder Drittanbieter-Cookies blockiert sind. Bitte verlassen Sie in diesem Fall den Incognito-Modus oder erlauben Sie die Verwendung von Drittanbieter-Cookies und versuchen es erneut.]]></de>
-            <en><![CDATA[The sign in with Google can not be done at the moment. This may be because you are working in incognito mode and/or third-party cookies are blocked. In this case, please leave the incognito mode or allow the use of third-party cookies and try again.]]></en>
+            <de>
+                <![CDATA[Der Login mit Google kann zurzeit leider nicht durchgeführt werden. Dies kann z.B. daran liegen, dass Sie im Incognito-Modus arbeiten und/oder Drittanbieter-Cookies blockiert sind. Bitte verlassen Sie in diesem Fall den Incognito-Modus oder erlauben Sie die Verwendung von Drittanbieter-Cookies und versuchen es erneut.]]></de>
+            <en>
+                <![CDATA[The sign in with Google can not be done at the moment. This may be because you are working in incognito mode and/or third-party cookies are blocked. In this case, please leave the incognito mode or allow the use of third-party cookies and try again.]]></en>
         </locale>
 
     </groups>
@@ -170,28 +191,37 @@
 
         <!-- Ajax -->
         <locale name="message.ajax.general.error">
-            <de><![CDATA[Beim Verarbeiten der Anfrage ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
-            <en><![CDATA[An unexpected error ocurred during your request. Please contact an administrator.]]></en>
+            <de>
+                <![CDATA[Beim Verarbeiten der Anfrage ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <en><![CDATA[An unexpected error occurred during your request. Please contact an administrator.]]></en>
         </locale>
         <locale name="exception.operation.only.allowed.by.own.user">
             <de><![CDATA[Diese Abfrage darf nur vom übergebenen Benutzer selbst durchgeführt werden.]]></de>
             <en><![CDATA[This request can only be executed by the given user.]]></en>
         </locale>
         <locale name="message.ajax.connectAccount.error">
-            <de><![CDATA[Bei der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-            <en><![CDATA[An error ocurred while linking your Google Account to your QUIQQER Account:<br/><br/>[error]]]></en>
+            <de>
+                <![CDATA[Bei der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <en>
+                <![CDATA[An error occurred while linking your Google Account to your QUIQQER Account:<br/><br/>[error]]]></en>
         </locale>
         <locale name="message.ajax.connectAccount.success">
-            <de><![CDATA[Das Google-Konto "[account]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit diesem QUIQQER-Benutzerkonto verwendet werden.]]></de>
-            <en><![CDATA[The Google Account "[account]" was succesfully linked to the QUIQQER Account "[qUserName]" (#[qUserId]). Authentication for this account via Google Login can now be used.]]></en>
+            <de>
+                <![CDATA[Das Google-Konto "[account]" wurde erfolgreich mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) verknüpft. Der Google-Login kann nun für die Authentifizierung mit diesem QUIQQER-Benutzerkonto verwendet werden.]]></de>
+            <en>
+                <![CDATA[The Google Account "[account]" was successfully linked to the QUIQQER Account "[qUserName]" (#[qUserId]). Authentication for this account via Google Login can now be used.]]></en>
         </locale>
         <locale name="message.ajax.disconnectAccount.error">
-            <de><![CDATA[Beim Aufheben der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
-            <en><![CDATA[An error occurred while unlinking your Google Account from your QUIQQER Account:<br/><br/>[error]]]></en>
+            <de>
+                <![CDATA[Beim Aufheben der Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
+            <en>
+                <![CDATA[An error occurred while unlinking your Google Account from your QUIQQER Account:<br/><br/>[error]]]></en>
         </locale>
         <locale name="message.ajax.disconnectAccount.success" html="true">
-            <de><![CDATA[Die Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) wurde erfolgreich gelöscht. Der Google-Login kann nun <b>nicht</b> mehr zur Authentifizierung für diesen QUIQQER-Benutzer verwendet werden.]]></de>
-            <en><![CDATA[The Google Account was succesfully unlinked from the QUIQQER Account "[qUserName]" (#[qUserId]). Google Login can now no longer be used to authenticate for this QUIQQER Account.]]></en>
+            <de>
+                <![CDATA[Die Verknüpfung des Google-Kontos mit dem QUIQQER-Benutzerkonto "[qUserName]" (#[qUserId]) wurde erfolgreich gelöscht. Der Google-Login kann nun <b>nicht</b> mehr zur Authentifizierung für diesen QUIQQER-Benutzer verwendet werden.]]></de>
+            <en>
+                <![CDATA[The Google Account was successfully unlinked from the QUIQQER Account "[qUserName]" (#[qUserId]). Google Login can now no longer be used to authenticate for this QUIQQER Account.]]></en>
         </locale>
         <locale name="message.ajax.createAccount.error">
             <de><![CDATA[Bei Erstellung des QUIQQER-Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]]]></de>
@@ -202,8 +232,10 @@
             <en><![CDATA[The QUIQQER Account <b>[email]</b> has been successfully created.]]></en>
         </locale>
         <locale name="message.ajax.loginAttemptsCheck.force.logout.attention">
-            <de><![CDATA[Sie haben sich zu oft mit dem falschen Google-Konto angemeldet. Bitte starten Sie den Login-Vorgang erneut.]]></de>
-            <en><![CDATA[You've logged in too often with the wrong Google Account. Please restart the login process.]]></en>
+            <de>
+                <![CDATA[Sie haben sich zu oft mit dem falschen Google-Konto angemeldet. Bitte starten Sie den Login-Vorgang erneut.]]></de>
+            <en>
+                <![CDATA[You've logged in too often with the wrong Google Account. Please restart the login process.]]></en>
         </locale>
 
         <!-- Class: Auth -->
@@ -222,7 +254,8 @@
 
         <!-- Class: Google -->
         <locale name="exception.google.api.error">
-            <de><![CDATA[Bei Verwendung der Google API ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <de>
+                <![CDATA[Bei Verwendung der Google API ist ein unerwarteter Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
             <en><![CDATA[An unexpected error occurred while using Google API. Please contact an administrator.]]></en>
         </locale>
         <locale name="exception.google.invalid.token">
@@ -234,36 +267,47 @@
             <en><![CDATA[There is already a user account with the e-mail address "[email]".]]></en>
         </locale>
         <locale name="exception.google.email.access.mandatory">
-            <de><![CDATA[Für die Erstellung eines Benutzerkontos ist es erforderlich, dass der Zugriff auf die bei Google hinterlegte E-Mail-Adresse gestattet wird.]]></de>
-            <en><![CDATA[For the creation of a user account, it is required to access the e-mail address stored at Google.]]></en>
+            <de>
+                <![CDATA[Für die Erstellung eines Benutzerkontos ist es erforderlich, dass der Zugriff auf die bei Google hinterlegte E-Mail-Adresse gestattet wird.]]></de>
+            <en>
+                <![CDATA[For the creation of a user account, it is required to access the e-mail address stored at Google.]]></en>
         </locale>
         <locale name="exception.google.email.incorrect">
-            <de><![CDATA[Die übergebene E-Mail-Adresse entspricht nicht der bei Google hinterlegten E-Mail-Adresse.]]></de>
+            <de>
+                <![CDATA[Die übergebene E-Mail-Adresse entspricht nicht der bei Google hinterlegten E-Mail-Adresse.]]></de>
             <en><![CDATA[The submitted email address does not correspond to the Google email address.]]></en>
         </locale>
 
         <!-- Class: Registrar -->
         <locale name="exception.registrar.token_invalid">
-            <de><![CDATA[Bei der Überprüfung Ihres Google-Kontos ist ein Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <de>
+                <![CDATA[Bei der Überprüfung Ihres Google-Kontos ist ein Fehler aufgetreten. Bitte wenden Sie sich an einen Administrator.]]></de>
             <en><![CDATA[There was an error checking your Google account. Please contact an administrator.]]></en>
         </locale>
         <locale name="exception.registrar.email_address_empty">
-            <de><![CDATA[Ihre E-Mail-Adresse konnte nicht aus Ihrem Google-Profil abgerufen werden. Bitte autorisieren Sie den Zugriff auf Ihre E-Mail-Adresse.]]></de>
-            <en><![CDATA[Your email address could not be retrieved from your Google profile. Please authorize access to your e-mail address.]]></en>
+            <de>
+                <![CDATA[Ihre E-Mail-Adresse konnte nicht aus Ihrem Google-Profil abgerufen werden. Bitte autorisieren Sie den Zugriff auf Ihre E-Mail-Adresse.]]></de>
+            <en>
+                <![CDATA[Your email address could not be retrieved from your Google profile. Please authorize access to your e-mail address.]]></en>
         </locale>
         <locale name="exception.registrar.email_already_exists">
-            <de><![CDATA[Es existiert bereits ein Benutzerkonto mit Ihrer bei Google hinterlegten E-Mail-Adresse.]]></de>
+            <de>
+                <![CDATA[Es existiert bereits ein Benutzerkonto mit Ihrer bei Google hinterlegten E-Mail-Adresse.]]></de>
             <en><![CDATA[There is already a user account with your Google e-mail address.]]></en>
         </locale>
         <locale name="exception.registrar.email_not_verified">
-            <de><![CDATA[Ihre bei Google hinterlegte E-Mail-Adresse ist noch nicht verifiziert. Bitte verifizieren Sie Ihre E-Mail-Adresse bei Google, um sich zu registrieren.]]></de>
-            <en><![CDATA[Your Google e-mail address is not yet verified. Please verify your e-mail address at Google to register.]]></en>
+            <de>
+                <![CDATA[Ihre bei Google hinterlegte E-Mail-Adresse ist noch nicht verifiziert. Bitte verifizieren Sie Ihre E-Mail-Adresse bei Google, um sich zu registrieren.]]></de>
+            <en>
+                <![CDATA[Your Google e-mail address is not yet verified. Please verify your e-mail address at Google to register.]]></en>
         </locale>
 
         <!-- Class: Login -->
         <locale name="login.javascript_required">
-            <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Um sich mit Google einzuloggen, aktivieren Sie bitte JavaScript.]]></de>
-            <en><![CDATA[JavaScript is disabled in your browser. To sign in with Google please enable JavaScript.]]></en>
+            <de>
+                <![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Um sich mit Google einzuloggen, aktivieren Sie bitte JavaScript.]]></de>
+            <en>
+                <![CDATA[JavaScript is disabled in your browser. To sign in with Google please enable JavaScript.]]></en>
         </locale>
     </groups>
 
@@ -274,18 +318,24 @@
             <en><![CDATA[Authentication with Google]]></en>
         </locale>
         <locale name="classes.Google.auth.error.opt_out_or_no_session">
-            <de><![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden, da Sie diese in Ihrem Google-Konto deaktiviert haben oder auf Ihr Google-Konto z.Z. nicht zugegriffen werden kann (z.B. weil sich Ihr Browser im Inkognito-Modus befindet). Bitte verwenden Sie ein andere Authentifizierungsmethode.]]></de>
-            <en><![CDATA[Authentication with Google cannot be used because you have disabled it in your Google account or there is no access to your google account (e.g. because your browser is in incognito mode).]]></en>
+            <de>
+                <![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden, da Sie diese in Ihrem Google-Konto deaktiviert haben oder auf Ihr Google-Konto z.Z. nicht zugegriffen werden kann (z.B. weil sich Ihr Browser im Inkognito-Modus befindet). Bitte verwenden Sie eine andere Authentifizierungsmethode.]]></de>
+            <en>
+                <![CDATA[Authentication with Google cannot be used because you have disabled it in your Google account or there is no access to your Google account (e.g. because your browser is in incognito mode).]]></en>
         </locale>
         <locale name="classes.Google.auth.error.browser_not_supported">
-            <de><![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden, da diese in Ihrem Browser nicht unterstützt wird. Bitte verwenden Sie ein andere Authentifizierungsmethode.]]></de>
-            <en><![CDATA[You cannot use Google authentication because it is not supported in your browser. Please use another authentication method.]]></en>
+            <de>
+                <![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden, da diese in Ihrem Browser nicht unterstützt wird. Bitte verwenden Sie eine andere Authentifizierungsmethode.]]></de>
+            <en>
+                <![CDATA[You cannot use Google authentication because it is not supported in your browser. Please use another authentication method.]]></en>
         </locale>
         <locale name="classes.Google.auth.error.unknown_reason">
-            <de><![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden. Bitte verwenden Sie ein andere Authentifizierungsmethode.]]></de>
-            <en><![CDATA[The authentication with Google cannot be used. Please use another authentication method.]]></en>
+            <de>
+                <![CDATA[Die Authentifizierung mit Google kann nicht verwendet werden. Bitte verwenden Sie eine andere Authentifizierungsmethode.]]></de>
+            <en>
+                <![CDATA[The authentication with Google cannot be used. Please use another authentication method.]]></en>
         </locale>
-        
+
         <!-- Control: Settings -->
         <locale name="controls.settings.table.btn.add">
             <de><![CDATA[Google-Konto verknüpfen]]></de>
@@ -296,20 +346,26 @@
             <en><![CDATA[Google Account]]></en>
         </locale>
         <locale name="controls.settings.addAccount.info.connected" html="true">
-            <de><![CDATA[Sie sind mit dem Google-Konto <b>[email]</b> ([name]) eingeloggt. Wenn Sie dieses Google-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Google-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
-            <en><![CDATA[You are currently logged in with the Google Account <b>[email]</b> ([name]). If you want to link this Google Account with this QUIQQER Account, please click <b>Link now</b>]]></en>
+            <de>
+                <![CDATA[Sie sind mit dem Google-Konto <b>[email]</b> ([name]) eingeloggt. Wenn Sie dieses Google-Konto mit diesem Benutzer verknüpfen möchten, um sich in Zukunft mit Ihrem Google-Login bei QUIQQER zu authentifizieren, klicken Sie bitte auf <b>jetzt verknüpfen</b>.]]></de>
+            <en>
+                <![CDATA[You are currently logged in with the Google Account <b>[email]</b> ([name]). If you want to link this Google Account with this QUIQQER Account, please click <b>Link now</b>]]></en>
         </locale>
         <locale name="controls.settings.addAccount.info.notSignedIn">
-            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Google-Konto verknüpft. Bitte loggen Sie sich bei Google ein, um eine Konto-Verknüpfung zu erstellen.]]></de>
-            <en><![CDATA[This QUIQQER Account is currently not linked to a Google Account. Please log in with your Google Account to create a QUIQQER Account link.]]></en>
+            <de>
+                <![CDATA[Dieses QUIQQER-Benutzerkonto ist z.Z. nicht mit einem Google-Konto verknüpft. Bitte loggen Sie sich bei Google ein, um eine Konto-Verknüpfung zu erstellen.]]></de>
+            <en>
+                <![CDATA[This QUIQQER Account is currently not linked to a Google Account. Please log in with your Google Account to create a QUIQQER Account link.]]></en>
         </locale>
         <locale name="controls.settings.wrong.user.info">
             <de><![CDATA[Die Verknüpfung mit einem Google-Konto kann nur der Benutzer selbst verwalten.]]></de>
             <en><![CDATA[The link to a Google Account can only be managed by the user himself.]]></en>
         </locale>
         <locale name="controls.settings.showAccountInfo.text">
-            <de><![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Google-Konto <b>[email]</b> ([name]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
-            <en><![CDATA[This QUIQQER Account is linked to the Google Account <b>[email]</b> ([name]) and can be used for authentication. If you want to remove this link, click <b>Unlink now</b>.]]></en>
+            <de>
+                <![CDATA[Dieses QUIQQER-Benutzerkonto ist mit dem Google-Konto <b>[email]</b> ([name]) verknüpft und kann zur Authentifizierung für diesen Benutzer verwendet werden. Wenn Sie diese Verknüpfung aufheben möchten, klicken Sie bitte auf <b>Verknüpfung aufheben</b>.]]></de>
+            <en>
+                <![CDATA[This QUIQQER Account is linked to the Google Account <b>[email]</b> ([name]) and can be used for authentication. If you want to remove this link, click <b>Unlink now</b>.]]></en>
         </locale>
         <locale name="controls.settings.addAccount.btn.connect">
             <de><![CDATA[Jetzt verknüpfen]]></de>
@@ -324,42 +380,54 @@
             <en><![CDATA[There was an error with Google's login. Please repeat the login process.]]></en>
         </locale>
         <locale name="controls.settings.api_error">
-            <de><![CDATA[Bei der Verbindung zur Google API ist ein Fehler aufgetreten. Bitte überprüfen Sie die Einstellungen des "Google Authentifikation"-Moduls.]]></de>
-            <en><![CDATA[An error occurred while connecting to the Google API. Please check the settings of the "Google Authentication" module.]]></en>
+            <de>
+                <![CDATA[Bei der Verbindung zur Google API ist ein Fehler aufgetreten. Bitte überprüfen Sie die Einstellungen des "Google Authentifikation"-Moduls.]]></de>
+            <en>
+                <![CDATA[An error occurred while connecting to the Google API. Please check the settings of the "Google Authentication" module.]]></en>
         </locale>
 
         <!-- Control: Register -->
         <locale name="controls.register.status.unknown">
-            <de><![CDATA[Um ein Benutzerkonto mit Google zu registrieren, wird der Zugriff auf Ihr Google-Profil (nur Name) und die dort hinterlegte E-Mail-Adresse benötigt. Bitte loggen Sie sich bei Google ein.]]></de>
-            <en><![CDATA[To register a user account with Google, access to your Google profile (name only) and the e-mail address stored there is required. Please log in to Google.]]></en>
+            <de>
+                <![CDATA[Um ein Benutzerkonto mit Google zu registrieren, wird der Zugriff auf Ihr Google-Profil (nur Name) und die dort hinterlegte E-Mail-Adresse benötigt. Bitte loggen Sie sich bei Google ein.]]></de>
+            <en>
+                <![CDATA[To register a user account with Google, access to your Google profile (name only) and the e-mail address stored there is required. Please log in to Google.]]></en>
         </locale>
         <locale name="controls.register.status.login_required">
             <de><![CDATA[Bitte loggen Sie sich bei Google ein, um fortzufahren.]]></de>
             <en><![CDATA[Please sign in with Google to continue.]]></en>
         </locale>
         <locale name="controls.register.status.connected.account.exists">
-            <de><![CDATA[Das Google-Konto, mit welchem Sie gerade eingeloggt sind, ist bereits mit einem Benutzerkonto verknüpft und kann daher nicht für eine Registrierung verwendet werden.]]></de>
-            <en><![CDATA[The Google Account that you are currently logged into is already linked to a user account and can not be used for registration.]]></en>
+            <de>
+                <![CDATA[Das Google-Konto, mit welchem Sie gerade eingeloggt sind, ist bereits mit einem Benutzerkonto verknüpft und kann daher nicht für eine Registrierung verwendet werden.]]></de>
+            <en>
+                <![CDATA[The Google Account that you are currently logged into is already linked to a user account and can not be used for registration.]]></en>
         </locale>
         <locale name="controls.register.registration.confirm" html="true">
-            <de><![CDATA[Bitte bestätigen Sie die Erstellung des Benutzerkontos <b>[email]</b> mit einem Klick auf <b>Benutzerkonto erstellen</b>.]]></de>
-            <en><![CDATA[Please confirm the creation of the user account <b>[email]</b> with a click on <b>Create Account</b>.]]></en>
+            <de>
+                <![CDATA[Bitte bestätigen Sie die Erstellung des Benutzerkontos <b>[email]</b> mit einem Klick auf <b>Benutzerkonto erstellen</b>.]]></de>
+            <en>
+                <![CDATA[Please confirm the creation of the user account <b>[email]</b> with a click on <b>Create Account</b>.]]></en>
         </locale>
         <locale name="controls.register.registration.confirm.btn.text">
             <de><![CDATA[Benutzerkonto erstellen]]></de>
             <en><![CDATA[Create account]]></en>
         </locale>
         <locale name="controls.register.registration.error">
-            <de><![CDATA[Bei der Erstellung des Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]<br/><br/>Es kann kein Benutzerkonto mit dem Google-Konto erstellt werden, mit welchem sie z.Z. eingeloggt sind. Bitte verwenden Sie ein anderes Google-Konto oder eine andere Registrierungsmethode.]]></de>
-            <en><![CDATA[An error occurred during the creation of the user account:<br/><br/>[error]<br/><br/>It is not possible to create a user account with the Google Account you are currently logged in with. Please use another Google Account or another registration method.]]></en>
+            <de>
+                <![CDATA[Bei der Erstellung des Benutzerkontos ist ein Fehler aufgetreten:<br/><br/>[error]<br/><br/>Es kann kein Benutzerkonto mit dem Google-Konto erstellt werden, mit welchem sie z.Z. eingeloggt sind. Bitte verwenden Sie ein anderes Google-Konto oder eine andere Registrierungsmethode.]]></de>
+            <en>
+                <![CDATA[An error occurred during the creation of the user account:<br/><br/>[error]<br/><br/>It is not possible to create a user account with the Google Account you are currently logged in with. Please use another Google Account or another registration method.]]></en>
         </locale>
         <locale name="controls.register.registration.success">
             <de><![CDATA[Das Benutzerkonto <b>[email]</b> wurde erfolgreich erstellt.]]></de>
             <en><![CDATA[User account <b>[email]</b> was successfully created.]]></en>
         </locale>
         <locale name="controls.register.general_error">
-            <de><![CDATA[Google-Login kann z.Z. nicht verwendet werden. Bitte wenden Sie sich an einen Administrator oder überprüfen Sie sie Google API-Einstellungen.]]></de>
-            <en><![CDATA[Google Login is not available at the moment. Please contact an administrator or check the Google API settings.]]></en>
+            <de>
+                <![CDATA[Google-Login kann z.Z. nicht verwendet werden. Bitte wenden Sie sich an einen Administrator oder überprüfen Sie sie Google API-Einstellungen.]]></de>
+            <en>
+                <![CDATA[Google Login is not available at the moment. Please contact an administrator or check the Google API settings.]]></en>
         </locale>
 
         <!-- Control: Login -->
@@ -368,20 +436,28 @@
             <en><![CDATA[Please log in with Google to sign in.]]></en>
         </locale>
         <locale name="controls.login.register.status.connected" html="true">
-            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
-            <en><![CDATA[It is necessary to link your Google Account to your user account to authenticate. To do this, please click <b>Link now</b>.]]></en>
+            <de>
+                <![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>jetzt verknüpfen</b>.]]></de>
+            <en>
+                <![CDATA[It is necessary to link your Google Account to your user account to authenticate. To do this, please click <b>Link now</b>.]]></en>
         </locale>
         <locale name="controls.login.register.status.not_authorized" html="true">
-            <de><![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>Jetzt verknüpfen</b>.]]></de>
-            <en><![CDATA[It is necessary to link your Google Account to your user account to authenticate. To do this, please click <b>Link now</b>.]]></en>
+            <de>
+                <![CDATA[Für die Authentifizierung ist es notwendig, dass Ihr Google-Konto mit dem Benutzerkonto, für welches Sie sich authentifizieren wollen, verknüpft ist. Um mit der Authentifizierung fortzufahren, klicken Sie bitte auf <b>jetzt verknüpfen</b>.]]></de>
+            <en>
+                <![CDATA[It is necessary to link your Google Account to your user account to authenticate. To do this, please click <b>Link now</b>.]]></en>
         </locale>
         <locale name="controls.login.wrong.google.user">
-            <de><![CDATA[Das Google-Konto, welches ausgewählt wurde, ist nicht mit dem Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte wählen Sie das Google-Konto, welches zu diesem Benutzerkonto gehört oder welches sie mit dem Benutzerkonto verknüpfen möchten.]]></de>
-            <en><![CDATA[The Google Account you selected is not linked to the user ccount you are trying wo authenticate for. Please select the Google Account that is linked to the user account or a Google Account that is currently not linked to any other user account.]]></en>
+            <de>
+                <![CDATA[Das Google-Konto, welches ausgewählt wurde, ist nicht mit dem Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte wählen Sie das Google-Konto, welches zu diesem Benutzerkonto gehört oder welches sie mit dem Benutzerkonto verknüpfen möchten.]]></de>
+            <en>
+                <![CDATA[The Google Account you selected is not linked to the user count you are trying wo authenticate for. Please select the Google Account that is linked to the user account or a Google Account that is currently not linked to any other user account.]]></en>
         </locale>
         <locale name="controls.login.no.quiqqer.account">
-            <de><![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungs-Methode.]]></de>
-            <en><![CDATA[The Google Account you are currently logged in with is not linked to the user account you are trying wo authenticate for. Please log in with another Google Account or use another authentication method.]]></en>
+            <de>
+                <![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungsmethode.]]></de>
+            <en>
+                <![CDATA[The Google Account you are currently logged in with is not linked to the user account you are trying wo authenticate for. Please log in with another Google Account or use another authentication method.]]></en>
         </locale>
         <locale name="controls.login.general_error">
             <de><![CDATA[Google-Login kann z.Z. nicht verwendet werden.]]></de>
@@ -394,8 +470,10 @@
 
         <!-- Control: frontend/controls/Registrar -->
         <locale name="controls.frontend.registrar.already_connected" html="true">
-            <de><![CDATA[Das Google-Konto <b>[email]</b> ist bereits mit einem Benutzerkonto verknüpft. Bitte loggen Sie sich mit diesem Benutzerkonto ein oder schließen Sie dieses Fenster, um sich ggf. mit einem anderen Google-Konto zu registrieren.]]></de>
-            <en><![CDATA[The Google account <b>[email]</b> is already linked to a user account. Please log in with this account or close this window to sign up with a different Google account.]]></en>
+            <de>
+                <![CDATA[Das Google-Konto <b>[email]</b> ist bereits mit einem Benutzerkonto verknüpft. Bitte loggen Sie sich mit diesem Benutzerkonto ein oder schließen Sie dieses Fenster, um sich ggf. mit einem anderen Google-Konto zu registrieren.]]></de>
+            <en>
+                <![CDATA[The Google account <b>[email]</b> is already linked to a user account. Please log in with this account or close this window to sign up with a different Google account.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.already_connected.login.label">
             <de><![CDATA[Jetzt mit Google einloggen]]></de>
@@ -424,8 +502,10 @@
             <en><![CDATA[Allow connection to Google]]></en>
         </locale>
         <locale name="gdpr_consent.popup.info">
-            <de><![CDATA[Mit einem Klick auf "Verbindung zu Google genehmigen" erklären Sie sich damit einverstanden, dass eine Verbindung zu Google hergestellt wird und Google möglicherweise personenbezogene Informationen sammelt, auswertet und/oder an Drittanbieter übermittelt so wie Cookies setzt, die für diese Zwecke nötig sind. Diese Zustimmung gilt auch für zukünftige Besuche auf dieser Website.]]></de>
-            <en><![CDATA[By clicking on "Allow connection to Google", you agree to be connected to Google and that Google may collect, analyze and/or transfer personal information to third parties as well as set cookies that are necessary for these purposes. This consent also applies to future visits to this website.]]></en>
+            <de>
+                <![CDATA[Mit einem Klick auf "Verbindung zu Google genehmigen" erklären Sie sich damit einverstanden, dass eine Verbindung zu Google hergestellt wird und Google möglicherweise personenbezogene Informationen sammelt, auswertet und/oder an Drittanbieter übermittelt so wie Cookies setzt, die für diese Zwecke nötig sind. Diese Zustimmung gilt auch für zukünftige Besuche auf dieser Website.]]></de>
+            <en>
+                <![CDATA[By clicking on "Allow connection to Google", you agree to be connected to Google and that Google may collect, analyze and/or transfer personal information to third parties as well as set cookies that are necessary for these purposes. This consent also applies to future visits to this website.]]></en>
         </locale>
         <locale name="gdpr_consent.popup.btn.text">
             <de><![CDATA[Verbindung zu Google genehmigen]]></de>

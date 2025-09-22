@@ -2,4 +2,5 @@
 <events>
     <event on="onUserDelete" fire="\QUI\Auth\Google\Events::onUserDelete"/>
     <event on="onQuiqqerFrontendUsersUserDelete" fire="\QUI\Auth\Google\Events::onUserDelete"/>
+    <event on="onQuiqqerMigrationV2" fire="\QUI\Auth\Google\Events::onQuiqqerMigrationV2"/>
 </events>
