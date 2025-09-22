@@ -27,9 +27,15 @@ class Login extends Control
     {
         parent::__construct($attributes);
 
+        $this->setJavaScriptControl('package/quiqqer/authgoogle/bin/controls/Login');
         $this->addCSSClass('quiqqer-google-login');
-        $this->addCSSFile(dirname(__FILE__) . '/Login.css');
         $this->setAttribute('icon', 'fa fa-google');
+
+        $cssFile = OPT_DIR . 'quiqqer/authgoogle/bin/classes/Google.css';
+
+        if (file_exists($cssFile)) {
+            $this->addCSSFile($cssFile);
+        }
     }
 
     /**
@@ -37,17 +43,7 @@ class Login extends Control
      */
     public function getBody(): string
     {
-        try {
-            $Engine = QUI::getTemplateManager()->getEngine();
-            $Conf = QUI::getPackage('quiqqer/authgoogle')->getConfig();
-        } catch (QUI\Exception) {
-            return '';
-        }
-
-        $Engine->assign([
-            'autoLogin' => $Conf->get('authSettings', 'autoLogin') ? "1" : "0"
-        ]);
-
+        $Engine = QUI::getTemplateManager()->getEngine();
         return $Engine->fetch(dirname(__FILE__) . '/Login.html');
     }
 }
