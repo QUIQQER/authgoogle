@@ -175,13 +175,10 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
 
                             // test if user already exists
-                            // if yes: login
-                            if (isConnected) {
+                            // and we are in a login process
+                            if (isConnected && Login) {
                                 form.setAttribute('data-authenticator', 'QUI\\Auth\\Google\\Auth');
-
-                                if (Login) {
-                                    return Login.auth(form);
-                                }
+                                return Login.auth(form);
                             }
 
                             // if not: registration
