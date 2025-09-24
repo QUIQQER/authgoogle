@@ -25,20 +25,30 @@
             </section>
         </config>
 
-        <window>
+        <window name="frontend-users">
+            <title>
+                <locale group="quiqqer/frontend-users" var="menu.title"/>
+            </title>
+            <params>
+                <icon>fa fa-cogs</icon>
+            </params>
+
+            <!--
             <title>
                 <locale group="quiqqer/authgoogle" var="settings.title" />
             </title>
             <params>
-                <icon>fa fa-google</icon>
+                <icon>fa fa-brands fa-google</icon>
             </params>
+            -->
 
             <categories>
-                <category name="settings">
+                <category name="google-auth-settings" index="10">
                     <text>
-                        <locale group="quiqqer/authgoogle" var="settings.category.settings.title" />
+                        <!--<locale group="quiqqer/authgoogle" var="settings.category.settings.title" />-->
+                        <locale group="quiqqer/authgoogle" var="settings.title" />
                     </text>
-                    <icon>fa fa-cogs</icon>
+                    <icon>fa fa-brands fa-google</icon>
 
                     <settings title="apiSettings" name="apiSettings">
                         <title>
