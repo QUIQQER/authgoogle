@@ -14,7 +14,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
     'qui/controls/buttons/Button',
     'qui/controls/windows/Confirm',
     'package/quiqqer/frontend-users/bin/Registration',
-
     'Ajax',
     'Locale',
 
@@ -285,8 +284,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                             clientId: this.$clientId,
                             mode: 'passive',
                             params: {nonce},
-                        }],
-                    },
+                        }]
+                    }
                 });
 
                 if (typeof credential.token !== 'undefined') {
@@ -297,8 +296,8 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 }
             } catch (err) {
                 console.error(err);
-            } finally {
                 isFedCMAuthenticating = false;
+            } finally {
                 setHasAttemptedAutoLogin = true;
             }
         },

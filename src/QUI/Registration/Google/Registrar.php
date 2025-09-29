@@ -248,7 +248,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getIcon(): string
     {
-        return 'fa fa-google';
+        return 'fa fa-brands fa-google';
     }
 
     /**
