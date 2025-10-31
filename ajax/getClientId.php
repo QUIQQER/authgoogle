@@ -8,7 +8,7 @@
 
 use QUI\Auth\Google\Google;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_getClientId',
     function () {
         return Google::getClientId();
