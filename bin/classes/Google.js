@@ -254,6 +254,14 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                         // Polling to check if popup was closed
                         const popupChecker = setInterval(() => {
+                            if (typeof popup === 'undefined') {
+                                return;
+                            }
+
+                            if (!popup) {
+                                return;
+                            }
+
                             if (popup.closed) {
                                 window.removeEventListener('message', messageListener);
                                 clearInterval(popupChecker);
