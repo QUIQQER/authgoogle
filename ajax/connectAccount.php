@@ -12,7 +12,7 @@
 
 use QUI\Auth\Google\Google;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_connectAccount',
     function ($userId, $idToken) {
         try {

@@ -146,31 +146,35 @@ class Google
      * Get Google Profile data
      *
      * @param string $accessToken - access token
-     * @return array
+     * @return array<string, mixed>
      * @throws Exception
      */
     public static function getProfileData(string $accessToken): array
     {
-        return self::getApi()->verifyIdToken($accessToken);
+        return self::getApi()->verifyIdToken($accessToken) ?: [];
     }
 
     /**
      * Get details of a connected Google account
      *
      * @param int|string $userId - QUIQQER User ID
-     * @return array|false - details as array or false if no account connected to given QUIQQER User account ID
+     * @return array<string, mixed> - details as array or false if no account connected to given QUIQQER User account ID
      */
-    public static function getConnectedAccountByQuiqqerUserId(int | string $userId): bool | array
+    public static function getConnectedAccountByQuiqqerUserId(int | string $userId): array
     {
-        $result = QUI::getDataBase()->fetch([
-            'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
-            'where' => [
-                'userId' => $userId
-            ]
-        ]);
+        try {
+            $result = QUI::getDataBase()->fetch([
+                'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
+                'where' => [
+                    'userId' => $userId
+                ]
+            ]);
+        } catch (QUI\Exception) {
+            return [];
+        }
 
         if (empty($result)) {
-            return false;
+            return [];
         }
 
         return current($result);
@@ -180,26 +184,30 @@ class Google
      * Get details of a connected Google account
      *
      * @param string $idToken - Google API id_token
-     * @return array|false - details as array or false if no account connected to given Google userID
+     * @return array<string, mixed> - details as array or false if no account connected to given Google userID
      *
      * @throws Exception
-     * @throws QUI\Database\Exception|\QUI\Auth\Google\Exception
      */
-    public static function getConnectedAccountByGoogleIdToken(string $idToken): bool | array
+    public static function getConnectedAccountByGoogleIdToken(string $idToken): array
     {
         self::validateAccessToken($idToken);
 
         $profile = self::getProfileData($idToken);
 
-        $result = QUI::getDataBase()->fetch([
-            'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
-            'where' => [
-                'googleUserId' => $profile['sub']
-            ]
-        ]);
+        try {
+            $result = QUI::getDataBase()->fetch([
+                'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
+                'where' => [
+                    'googleUserId' => $profile['sub']
+                ]
+            ]);
+        } catch (QUI\Exception $e) {
+            QUI\System\Log::writeException($e);
+            return [];
+        }
 
         if (empty($result)) {
-            return false;
+            return [];
         }
 
         return current($result);
@@ -261,10 +269,10 @@ class Google
     /**
      * Get Google API Instance
      *
-     * @return GoogleApi|null
+     * @return GoogleApi
      * @throws Exception
      */
-    protected static function getApi(): ?GoogleApi
+    protected static function getApi(): GoogleApi
     {
         if (!is_null(self::$Api)) {
             return self::$Api;
@@ -273,7 +281,6 @@ class Google
         try {
             self::$Api = new GoogleApi([
                 'client_id' => self::getClientId(),
-//                'client_secret' => self::getClientKey()
             ]);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
@@ -296,7 +303,7 @@ class Google
      */
     public static function getClientId(): string
     {
-        return QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('apiSettings', 'clientId');
+        return QUI::getPackage('quiqqer/authgoogle')->getConfig()?->get('apiSettings', 'clientId');
     }
 
     /**
@@ -306,7 +313,7 @@ class Google
      */
     protected static function getClientKey(): string
     {
-        return QUI::getPackage('quiqqer/authgoogle')->getConfig()->get('apiSettings', 'clientKey');
+        return QUI::getPackage('quiqqer/authgoogle')->getConfig()?->get('apiSettings', 'clientKey');
     }
 
     /**
@@ -324,7 +331,7 @@ class Google
             return;
         }
 
-        if (QUI::getSession()->get('uid') !== $userId || !$userId) {
+        if (QUI::getSession()?->get('uid') !== $userId || !$userId) {
             throw new QUI\Permissions\Exception(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',

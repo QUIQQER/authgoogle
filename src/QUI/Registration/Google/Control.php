@@ -18,7 +18,7 @@ class Control extends QUI\Control
     /**
      * Control constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {

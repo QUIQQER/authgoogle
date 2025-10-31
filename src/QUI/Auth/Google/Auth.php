@@ -32,7 +32,7 @@ class Auth extends AbstractAuthenticator
     /**
      * Auth Constructor.
      *
-     * @param string|array|integer $user - name of the user, or user id
+     * @param string|array<string, mixed>|integer $user - name of the user, or user id
      */
     public function __construct(mixed $user = '')
     {
@@ -79,9 +79,8 @@ class Auth extends AbstractAuthenticator
     /**
      * Authenticate the user
      *
-     * @param array|integer|string $authParams
+     * @param array<string, mixed>|integer|string $authParams
      *
-     * @throws Exception
      * @throws QUI\Permissions\Exception|\QUI\Auth\Google\Exception
      */
     public function auth(string | array | int $authParams): void
@@ -165,6 +164,10 @@ class Auth extends AbstractAuthenticator
      */
     public function getUser(): QUI\Interfaces\Users\User
     {
+        if ($this->User === null) {
+            return QUI::getUsers()->getNobody();
+        }
+
         return $this->User;
     }
 

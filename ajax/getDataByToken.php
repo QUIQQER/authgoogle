@@ -9,7 +9,7 @@
 
 use QUI\Auth\Google\Google;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_getDataByToken',
     function ($idToken) {
         return Google::getProfileData($idToken);

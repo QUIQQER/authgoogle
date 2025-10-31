@@ -7,10 +7,10 @@
  * @return bool
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_isEditUserSessionUser',
     function ($userId) {
-        return QUI::getSession()->get('uid') === $userId;
+        return QUI::getSession()?->get('uid') === $userId;
     },
     ['userId']
 );
