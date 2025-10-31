@@ -254,11 +254,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * Get registration settings for this plugin
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     protected function getRegistrationSettings(): array
     {
+        if (!QUI::getPackage('quiqqer/authgoogle')->getConfig()) {
+            return [];
+        }
+
         return QUI::getPackage('quiqqer/authgoogle')->getConfig()->getSection('registration');
     }
 
