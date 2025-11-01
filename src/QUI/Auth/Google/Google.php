@@ -65,6 +65,10 @@ class Google
 
         self::validateAccessToken($accessToken);
 
+        if (empty($profileData['name'])) {
+            $profileData['name'] = $profileData['email'];
+        }
+
         QUI::getDataBase()->insert(
             QUI::getDBTableName(self::TBL_ACCOUNTS),
             [
