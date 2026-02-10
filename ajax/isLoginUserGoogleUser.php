@@ -29,7 +29,7 @@ QUI::getAjax()->registerFunction(
             return false;
         }
 
-        return (int)$profileData['sub'] === (int)$accountData['googleUserId'];
+        return (string)$profileData['sub'] === (string)$accountData['googleUserId'];
     },
     ['idToken']
 );
