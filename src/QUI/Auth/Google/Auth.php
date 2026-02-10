@@ -114,6 +114,21 @@ class Auth extends AbstractAuthenticator
             $Users = QUI::getUsers();
 
             if (!empty($userData['email']) && $Users->emailExists($userData['email'])) {
+                // Avoid account takeover via unverified emails.
+                $allowUnverified = false;
+                $cfg = QUI::getPackage('quiqqer/authgoogle')->getConfig();
+
+                if ($cfg) {
+                    $allowUnverified = (bool)$cfg->get('registration', 'allowUnverifiedEmailAddresses');
+                }
+
+                if (!$allowUnverified && empty($userData['email_verified'])) {
+                    throw new GoogleException([
+                        'quiqqer/authgoogle',
+                        'exception.auth.email_not_verified'
+                    ], 1001);
+                }
+
                 try {
                     $User = $Users->getUserByMail($userData['email']);
 
