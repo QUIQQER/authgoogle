@@ -247,6 +247,10 @@
             <de><![CDATA[Mit diesem Google-Konto ist kein Benutzerkonto verknüpft.]]></de>
             <en><![CDATA[No user account is associated with this Google Account.]]></en>
         </locale>
+        <locale name="exception.auth.email_not_verified">
+            <de><![CDATA[Ihre bei Google hinterlegte E-Mail-Adresse ist nicht verifiziert.]]></de>
+            <en><![CDATA[Your Google e-mail address is not verified.]]></en>
+        </locale>
         <locale name="exception.auth.wrong.account.for.user">
             <de><![CDATA[Dieses Google-Konto ist nicht mit dem übergebenen Benutzerkonto verknüpft.]]></de>
             <en><![CDATA[This Google Account is not linked to the user ccount you submitted.]]></en>
