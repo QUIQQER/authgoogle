@@ -20,7 +20,7 @@
     "quiqqer/core": "^2.1",
     "google/apiclient": "^2.1",
     "quiqqer/frontend-users": "^2.8",
-    "firebase/php-jwt": "^6.0"
+    "firebase/php-jwt": "^7.0"
   },
   "autoload": {
     "psr-4": {
