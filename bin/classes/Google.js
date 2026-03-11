@@ -237,8 +237,26 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 if (!this.$token) {
                     return new Promise((resolve, reject) => {
                         const redirectUri = window.location.origin + URL_OPT_DIR + 'quiqqer/authgoogle/bin/oauth_callback.php';
+                        const authorizeUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
 
-                        const popup = window.open(`https://accounts.google.com/o/oauth2/auth?client_id=${this.$clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token id_token&scope=email profile&prompt=consent`, 'google_oauth', 'width=500,height=600');
+                        authorizeUrl.search = new URLSearchParams({
+                            client_id: this.$clientId,
+                            redirect_uri: redirectUri,
+                            response_type: 'token id_token',
+                            scope: 'email profile openid',
+                            prompt: 'consent'
+                        }).toString();
+
+                        const popup = window.open(
+                            authorizeUrl.toString(),
+                            'google_oauth',
+                            'width=500,height=600'
+                        );
+
+                        if (!popup) {
+                            reject(new Error('Google login popup could not be opened.'));
+                            return;
+                        }
 
                         // Listen for the message event
                         const messageListener = (event) => {
