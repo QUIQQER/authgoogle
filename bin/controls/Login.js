@@ -1,7 +1,5 @@
 /**
  * Google Authentication for QUIQQER
- *
- * @module package/quiqqer/authgoogle/bin/controls/Login
  */
 define('package/quiqqer/authgoogle/bin/controls/Login', [
     'qui/controls/Control',
