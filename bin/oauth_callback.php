@@ -9,11 +9,13 @@
     const params = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = params.get('access_token');
     const idToken = params.get('id_token');
+    const state = params.get('state');
 
     if ((accessToken || idToken) && window.opener) {
         window.opener.postMessage({
             googleToken: accessToken,
-            googleIdToken: idToken
+            googleIdToken: idToken,
+            googleState: state
         }, window.location.origin);
         window.close();
     } else {

@@ -1,8 +1,6 @@
 /**
  * Main controller for Google JavaScript API
  *
- * @module package/quiqqer/authgoogle/bin/classes/Google
- *
  * @event onLoaded [this] - Fires if everything has loaded
  * @event onLogin [authResponse, this] - Fires if the user successfully authenticates with Google
  * @event onLogout [this] - Fires if the user clicks the Logout button
@@ -24,9 +22,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
     const lg = 'quiqqer/authgoogle';
 
-    let isFedCMAuthenticating = false;
-    let setHasAttemptedAutoLogin = false;
-
     return new Class({
 
         Extends: QDOM,
@@ -44,18 +39,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             this.$loaded = false;
             this.$token = false;
             this.$clientId = null;
-        },
-
-        isFedCMSupported: function () {
-            try {
-                return (typeof window !== 'undefined'
-                    && 'IdentityCredential' in window
-                    && 'navigator' in window
-                    && 'credentials' in navigator
-                    && !!navigator.credentials.get);
-            } catch {
-                return false;
-            }
+            this.$gisInitialized = false;
         },
 
         isOneTapSupported: function () {
@@ -157,32 +141,22 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                             return this.isAccountConnectedToQuiqqer(this.$token);
                         }).then((isConnected) => {
-                            let Registration = null;
                             let Login = null;
-
-                            const registrationNode = Btn.getElm().getParent('[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]');
-
-                            if (registrationNode) {
-                                Registration = QUI.Controls.getById(registrationNode.get('data-quiid'));
-                            }
-
                             const loginNode = Btn.getElm().getParent('[data-qui="controls/users/Login"]');
 
                             if (loginNode) {
                                 Login = QUI.Controls.getById(loginNode.get('data-quiid'));
                             }
 
+                            console.log(111);
+                            console.log('isConnected', isConnected);
+                            console.log('Login', Login);
 
                             // test if user already exists
                             // and we are in a login process
                             if (isConnected && Login) {
                                 form.setAttribute('data-authenticator', 'QUI\\Auth\\Google\\Auth');
                                 return Login.auth(form);
-                            }
-
-                            // if not: registration
-                            if (Registration) {
-                                return Registration.$sendForm(form);
                             }
 
                             return registration.register(
@@ -217,17 +191,9 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     return;
                 }
 
-                const fedCMSupported = this.isFedCMSupported();
                 const oneTapSupported = this.isOneTapSupported();
 
-                //console.log({fedCMSupported: fedCMSupported});
-                //console.log({oneTapSupported: oneTapSupported});
-
                 try {
-                    if (fedCMSupported) {
-                        await this.authenticateWithFedCM();
-                    }
-
                     if (oneTapSupported && !this.$token) {
                         await this.initializeGoogleOneTap();
                     }
@@ -238,13 +204,31 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     return new Promise((resolve, reject) => {
                         const redirectUri = window.location.origin + URL_OPT_DIR + 'quiqqer/authgoogle/bin/oauth_callback.php';
                         const authorizeUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+                        const state = crypto.randomUUID?.() || Math.random().toString(36).substring(2);
+                        const nonce = crypto.randomUUID?.() || Math.random().toString(36).substring(2);
+                        let settled = false;
+
+                        const finish = (handler, value) => {
+                            if (settled) {
+                                return;
+                            }
+
+                            settled = true;
+                            window.removeEventListener('message', messageListener);
+                            clearInterval(popupChecker);
+                            clearTimeout(popupTimeout);
+                            handler(value);
+                        };
 
                         authorizeUrl.search = new URLSearchParams({
                             client_id: this.$clientId,
                             redirect_uri: redirectUri,
-                            response_type: 'token id_token',
-                            scope: 'email profile openid',
-                            prompt: 'consent'
+                            response_type: 'id_token',
+                            scope: 'openid email profile',
+                            response_mode: 'fragment',
+                            prompt: 'select_account',
+                            state: state,
+                            nonce: nonce
                         }).toString();
 
                         const popup = window.open(
@@ -260,32 +244,31 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
                         // Listen for the message event
                         const messageListener = (event) => {
-                            if (event.origin === window.location.origin && (event.data.googleToken || event.data.googleIdToken)) {
+                            if (event.origin !== window.location.origin) {
+                                return;
+                            }
+
+                            if (!event.data || event.data.googleState !== state) {
+                                return;
+                            }
+
+                            if (event.data.googleIdToken) {
                                 this.$token = event.data.googleIdToken;
                                 popup.close();
-                                window.removeEventListener('message', messageListener);
-                                clearInterval(popupChecker);
-                                resolve(this.$token);
+                                finish(resolve, this.$token);
                             }
                         };
                         window.addEventListener('message', messageListener);
 
-                        // Polling to check if popup was closed
-                        const popupChecker = setInterval(() => {
-                            if (typeof popup === 'undefined') {
-                                return;
-                            }
-
-                            if (!popup) {
-                                return;
-                            }
-
-                            if (popup.closed) {
-                                window.removeEventListener('message', messageListener);
+                        const popupChecker = window.setInterval(() => {
+                            if (settled) {
                                 clearInterval(popupChecker);
-                                reject(new Error('Popup geschlossen, ohne Login.'));
                             }
                         }, 500);
+
+                        const popupTimeout = window.setTimeout(() => {
+                            finish(reject, new Error('Google login popup timed out.'));
+                        }, 120000);
                     });
                 }
 
@@ -293,41 +276,27 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
             });
         },
 
-        authenticateWithFedCM: async function () {
-            if (isFedCMAuthenticating) {
-                return false;
+        initializeGoogleIdentity: function () {
+            if (this.$gisInitialized) {
+                return;
             }
 
-            isFedCMAuthenticating = true;
-
-            try {
-                const nonce = crypto.randomUUID?.() || Math.random().toString(36).substring(2);
-
-                const credential = await navigator.credentials.get({
-                    identity: {
-                        context: 'signin', providers: [{
-                            configURL: 'https://accounts.google.com/gsi/fedcm.json',
-                            clientId: this.$clientId,
-                            mode: 'passive',
-                            params: {nonce},
-                        }]
+            window.google.accounts.id.initialize({
+                client_id: this.$clientId,
+                context: 'signin',
+                nonce: crypto.randomUUID?.() || Math.random().toString(36).substring(2),
+                auto_select: false,
+                cancel_on_tap_outside: true,
+                itp_support: true,
+                use_fedcm_for_prompt: true,
+                callback: (response) => {
+                    if (response && typeof response.credential === 'string' && response.credential !== '') {
+                        this.$token = response.credential;
                     }
-                });
-
-                if (credential && typeof credential.token === 'string' && credential.token !== '') {
-                    this.$token = credential.token;
-                    return true;
                 }
+            });
 
-                console.warn('FedCM did not return an ID token, falling back to the next sign-in flow.');
-                return false;
-            } catch (err) {
-                console.warn('FedCM authentication failed, falling back to the next sign-in flow.', err);
-                return false;
-            } finally {
-                isFedCMAuthenticating = false;
-                setHasAttemptedAutoLogin = true;
-            }
+            this.$gisInitialized = true;
         },
 
         initializeGoogleOneTap: async function () {
@@ -337,35 +306,63 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
             return new Promise((resolve, reject) => {
                 try {
-                    window.google.accounts.id.initialize({
-                        client_id: this.$clientId, callback: (response) => {
-                            this.$token = response.credential;
+                    this.initializeGoogleIdentity();
 
-                            resolve();
-                        }, auto_select: true, cancel_on_tap_outside: false,
-                    });
+                    let settled = false;
+                    const finish = (handler, value) => {
+                        if (settled) {
+                            return;
+                        }
+
+                        settled = true;
+                        handler(value);
+                    };
+
+                    const tokenWatcher = window.setInterval(() => {
+                        if (!this.$token) {
+                            return;
+                        }
+
+                        clearInterval(tokenWatcher);
+                        finish(resolve);
+                    }, 150);
 
                     window.google.accounts.id.prompt((notification) => {
-                        console.log('🔍 One Tap status:', notification);
+                        if (this.$token) {
+                            clearInterval(tokenWatcher);
+                            finish(resolve);
+                            return;
+                        }
 
-                        if (notification.isNotDisplayed()) {
-                            console.warn('🚫 One Tap was not displayed:', notification.getNotDisplayedReason?.());
-                            reject('One Tap was not displayed: ' + notification.getNotDisplayedReason?.());
-                        } else if (notification.isSkippedMoment()) {
-                            console.warn('⏭ User skipped the One Tap dialog');
-                            reject('User skipped the One Tap dialog');
-                        } else if (notification.isDismissedMoment()) {
-                            console.warn('🙅‍♂️ User dismissed the One Tap dialog');
-                            reject('User dismissed the One Tap dialog');
-                        } else {
-                            console.log('✅ One Tap is displayed');
-                            // Do not resolve() here – wait for actual login callback
+                        // These helpers are unavailable or limited when FedCM controls the prompt.
+                        if (notification && typeof notification.isNotDisplayed === 'function' && notification.isNotDisplayed()) {
+                            clearInterval(tokenWatcher);
+                            finish(reject, 'One Tap was not displayed');
+                            return;
+                        }
+
+                        if (notification && typeof notification.isSkippedMoment === 'function' && notification.isSkippedMoment()) {
+                            clearInterval(tokenWatcher);
+                            finish(reject, 'User skipped the One Tap dialog');
+                            return;
+                        }
+
+                        if (notification && typeof notification.isDismissedMoment === 'function' && notification.isDismissedMoment()) {
+                            clearInterval(tokenWatcher);
+                            finish(reject, 'User dismissed the One Tap dialog');
                         }
                     });
 
-                    setHasAttemptedAutoLogin = true;
+                    window.setTimeout(() => {
+                        clearInterval(tokenWatcher);
+
+                        if (!this.$token) {
+                            finish(reject, 'One Tap timed out');
+                        } else {
+                            finish(resolve);
+                        }
+                    }, 10000);
                 } catch (e) {
-                    setHasAttemptedAutoLogin = true;
                     reject('Fehler bei One Tap');
                 }
             });

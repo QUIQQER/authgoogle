@@ -12,8 +12,6 @@ use QUI\Control;
  * Class Register
  *
  * Google Registration Control
- *
- * @package QUI\Auth\Google
  */
 class Register extends Control
 {

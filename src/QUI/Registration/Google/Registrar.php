@@ -13,17 +13,19 @@ use QUI\ExceptionStack;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\FrontendUsers\InvalidFormField;
-use QUI\Interfaces\Users\User;
 
 /**
  * Class Email\Registrar
  *
  * Registration via e-mail address
- *
- * @package QUI\Registration\Google
  */
 class Registrar extends FrontendUsers\AbstractRegistrar
 {
+    /**
+     * @var array<string, mixed>|null
+     */
+    private ?array $profileData = null;
+
     /**
      * Registrar constructor.
      */
@@ -33,40 +35,96 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     }
 
     /**
-     * @param User $User
-     * @return void
+     * @return array<string, mixed>
+     *
+     * @throws QUI\Exception
+     */
+    private function getProfileDataFromToken(): array
+    {
+        if (!is_null($this->profileData)) {
+            return $this->profileData;
+        }
+
+        $token = $this->getAttribute('token');
+        Google::validateAccessToken($token);
+        $this->profileData = Google::getProfileData($token);
+
+        return $this->profileData;
+    }
+
+    /**
+     * @return QUI\Interfaces\Users\User
      *
      * @throws Exception
      * @throws QUI\Exception
      * @throws ExceptionStack
      * @throws QUI\Permissions\Exception
      */
-    public function onRegistered(QUI\Interfaces\Users\User $User): void
+    public function createUser(): QUI\Interfaces\Users\User
     {
         $SystemUser = QUI::getUsers()->getSystemUser();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+        $useAddress = boolval($registrationSettings['addressInput']);
         $token = $this->getAttribute('token');
+        $profileData = $this->getProfileDataFromToken();
 
-        // test if user is connected
-        // we don't want to override a connected user
         if (Google::existsQuiqqerAccount($token)) {
-            return;
+            $connectionProfile = Google::getConnectedAccountByGoogleIdToken($token);
+
+            return QUI::getUsers()->get($connectionProfile['userId']);
         }
 
-        // set user data
-        $profileData = Google::getProfileData($token);
+        $User = parent::createUser();
 
-        $User->setAttributes([
-            'email' => $profileData['email'],
-            'firstname' => empty($profileData['given_name']) ? null : $profileData['given_name'],
-            'lastname' => empty($profileData['family_name']) ? null : $profileData['family_name'],
-        ]);
+        if (!empty($profileData['email'])) {
+            $User->setAttribute('email', $profileData['email']);
+        }
+
+        if (!empty($profileData['given_name'])) {
+            $User->setAttribute('firstname', $profileData['given_name']);
+        }
+
+        if (!empty($profileData['family_name'])) {
+            $User->setAttribute('lastname', $profileData['family_name']);
+        }
+
+        if ($useAddress && !empty($profileData['email'])) {
+            $Address = $User->getStandardAddress();
+
+            if (is_null($Address)) {
+                $Address = $User->addAddress([], $SystemUser);
+
+                if (is_null($Address)) {
+                    throw new QUI\Exception('Could not create standard address for Google registration.');
+                }
+            }
+
+            $Address->editMail(0, $profileData['email']);
+
+            if (!empty($profileData['given_name'])) {
+                $Address->setAttribute('firstname', $profileData['given_name']);
+            }
+
+            if (!empty($profileData['family_name'])) {
+                $Address->setAttribute('lastname', $profileData['family_name']);
+            }
+
+            $Address->save($SystemUser);
+            $User->setAttribute('address', $Address->getUUID());
+        }
 
         $User->setAttribute(FrontendUsersHandler::USER_ATTR_EMAIL_VERIFIED, boolval($profileData['email_verified']));
         $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         $User->save($SystemUser);
 
-        // connect Google account with QUIQQER account
         Google::connectQuiqqerAccount($User->getUUID(), $token, false);
+
+        return $User;
+    }
+
+    public function onRegistered(QUI\Interfaces\Users\User $User): void
+    {
     }
 
     /**
@@ -136,7 +194,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         try {
-            Google::validateAccessToken($token);
+            $profileData = $this->getProfileDataFromToken();
         } catch (\Exception) {
             throw new FrontendUsers\Exception([
                 $lg,
@@ -164,7 +222,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         $settings = $this->getRegistrationSettings();
-        $profileData = Google::getProfileData($token);
 
         if (
             !(int)$settings['allowUnverifiedEmailAddresses']
@@ -192,11 +249,11 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
     /**
      * @return string
-     * @throws QUI\Permissions\Exception
+     * @throws QUI\Permissions\Exception|QUI\Exception
      */
     public function getUsername(): string
     {
-        $userData = Google::getProfileData($this->getAttribute('token'));
+        $userData = $this->getProfileDataFromToken();
 
         if (!empty($userData['email'])) {
             return $userData['email'];

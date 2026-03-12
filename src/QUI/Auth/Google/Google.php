@@ -11,8 +11,6 @@ use QUI\Permissions\Exception;
  * Class Google
  *
  * Google Graph API
- *
- * @package QUI\Auth\Google
  */
 class Google
 {
