@@ -13,17 +13,17 @@ use QUI\ExceptionStack;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\FrontendUsers\InvalidFormField;
-use QUI\Interfaces\Users\User;
 
 /**
  * Class Email\Registrar
  *
  * Registration via e-mail address
- *
- * @package QUI\Registration\Google
  */
 class Registrar extends FrontendUsers\AbstractRegistrar
 {
+    /**
+     * @var array<string, mixed>|null
+     */
     private ?array $profileData = null;
 
     /**
@@ -91,6 +91,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if ($useAddress && !empty($profileData['email'])) {
             $Address = $User->getStandardAddress();
+
+            if (is_null($Address)) {
+                $Address = $User->addAddress([], $SystemUser);
+
+                if (is_null($Address)) {
+                    throw new QUI\Exception('Could not create standard address for Google registration.');
+                }
+            }
+
             $Address->editMail(0, $profileData['email']);
 
             if (!empty($profileData['given_name'])) {
@@ -240,7 +249,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
     /**
      * @return string
-     * @throws QUI\Permissions\Exception
+     * @throws QUI\Permissions\Exception|QUI\Exception
      */
     public function getUsername(): string
     {

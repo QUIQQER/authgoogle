@@ -10,8 +10,6 @@ use QUI;
 
 /**
  * Class Control
- *
- * @package QUI\Registration\Google
  */
 class Control extends QUI\Control
 {

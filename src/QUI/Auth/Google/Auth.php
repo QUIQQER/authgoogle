@@ -9,7 +9,6 @@ namespace QUI\Auth\Google;
 use QUI;
 use QUI\Auth\Google\Exception as GoogleException;
 use QUI\Control;
-use QUI\Database\Exception;
 use QUI\Locale;
 use QUI\Users\AbstractAuthenticator;
 
@@ -19,8 +18,6 @@ use function is_string;
  * Class Auth
  *
  * Authentication handler for Google authentication
- *
- * @package QUI\Authe\Google2Fa
  */
 class Auth extends AbstractAuthenticator
 {
@@ -81,7 +78,7 @@ class Auth extends AbstractAuthenticator
      *
      * @param array<string, mixed>|integer|string $authParams
      *
-     * @throws QUI\Permissions\Exception|\QUI\Auth\Google\Exception
+     * @throws QUI\Permissions\Exception|Exception|QUI\Exception
      */
     public function auth(string | array | int $authParams): void
     {
@@ -115,12 +112,8 @@ class Auth extends AbstractAuthenticator
 
             if (!empty($userData['email']) && $Users->emailExists($userData['email'])) {
                 // Avoid account takeover via unverified emails.
-                $allowUnverified = false;
                 $cfg = QUI::getPackage('quiqqer/authgoogle')->getConfig();
-
-                if ($cfg) {
-                    $allowUnverified = (bool)$cfg->get('registration', 'allowUnverifiedEmailAddresses');
-                }
+                $allowUnverified = (bool)$cfg?->get('registration', 'allowUnverifiedEmailAddresses');
 
                 if (!$allowUnverified && empty($userData['email_verified'])) {
                     throw new GoogleException([
