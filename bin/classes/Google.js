@@ -67,7 +67,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                 return false;
             }
 
-            return typeof window.google.accounts.id === 'undefined';
+            return typeof window.google.accounts.id !== 'undefined';
         },
 
         loadGoogleScript: function () {
@@ -295,7 +295,7 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
 
         authenticateWithFedCM: async function () {
             if (isFedCMAuthenticating) {
-                return;
+                return false;
             }
 
             isFedCMAuthenticating = true;
@@ -314,16 +314,18 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                     }
                 });
 
-                if (typeof credential.token !== 'undefined') {
+                if (credential && typeof credential.token === 'string' && credential.token !== '') {
                     this.$token = credential.token;
-                } else {
-                    console.error('Failed to retrieve FedCM credential - possibly disabled in browser');
-                    isFedCMAuthenticating = false;
+                    return true;
                 }
+
+                console.warn('FedCM did not return an ID token, falling back to the next sign-in flow.');
+                return false;
             } catch (err) {
-                console.error(err);
-                isFedCMAuthenticating = false;
+                console.warn('FedCM authentication failed, falling back to the next sign-in flow.', err);
+                return false;
             } finally {
+                isFedCMAuthenticating = false;
                 setHasAttemptedAutoLogin = true;
             }
         },
