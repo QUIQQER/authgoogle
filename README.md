@@ -17,7 +17,7 @@ Features
 Installation
 ------------
 
-The Package Name is: `quiqqer/authgoogle`
+The package name is: `quiqqer/authgoogle`
 
 Contribute
 ----------
