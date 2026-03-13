@@ -148,10 +148,6 @@ define('package/quiqqer/authgoogle/bin/classes/Google', [
                                 Login = QUI.Controls.getById(loginNode.get('data-quiid'));
                             }
 
-                            console.log(111);
-                            console.log('isConnected', isConnected);
-                            console.log('Login', Login);
-
                             // test if user already exists
                             // and we are in a login process
                             if (isConnected && Login) {

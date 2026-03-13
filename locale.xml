@@ -20,6 +20,12 @@
             <en><![CDATA[QUIQQER registration and authentication via Google Account]]></en>
         </locale>
 
+        <!-- Permission -->
+        <locale name="permission.quiqqer.auth._header">
+            <de><![CDATA[QUIQQER Authentifizierung]]></de>
+            <en><![CDATA[QUIQQER authentication]]></en>
+        </locale>
+
         <!-- Settings -->
         <locale name="settings.title">
             <de><![CDATA[Google Registrierung / Login]]></de>
