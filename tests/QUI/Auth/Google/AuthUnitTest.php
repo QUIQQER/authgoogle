@@ -32,14 +32,26 @@ class AuthUnitTest extends TestCase
 
     public function testTitleAndDescriptionUseProvidedLocale(): void
     {
+        $call = 0;
+
         $Locale = $this->createMock(Locale::class);
         $Locale->expects($this->exactly(2))
             ->method('get')
-            ->withConsecutive(
-                ['quiqqer/authgoogle', 'authgoogle.title'],
-                ['quiqqer/authgoogle', 'authgoogle.description']
-            )
-            ->willReturnOnConsecutiveCalls('Google title', 'Google description');
+            ->willReturnCallback(function (string $package, string $key) use (&$call): string {
+                $call++;
+
+                if ($call === 1) {
+                    $this->assertSame('quiqqer/authgoogle', $package);
+                    $this->assertSame('authgoogle.title', $key);
+
+                    return 'Google title';
+                }
+
+                $this->assertSame('quiqqer/authgoogle', $package);
+                $this->assertSame('authgoogle.description', $key);
+
+                return 'Google description';
+            });
 
         $Auth = new Auth();
 
