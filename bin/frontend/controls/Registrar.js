@@ -1,7 +1,5 @@
 /**
  * QUIQQER account registration via Google Account
- *
- * @module package/quiqqer/authgoogle/bin/frontend/controls/Registrar
  */
 define('package/quiqqer/authgoogle/bin/frontend/controls/Registrar', [
 

@@ -10,8 +10,6 @@ use QUI\Users\Exception as QUIUserException;
 
 /**
  * Class Exception
- *
- * @package QUI\Auth\Google
  */
 class Exception extends QUIUserException
 {

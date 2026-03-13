@@ -18,13 +18,17 @@ class Events
      * @return void
      *
      * @throws Exception
-     * @throws \QUI\Permissions\Exception
+     * @throws QUI\Permissions\Exception
      */
     public static function onUserDelete(User $User): void
     {
         Google::disconnectAccount($User->getUUID(), false);
     }
 
+    /**
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
     public static function onQuiqqerMigrationV2(QUI\System\Console\Tools\MigrationV2 $Console): void
     {
         $Console->writeLn('- Migrate google auth');

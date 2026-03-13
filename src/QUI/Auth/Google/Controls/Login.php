@@ -13,8 +13,6 @@ use QUI\Control;
  * Class Register
  *
  * Google Login Control
- *
- * @package QUI\Auth\Google
  */
 class Login extends Control
 {
