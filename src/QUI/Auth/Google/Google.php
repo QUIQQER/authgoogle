@@ -77,6 +77,7 @@ class Google
             ]
         );
 
+
         $User->enableAuthenticator(
             Auth::class,
             QUI::getUsers()->getSystemUser()
