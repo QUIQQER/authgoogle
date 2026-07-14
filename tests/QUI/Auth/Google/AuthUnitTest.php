@@ -7,6 +7,7 @@ use QUI;
 use QUI\Auth\Google\Auth;
 use QUI\Auth\Google\Controls\Login;
 use QUI\Locale;
+use ReflectionMethod;
 
 class AuthUnitTest extends TestCase
 {
@@ -68,5 +69,13 @@ class AuthUnitTest extends TestCase
         $this->assertNull($Auth->getSettingsControl());
         $this->assertNull($Auth->getPasswordResetControl());
         $this->assertInstanceOf(Login::class, Auth::getLoginControl());
+    }
+
+    public function testAuthDeclaresBooleanResult(): void
+    {
+        $returnType = (new ReflectionMethod(Auth::class, 'auth'))->getReturnType();
+
+        $this->assertNotNull($returnType);
+        $this->assertSame('bool', $returnType->getName());
     }
 }

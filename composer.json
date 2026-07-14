@@ -2,22 +2,24 @@
   "name": "quiqqer/authgoogle",
   "type": "quiqqer-module",
   "description": "QUIQQER registration and authentication with Google account",
-  "license": "GPL-3.0+",
+  "license": "GPL-3.0-or-later",
   "homepage": "https://www.quiqqer.com",
   "authors": [
     {
-      "name": "Patrick Müller",
-      "email": "p.mueller@pcsg.de",
-      "homepage": "https://www.pcsg.de",
-      "role": "Developer"
+      "name": "PCSG - Computer & Internet Service OHG",
+      "email": "info@quiqqer.com",
+      "homepage": "https://www.quiqqer.com",
+      "role": "Maintainer"
     }
   ],
   "support": {
     "email": "support@pcsg.de",
-    "url": "https://www.pcsg.de"
+    "issues": "https://dev.quiqqer.com/quiqqer/authgoogle/issues",
+    "source": "https://dev.quiqqer.com/quiqqer/authgoogle"
   },
   "require": {
-    "quiqqer/core": "^2.1",
+    "php": "^8.2",
+    "quiqqer/core": "^2.24",
     "google/apiclient": "^2.1",
     "quiqqer/frontend-users": "^2.12.5",
     "firebase/php-jwt": "^7.0"

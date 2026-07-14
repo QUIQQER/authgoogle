@@ -5,6 +5,10 @@ namespace QUI\Auth\Google;
 use QUI;
 use QUI\Database\Exception;
 use QUI\Users\User;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\ColumnDiff;
+use Doctrine\DBAL\Schema\TableDiff;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Events
@@ -34,9 +38,27 @@ class Events
         $Console->writeLn('- Migrate google auth');
         $table = Google::table();
 
-        QUI::getDatabase()->execSQL(
-            'ALTER TABLE `' . $table . '` CHANGE `userId` `userId` VARCHAR(50) NOT NULL;'
-        );
+        $SchemaManager = QUI::getSchemaManager();
+
+        if ($SchemaManager->tablesExist([$table])) {
+            $Table = $SchemaManager->introspectTable($table);
+
+            if ($Table->hasColumn('userId')) {
+                $CurrentColumn = $Table->getColumn('userId');
+                $TargetColumn = new Column(
+                    'userId',
+                    Type::getType('string'),
+                    ['length' => 50, 'notnull' => true]
+                );
+
+                $SchemaManager->alterTable(new TableDiff(
+                    $Table,
+                    changedColumns: [
+                        'userId' => new ColumnDiff($CurrentColumn, $TargetColumn)
+                    ]
+                ));
+            }
+        }
 
         QUI\Utils\MigrationV1ToV2::migrateUsers(
             $table,

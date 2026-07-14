@@ -80,7 +80,7 @@ class Auth extends AbstractAuthenticator
      *
      * @throws QUI\Permissions\Exception|Exception|QUI\Exception
      */
-    public function auth(string | array | int $authParams): void
+    public function auth(string | array | int $authParams): bool
     {
         if (!is_array($authParams) || !isset($authParams['token'])) {
             throw new GoogleException([
@@ -104,7 +104,7 @@ class Auth extends AbstractAuthenticator
 
         if (empty($connectionProfile)) {
             /**
-             * Check if a user with the Facebook e-mail address already exists and if so
+             * Check if a user with the Google e-mail address already exists and if so
              * automatically connect it to the QUIQQER account.
              */
             $userData = Google::getProfileData($token);
@@ -163,6 +163,8 @@ class Auth extends AbstractAuthenticator
                 'exception.auth.wrong.account.for.user'
             ], 401);
         }
+
+        return true;
     }
 
     /**
