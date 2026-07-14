@@ -67,13 +67,13 @@ class Google
             $profileData['name'] = $profileData['email'];
         }
 
-        QUI::getDataBase()->insert(
-            QUI::getDBTableName(self::TBL_ACCOUNTS),
+        QUI::getDataBaseConnection()->insert(
+            QUI\Utils\Doctrine::quoteIdentifier(self::table()),
             [
-                'userId' => $User->getUUID(),
-                'googleUserId' => $profileData['sub'],
-                'email' => $profileData['email'],
-                'name' => $profileData['name']
+                QUI\Utils\Doctrine::quoteIdentifier('userId') => $User->getUUID(),
+                QUI\Utils\Doctrine::quoteIdentifier('googleUserId') => $profileData['sub'],
+                QUI\Utils\Doctrine::quoteIdentifier('email') => $profileData['email'],
+                QUI\Utils\Doctrine::quoteIdentifier('name') => $profileData['name']
             ]
         );
 
@@ -102,22 +102,20 @@ class Google
 
         try {
             $User = QUI::getUsers()->get($userId);
-            $userId = $User->getUUID();
             $userUuid = $User->getUUID();
         } catch (QUI\Exception $e) {
             QUI\System\Log::writeException($e);
             return;
         }
 
-        QUI::getDataBase()->delete(
-            QUI::getDBTableName(self::TBL_ACCOUNTS),
-            ['userId' => $userId]
-        );
+        $Connection = QUI::getDataBaseConnection();
 
-        QUI::getDataBase()->delete(
-            QUI::getDBTableName(self::TBL_ACCOUNTS),
-            ['userId' => $userUuid]
-        );
+        foreach (array_unique([(string)$userId, $userUuid]) as $accountUserId) {
+            $Connection->delete(
+                QUI\Utils\Doctrine::quoteIdentifier(self::table()),
+                [QUI\Utils\Doctrine::quoteIdentifier('userId') => $accountUserId]
+            );
+        }
     }
 
     /**
@@ -166,21 +164,23 @@ class Google
     public static function getConnectedAccountByQuiqqerUserId(int | string $userId): array
     {
         try {
-            $result = QUI::getDataBase()->fetch([
-                'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
-                'where' => [
-                    'userId' => $userId
-                ]
-            ]);
-        } catch (QUI\Exception) {
+            $userUuid = QUI::getUsers()->get($userId)->getUUID();
+            $QueryBuilder = QUI::getQueryBuilder();
+            $account = $QueryBuilder
+                ->select('*')
+                ->from(QUI\Utils\Doctrine::quoteIdentifier(self::table()))
+                ->where($QueryBuilder->expr()->eq('userId', ':userId'))
+                ->orWhere($QueryBuilder->expr()->eq('userId', ':userUuid'))
+                ->setParameter('userId', (string)$userId)
+                ->setParameter('userUuid', $userUuid)
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchAssociative();
+        } catch (\Exception) {
             return [];
         }
 
-        if (empty($result)) {
-            return [];
-        }
-
-        return current($result);
+        return $account === false ? [] : $account;
     }
 
     /**
@@ -198,22 +198,13 @@ class Google
         $profile = self::getProfileData($idToken);
 
         try {
-            $result = QUI::getDataBase()->fetch([
-                'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
-                'where' => [
-                    'googleUserId' => $profile['sub']
-                ]
-            ]);
-        } catch (QUI\Exception $e) {
+            $account = self::getAccountByGoogleUserId((string)$profile['sub']);
+        } catch (\Doctrine\DBAL\Exception $e) {
             QUI\System\Log::writeException($e);
             return [];
         }
 
-        if (empty($result)) {
-            return [];
-        }
-
-        return current($result);
+        return $account === false ? [] : $account;
     }
 
     /**
@@ -229,19 +220,13 @@ class Google
     {
         $profile = self::getProfileData($token);
 
-        $result = QUI::getDataBase()->fetch([
-            'from' => QUI::getDBTableName(self::TBL_ACCOUNTS),
-            'where' => [
-                'googleUserId' => $profile['sub']
-            ],
-            'limit' => 1
-        ]);
+        $account = self::getAccountByGoogleUserId((string)$profile['sub']);
 
-        if (empty($result)) {
+        if ($account === false) {
             return false;
         }
 
-        $userId = $result[0]['userId'];
+        $userId = $account['userId'] ?? null;
 
         if (empty($userId)) {
             return false;
@@ -343,5 +328,23 @@ class Google
                 401
             );
         }
+    }
+
+    /**
+     * @return array<string, mixed>|false
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private static function getAccountByGoogleUserId(string $googleUserId): array | false
+    {
+        $QueryBuilder = QUI::getQueryBuilder();
+
+        return $QueryBuilder
+            ->select('*')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(self::table()))
+            ->where($QueryBuilder->expr()->eq('googleUserId', ':googleUserId'))
+            ->setParameter('googleUserId', $googleUserId)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
     }
 }
