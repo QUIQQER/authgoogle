@@ -176,7 +176,7 @@
         <locale name="controls.frontend.registrar.already_authenticated" html="true">
             <de>
                 <![CDATA[Sie sind z.Z. eingeloggt. Bitte loggen Sie sich aus, um mit Google ein Benutzerkonto zu registrieren.]]></de>
-            <en><![CDATA[You are currently logged in. Please log out to registrer an account via Google.]]></en>
+            <en><![CDATA[You are currently logged in. Please log out to register an account via Google.]]></en>
         </locale>
         <locale name="controls.frontend.registrar.sign_in.popup.error">
             <de>
@@ -461,13 +461,13 @@
             <de>
                 <![CDATA[Das Google-Konto, welches ausgewählt wurde, ist nicht mit dem Benutzerkonto verknüpft, für welches Sie sich gerade authentifizieren. Bitte wählen Sie das Google-Konto, welches zu diesem Benutzerkonto gehört oder welches sie mit dem Benutzerkonto verknüpfen möchten.]]></de>
             <en>
-                <![CDATA[The Google Account you selected is not linked to the user count you are trying wo authenticate for. Please select the Google Account that is linked to the user account or a Google Account that is currently not linked to any other user account.]]></en>
+                <![CDATA[The Google Account you selected is not linked to the user account you are trying to authenticate. Please select the Google Account that is linked to the user account or a Google Account that is currently not linked to any other user account.]]></en>
         </locale>
         <locale name="controls.login.no.quiqqer.account">
             <de>
                 <![CDATA[Zu dem Google-Konto, mit welchem Sie z.Z. eingeloggt sind, existiert kein Benutzerkonto. Bitte loggen Sie sich mit einem anderen Google-Konto ein oder verwenden Sie eine andere Authentifizierungsmethode.]]></de>
             <en>
-                <![CDATA[The Google Account you are currently logged in with is not linked to the user account you are trying wo authenticate for. Please log in with another Google Account or use another authentication method.]]></en>
+                <![CDATA[The Google Account you are currently logged in with is not linked to the user account you are trying to authenticate. Please log in with another Google Account or use another authentication method.]]></en>
         </locale>
         <locale name="controls.login.general_error">
             <de><![CDATA[Google-Login kann z.Z. nicht verwendet werden.]]></de>
