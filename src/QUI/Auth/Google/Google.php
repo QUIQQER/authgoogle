@@ -319,7 +319,7 @@ class Google
             return;
         }
 
-        if (QUI::getSession()?->get('uid') !== $userId || !$userId) {
+        if (QUI::getSession()->get('uid') !== $userId || !$userId) {
             throw new QUI\Permissions\Exception(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',

@@ -12,7 +12,7 @@ use QUI\Auth\Google\Google;
 QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_isLoginUserGoogleUser',
     function ($idToken) {
-        $loginUserId = QUI::getSession()?->get('uid');
+        $loginUserId = QUI::getSession()->get('uid');
 
         if (!$loginUserId) {
             return false;
