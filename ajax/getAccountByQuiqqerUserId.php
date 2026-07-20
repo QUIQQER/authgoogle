@@ -12,7 +12,7 @@ use QUI\Auth\Google\Google;
 QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_getAccountByQuiqqerUserId',
     function ($userId) {
-        if (QUI::getSession()?->get('uid') !== $userId) {
+        if (QUI::getSession()->get('uid') !== $userId) {
             throw new QUI\Permissions\Exception(
                 QUI::getLocale()->get(
                     'quiqqer/authgoogle',

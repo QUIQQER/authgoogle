@@ -11,7 +11,7 @@ QUI::getAjax()->registerFunction(
     'package_quiqqer_authgoogle_ajax_loginAttemptsCheck',
     function () {
         $Session = QUI::getSession();
-        $loginErrorCount = $Session?->get('google_login_errors');
+        $loginErrorCount = $Session->get('google_login_errors');
         $maxLoginErrors = QUI::getPackage('quiqqer/authgoogle')->getConfig()?->get('authSettings', 'maxLoginErrors');
 
         if (empty($loginErrorCount)) {
@@ -28,12 +28,12 @@ QUI::getAjax()->registerFunction(
                 )
             );
 
-            $Session?->destroy();
+            $Session->destroy();
 
             return true;
         }
 
-        $Session?->set('google_login_errors', $loginErrorCount);
+        $Session->set('google_login_errors', $loginErrorCount);
 
         return false;
     }
