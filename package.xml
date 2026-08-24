@@ -8,6 +8,22 @@
             <locale group="quiqqer/authgoogle" var="package.description"/>
         </description>
 
+        <capabilities schemaVersion="1">
+            <capability id="authentication.google-sign-in">
+                <title>Google sign-in</title>
+                <description>
+                    Authenticates QUIQQER users with Google accounts and manages the link between the Google identity and the local user account.
+                </description>
+            </capability>
+
+            <capability id="identity.google-registration">
+                <title>Google registration</title>
+                <description>
+                    Registers QUIQQER frontend users from validated Google identity tokens and supports automatic or manual account activation.
+                </description>
+            </capability>
+        </capabilities>
+
         <image src="URL_OPT_DIR/quiqqer/authgoogle/bin/images/Logo.jpg"/>
 
         <preview>
