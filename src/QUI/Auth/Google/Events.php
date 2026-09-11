@@ -16,7 +16,7 @@ use Doctrine\DBAL\Types\Type;
 class Events
 {
     /**
-     * quiqqer/quiqqer: onUserDelete
+     * quiqqer/core: onUserDelete
      *
      * @param User $User
      * @return void
